@@ -3,6 +3,7 @@ package com.tiktime.controller;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.tiktime.screens.GameScreen;
+import com.tiktime.screens.SettingsScreen;
 import com.tiktime.screens.UpgradeScreen;
 
 public class MenuController {
@@ -17,11 +18,11 @@ public class MenuController {
     }
 
     public void onUpgradeClicked() {
-        game.setScreen(new UpgradeScreen());
+        game.setScreen(new UpgradeScreen(game));
     }
 
     public void onSettingsClicked() {
-        game.setScreen(new UpgradeScreen());
+        game.setScreen(new SettingsScreen());
     }
 
     public void onExitClicked() {

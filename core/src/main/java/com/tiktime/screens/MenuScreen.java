@@ -1,11 +1,11 @@
 package com.tiktime.screens;
 
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.ScreenAdapter;
 import com.tiktime.controller.MenuController;
 import com.tiktime.view.MenuView;
 
-public class MenuScreen implements Screen {
+public class MenuScreen extends ScreenAdapter {
     private final Game game;
     private final MenuController menuController;
     private final MenuView menuView;
@@ -18,36 +18,21 @@ public class MenuScreen implements Screen {
 
     @Override
     public void show() {
-
+        menuView.show();
     }
 
     @Override
     public void render(float v) {
-
+        menuView.render(v);
     }
 
     @Override
-    public void resize(int i, int i1) {
-
-    }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
-
+    public void resize(int width, int height) {
+        menuView.resize(width, height);
     }
 
     @Override
     public void dispose() {
-
+        menuView.dispose();
     }
 }
