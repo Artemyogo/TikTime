@@ -25,7 +25,7 @@ public class MenuView implements Disposable {
         this.menuController = menuController;
         viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         stage = new Stage(viewport);
-        skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
+        skin = new Skin(Gdx.files.internal("flat-earth/skin/flat-earth-ui.json"));
 
         createUI();
     }
