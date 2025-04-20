@@ -21,18 +21,23 @@ public class UpgradeModel {
         regenLevel = prefs.getInteger("RegenLevel", 0);
     }
 
+    private int upgradeCost(int level) {
+        return (level + 1) * 100;
+    }
+
     public void setMoney(int money) {
-        this.money = money;
+        this.money = Math.max(money, 0);
     }
 
     public void addMoney(int x) {
-        this.money += x;
+        this.money = Math.max(this.money + x, 0);
     }
 
     public int getMoney() {
         return money;
     }
 
+    // HP Logic
     public void setHpLevel(int hpLevel) {
         this.hpLevel = hpLevel;
     }
@@ -41,10 +46,11 @@ public class UpgradeModel {
         return hpLevel;
     }
 
-    public void addHpLevel() {
-        hpLevel++;
+    public boolean tryAddHpLevel() {
+        return tryUpgrade(hpLevel, this::setHpLevel);
     }
 
+    // Speed Logic
     public void setSpeedLevel(int speedLevel) {
         this.speedLevel = speedLevel;
     }
@@ -53,10 +59,11 @@ public class UpgradeModel {
         return speedLevel;
     }
 
-    public void addSpeedLevel() {
-        speedLevel++;
+    public boolean tryAddSpeedLevel() {
+        return tryUpgrade(speedLevel, this::setSpeedLevel);
     }
 
+    // Damage Logic
     public void setDamageLevel(int damageLevel) {
         this.damageLevel = damageLevel;
     }
@@ -65,10 +72,11 @@ public class UpgradeModel {
         return damageLevel;
     }
 
-    public void addDamageLevel() {
-        damageLevel++;
+    public boolean tryAddDamageLevel() {
+        return tryUpgrade(damageLevel, this::setDamageLevel);
     }
 
+    // Regen Logic
     public void setRegenLevel(int regenLevel) {
         this.regenLevel = regenLevel;
     }
@@ -77,8 +85,18 @@ public class UpgradeModel {
         return regenLevel;
     }
 
-    public void addRegenLevel() {
-        regenLevel++;
+    public boolean tryAddRegenLevel() {
+        return tryUpgrade(regenLevel, this::setRegenLevel);
+    }
+
+    private boolean tryUpgrade(int currentLevel, java.util.function.IntConsumer levelSetter) {
+        int cost = upgradeCost(currentLevel);
+        if (money >= cost) {
+            levelSetter.accept(currentLevel + 1);
+            money -= cost;
+            return true;
+        }
+        return false;
     }
 
     public void save() {
