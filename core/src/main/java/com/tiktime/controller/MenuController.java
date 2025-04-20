@@ -2,8 +2,8 @@ package com.tiktime.controller;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.tiktime.ui.screens.GameScreen;
-import com.tiktime.ui.screens.UpgradeScreen;
+import com.tiktime.screens.GameScreen;
+import com.tiktime.screens.UpgradeScreen;
 
 public class MenuController {
     private final Game game;

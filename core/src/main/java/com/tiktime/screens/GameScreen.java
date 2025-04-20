@@ -1,9 +1,8 @@
-package com.tiktime.ui.screens;
+package com.tiktime.screens;
 
 import com.badlogic.gdx.Screen;
 
-public class MenuScreen implements Screen {
-
+public class GameScreen implements Screen {
     @Override
     public void show() {
 

@@ -1,4 +1,4 @@
-package com.tiktime.ui.screens;
+package com.tiktime.screens;
 
 import com.badlogic.gdx.ScreenAdapter;
 
