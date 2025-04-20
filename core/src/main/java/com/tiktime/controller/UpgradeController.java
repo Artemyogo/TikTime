@@ -23,6 +23,7 @@ public class UpgradeController {
     }
 
     void onExitClicked(){
+        model.save();
         game.setScreen(new MenuScreen(game));
     }
 

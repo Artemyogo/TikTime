@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 
 public class UpgradeModel {
-    private Preferences prefs;
+    private final Preferences prefs;
     private int money;
     private int hpLevel, speedLevel, damageLevel, regenLevel;
 
