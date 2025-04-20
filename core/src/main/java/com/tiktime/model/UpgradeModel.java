@@ -1,0 +1,92 @@
+package com.tiktime.model;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
+
+public class UpgradeModel {
+    private Preferences prefs;
+    private int money;
+    private int hpLevel, speedLevel, damageLevel, regenLevel;
+
+    public UpgradeModel() {
+        prefs = Gdx.app.getPreferences("upgrade");
+        load();
+    }
+
+    private void load() {
+        money = prefs.getInteger("money", 0);
+        hpLevel = prefs.getInteger("HpLevel", 0);
+        speedLevel = prefs.getInteger("SpeedLevel", 0);
+        damageLevel = prefs.getInteger("DamageLevel", 0);
+        regenLevel = prefs.getInteger("RegenLevel", 0);
+    }
+
+    public void setMoney(int money) {
+        this.money = money;
+    }
+
+    public void addMoney(int x) {
+        this.money += x;
+    }
+
+    public int getMoney() {
+        return money;
+    }
+
+    public void setHpLevel(int hpLevel) {
+        this.hpLevel = hpLevel;
+    }
+
+    public int getHpLevel() {
+        return hpLevel;
+    }
+
+    public void addHpLevel() {
+        hpLevel++;
+    }
+
+    public void setSpeedLevel(int speedLevel) {
+        this.speedLevel = speedLevel;
+    }
+
+    public int getSpeedLevel() {
+        return speedLevel;
+    }
+
+    public void addSpeedLevel() {
+        speedLevel++;
+    }
+
+    public void setDamageLevel(int damageLevel) {
+        this.damageLevel = damageLevel;
+    }
+
+    public int getDamageLevel() {
+        return damageLevel;
+    }
+
+    public void addDamageLevel() {
+        damageLevel++;
+    }
+
+    public void setRegenLevel(int regenLevel) {
+        this.regenLevel = regenLevel;
+    }
+
+    public int getRegenLevel() {
+        return regenLevel;
+    }
+
+    public void addRegenLevel() {
+        regenLevel++;
+    }
+
+    public void save() {
+        prefs.putInteger("money", money);
+        prefs.putInteger("HpLevel", hpLevel);
+        prefs.putInteger("SpeedLevel", speedLevel);
+        prefs.putInteger("DamageLevel", damageLevel);
+        prefs.putInteger("RegenLevel", regenLevel);
+        prefs.flush();
+    }
+}
