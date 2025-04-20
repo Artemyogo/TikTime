@@ -21,7 +21,7 @@ public class UpgradeModel {
         regenLevel = prefs.getInteger("RegenLevel", 0);
     }
 
-    private int upgradeCost(int level) {
+    public static int upgradeCost(int level) {
         return (level + 1) * 100;
     }
 

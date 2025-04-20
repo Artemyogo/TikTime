@@ -55,7 +55,7 @@ public class MenuView implements Disposable {
         table.setFillParent(true); // Растягиваем на весь экран
         stage.addActor(table);
 
-        titleLabel = new Label("TikTime", skin, "title");
+//        titleLabel = new Label("TikTime", skin, "title");
         table.add(titleLabel).padBottom(50).row();
 
         startButton = new TextButton("Start Game", skin);
