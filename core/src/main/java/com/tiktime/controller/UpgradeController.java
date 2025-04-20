@@ -22,12 +22,12 @@ public class UpgradeController {
         this.view.setMoney(this.model.getMoney());
     }
 
-    void onExitClicked(){
-        model.save();
+    public void onExitClicked(){
+        view.dispose();
         game.setScreen(new MenuScreen(game));
     }
 
-    void onUpgradeHPClicked(){
+    public void onUpgradeHPClicked(){
         if(model.tryAddHpLevel()) {
             view.setHpUpgradePrice(UpgradeModel.getCost(model.getHpLevel()));
             view.setMoney(model.getMoney());
@@ -35,7 +35,7 @@ public class UpgradeController {
         }
     }
 
-    void onUpgradeSpeedClicked(){
+    public void onUpgradeSpeedClicked(){
         if(model.tryAddSpeedLevel()) {
             view.setSpeedUpgradePrice(UpgradeModel.getCost(model.getSpeedLevel()));
             view.setMoney(model.getMoney());
@@ -43,7 +43,7 @@ public class UpgradeController {
         }
     }
 
-    void onUpgradeDamageClicked(){
+    public void onUpgradeDamageClicked(){
         if(model.tryAddDamageLevel()) {
             view.setDamageUpgradePrice(UpgradeModel.getCost(model.getDamageLevel()));
             view.setMoney(model.getMoney());
@@ -51,7 +51,7 @@ public class UpgradeController {
         }
     }
 
-    void onUpgradeRegenClicked(){
+    public void onUpgradeRegenClicked(){
         if(model.tryAddRegenLevel()) {
             view.setRegenUpgradePrice(UpgradeModel.getCost(model.getRegenLevel()));
             view.setMoney(model.getMoney());
