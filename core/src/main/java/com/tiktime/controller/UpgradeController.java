@@ -9,10 +9,17 @@ public class UpgradeController {
     private final Game game;
     private final UpgradeModel model;
     private final UpgradeView view;
+
     public UpgradeController(Game game, UpgradeModel model, UpgradeView view){
         this.game = game;
         this.model = model;
         this.view = view;
+
+        this.view.setHpUpgradePrice(UpgradeModel.getCost(this.model.getHpLevel()));
+        this.view.setSpeedUpgradePrice(UpgradeModel.getCost(this.model.getSpeedLevel()));
+        this.view.setDamageUpgradePrice(UpgradeModel.getCost(this.model.getDamageLevel()));
+        this.view.setRegenUpgradePrice(UpgradeModel.getCost(this.model.getRegenLevel()));
+        this.view.setMoney(this.model.getMoney());
     }
 
     void onExitClicked(){
@@ -21,28 +28,33 @@ public class UpgradeController {
 
     void onUpgradeHPClicked(){
         if(model.tryAddHpLevel()) {
-            view.setHpUpgradePrice(UpgradeModel.upgradeCost(model.getHpLevel()));
+            view.setHpUpgradePrice(UpgradeModel.getCost(model.getHpLevel()));
             view.setMoney(model.getMoney());
+            model.save();
         }
     }
 
     void onUpgradeSpeedClicked(){
         if(model.tryAddSpeedLevel()) {
-            view.setSpeedUpgradePrice(UpgradeModel.upgradeCost(model.getSpeedLevel()));
+            view.setSpeedUpgradePrice(UpgradeModel.getCost(model.getSpeedLevel()));
             view.setMoney(model.getMoney());
+            model.save();
         }
     }
 
     void onUpgradeDamageClicked(){
         if(model.tryAddDamageLevel()) {
-            view.setDamageUpgradePrice(UpgradeModel.upgradeCost(model.getDamageLevel()));
+            view.setDamageUpgradePrice(UpgradeModel.getCost(model.getDamageLevel()));
             view.setMoney(model.getMoney());
+            model.save();
         }
     }
+
     void onUpgradeRegenClicked(){
         if(model.tryAddRegenLevel()) {
-            view.setRegenUpgradePrice(UpgradeModel.upgradeCost(model.getRegenLevel()));
+            view.setRegenUpgradePrice(UpgradeModel.getCost(model.getRegenLevel()));
             view.setMoney(model.getMoney());
+            model.save();
         }
     }
 

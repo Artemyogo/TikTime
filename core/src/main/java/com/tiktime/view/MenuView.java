@@ -19,13 +19,14 @@ public class MenuView implements Disposable {
     private TextButton startButton;
     private TextButton exitButton;
     private Label titleLabel;
-    FitViewport viewport;
+    private TextButton upgradeButton;
+    private FitViewport viewport;
 
     public MenuView(MenuController menuController) {
         this.menuController = menuController;
         viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         stage = new Stage(viewport);
-        skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
+        skin = new Skin(Gdx.files.internal("flat-earth/skin/flat-earth-ui.json"));
 
         createUI();
     }
@@ -55,8 +56,8 @@ public class MenuView implements Disposable {
         table.setFillParent(true); // Растягиваем на весь экран
         stage.addActor(table);
 
-//        titleLabel = new Label("TikTime", skin, "title");
-        table.add(titleLabel).padBottom(50).row();
+        //titleLabel = new Label("TikTime", skin, "title");
+        //table.add(titleLabel).padBottom(50).row();
 
         startButton = new TextButton("Start Game", skin);
         table.add(startButton).width(400).height(80).padBottom(20).row();
@@ -66,6 +67,17 @@ public class MenuView implements Disposable {
             public void clicked(InputEvent event, float x, float y) {
                 // Через menuController обрабатываем
                 menuController.onPlayClicked();
+            }
+        });
+
+        upgradeButton = new TextButton("Upgrade", skin);
+        table.add(upgradeButton).width(400).height(80).padBottom(20).row();
+
+        upgradeButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                // Через menuController обрабатываем
+                menuController.onUpgradeClicked();
             }
         });
 

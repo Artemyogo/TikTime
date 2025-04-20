@@ -21,7 +21,7 @@ public class UpgradeModel {
         regenLevel = prefs.getInteger("RegenLevel", 0);
     }
 
-    public static int upgradeCost(int level) {
+    public static int getCost(int level) {
         return (level + 1) * 100;
     }
 
@@ -90,7 +90,7 @@ public class UpgradeModel {
     }
 
     private boolean tryUpgrade(int currentLevel, java.util.function.IntConsumer levelSetter) {
-        int cost = upgradeCost(currentLevel);
+        int cost = getCost(currentLevel);
         if (money >= cost) {
             levelSetter.accept(currentLevel + 1);
             money -= cost;

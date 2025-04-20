@@ -6,12 +6,10 @@ import com.tiktime.controller.MenuController;
 import com.tiktime.view.MenuView;
 
 public class MenuScreen extends ScreenAdapter {
-    private final Game game;
     private final MenuController menuController;
     private final MenuView menuView;
 
     public MenuScreen(Game game) {
-        this.game = game;
         menuController = new MenuController(game);
         menuView = new MenuView(menuController);
     }
