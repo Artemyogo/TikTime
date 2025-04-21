@@ -1,17 +1,16 @@
 package com.tiktime.model.gameobjects;
 
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.tiktime.model.components.HealthComponent;
 import com.tiktime.model.enums.Faction;
 
-public abstract class Entity extends GameObject {
+public abstract class EntityModel extends GameObjectModel {
     private HealthComponent healthComponent;
     Faction faction;
 
-    public Entity(String id, float x, float y, float width, float height, TextureRegion texture,
-                  HealthComponent healthComponent, Faction faction) {
-        super(id, x, y, width, height, texture);
-        this.healthComponent = new HealthComponent(healthComponent);
+    public EntityModel(String id, float x, float y, float width, float height,
+                       HealthComponent healthComponent, Faction faction) {
+        super(id, x, y, width, height);
+        this.healthComponent = healthComponent;
         this.faction = faction;
     }
 
