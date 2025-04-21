@@ -41,6 +41,34 @@ public class UpgradeView implements Disposable {
 
     public void setController(UpgradeController controller) {
         this.controller = controller;
+
+        hpUpgradeButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                controller.onUpgradeHPClicked();
+            }
+        });
+
+        speedUpgradeButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                controller.onUpgradeSpeedClicked();
+            }
+        });
+
+        damageUpgradeButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                controller.onUpgradeDamageClicked();
+            }
+        });
+
+        regenUpgradeButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                controller.onUpgradeRegenClicked();
+            }
+        });
     }
 
     private void createUI() {
@@ -62,7 +90,7 @@ public class UpgradeView implements Disposable {
         topRight.add(coinLabel).padTop(64).padRight(52);
 
         TextButton back = new TextButton("Back", skin);
-        topLeft.add(back).width(200).height(80).padTop(64).padLeft(32);
+        topLeft.add(back).width(252).height(80).padTop(56).padLeft(32);
         back.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -70,10 +98,10 @@ public class UpgradeView implements Disposable {
             }
         });
 
-        upgrades.add(hpUpgradeButton).height(100).padTop(200).padBottom(70).row();
-        upgrades.add(speedUpgradeButton).height(100).padBottom(70).row();
-        upgrades.add(damageUpgradeButton).height(100).padBottom(70).row();
-        upgrades.add(regenUpgradeButton).height(100).row();
+        upgrades.add(hpUpgradeButton).height(100).width(552).padTop(152).padBottom(70).row();
+        upgrades.add(speedUpgradeButton).height(100).width(552).padBottom(70).row();
+        upgrades.add(damageUpgradeButton).height(100).width(552).padBottom(70).row();
+        upgrades.add(regenUpgradeButton).height(100).width(552).row();
     }
 
     public void setHpUpgradePrice(int price) {
@@ -102,6 +130,39 @@ public class UpgradeView implements Disposable {
 
     public void render(float delta) {
         Gdx.gl.glClear(Gdx.gl.GL_COLOR_BUFFER_BIT);
+
+        if (controller.isAvailableHPUpgrade()) {
+            hpUpgradeButton.setColor(Color.GREEN);
+            hpUpgradeButton.setDisabled(false);
+        } else {
+            hpUpgradeButton.setColor(Color.RED);
+            hpUpgradeButton.setDisabled(true);
+        }
+
+        if (controller.isAvailableSpeedUpgrade()) {
+            speedUpgradeButton.setColor(Color.GREEN);
+            speedUpgradeButton.setDisabled(false);
+        } else {
+            speedUpgradeButton.setColor(Color.RED);
+            speedUpgradeButton.setDisabled(true);
+        }
+
+        if (controller.isAvailableDamageUpgrade()) {
+            damageUpgradeButton.setColor(Color.GREEN);
+            damageUpgradeButton.setDisabled(false);
+        } else {
+            damageUpgradeButton.setColor(Color.RED);
+            damageUpgradeButton.setDisabled(true);
+        }
+
+        if (controller.isAvailableRegenUpgrade()) {
+            regenUpgradeButton.setColor(Color.GREEN);
+            regenUpgradeButton.setDisabled(false);
+        } else {
+            regenUpgradeButton.setColor(Color.RED);
+            regenUpgradeButton.setDisabled(true);
+        }
+
         stage.act(delta);
         stage.draw();
     }

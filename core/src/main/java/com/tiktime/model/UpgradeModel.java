@@ -2,6 +2,10 @@ package com.tiktime.model;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.tiktime.model.components.HealthComponent;
+import com.tiktime.model.consts.PlayerBaseCharacteristics;
+import com.tiktime.model.enums.Faction;
 
 public class UpgradeModel {
     private final Preferences prefs;
@@ -10,6 +14,7 @@ public class UpgradeModel {
 
     private UpgradeModel() {
         prefs = Gdx.app.getPreferences("stats");
+        clear(); // delete this line later
         load();
     }
 
@@ -116,5 +121,9 @@ public class UpgradeModel {
         prefs.putInteger("DamageLevel", damageLevel);
         prefs.putInteger("RegenLevel", regenLevel);
         prefs.flush();
+    }
+
+    private void clear() {
+        prefs.clear();
     }
 }

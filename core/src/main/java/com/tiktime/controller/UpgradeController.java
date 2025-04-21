@@ -59,4 +59,20 @@ public class UpgradeController {
         }
     }
 
+    public boolean isAvailableHPUpgrade() {
+        return UpgradeModel.getCost(model.getHpLevel()) <= model.getMoney();
+    }
+
+    public boolean isAvailableSpeedUpgrade() {
+        return UpgradeModel.getCost(model.getSpeedLevel()) <= model.getMoney();
+    }
+
+    public boolean isAvailableDamageUpgrade() {
+        return UpgradeModel.getCost(model.getDamageLevel()) <= model.getMoney();
+    }
+
+    public boolean isAvailableRegenUpgrade() {
+        return UpgradeModel.getCost(model.getRegenLevel()) <= model.getMoney();
+    }
+
 }
