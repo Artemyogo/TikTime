@@ -15,11 +15,23 @@ public class UpgradeController {
         this.view = view;
         this.model = UpgradeModel.getInstance();
 
-        this.view.setHpUpgradePrice(UpgradeModel.getCost(this.model.getHpLevel()));
-        this.view.setSpeedUpgradePrice(UpgradeModel.getCost(this.model.getSpeedLevel()));
-        this.view.setDamageUpgradePrice(UpgradeModel.getCost(this.model.getDamageLevel()));
-        this.view.setRegenUpgradePrice(UpgradeModel.getCost(this.model.getRegenLevel()));
-        this.view.setMoney(this.model.getMoney());
+        setUpgradesPrice();
+        setButtonsState();
+    }
+
+    private void setUpgradesPrice() {
+        view.setHpUpgradePrice(UpgradeModel.getCost(model.getHpLevel()));
+        view.setSpeedUpgradePrice(UpgradeModel.getCost(model.getSpeedLevel()));
+        view.setDamageUpgradePrice(UpgradeModel.getCost(model.getDamageLevel()));
+        view.setRegenUpgradePrice(UpgradeModel.getCost(model.getRegenLevel()));
+        view.setMoney(model.getMoney());
+    }
+
+    private void setButtonsState() {
+        UpgradeView.setActive(view.getHPUpgradeButton(), isAvailableHPUpgrade());
+        UpgradeView.setActive(view.getSpeedUpgradeButton(), isAvailableSpeedUpgrade());
+        UpgradeView.setActive(view.getDamageUpgradeButton(), isAvailableDamageUpgrade());
+        UpgradeView.setActive(view.getRegenUpgradeButton(), isAvailableRegenUpgrade());
     }
 
     public void onExitClicked(){
@@ -28,50 +40,50 @@ public class UpgradeController {
     }
 
     public void onUpgradeHPClicked(){
-        if(model.tryAddHpLevel()) {
-            view.setHpUpgradePrice(UpgradeModel.getCost(model.getHpLevel()));
-            view.setMoney(model.getMoney());
+        if (model.tryAddHpLevel()) {
             model.save();
+            setUpgradesPrice();
+            setButtonsState();
         }
     }
 
     public void onUpgradeSpeedClicked(){
-        if(model.tryAddSpeedLevel()) {
-            view.setSpeedUpgradePrice(UpgradeModel.getCost(model.getSpeedLevel()));
-            view.setMoney(model.getMoney());
+        if (model.tryAddSpeedLevel()) {
             model.save();
+            setUpgradesPrice();
+            setButtonsState();
         }
     }
 
     public void onUpgradeDamageClicked(){
-        if(model.tryAddDamageLevel()) {
-            view.setDamageUpgradePrice(UpgradeModel.getCost(model.getDamageLevel()));
-            view.setMoney(model.getMoney());
+        if (model.tryAddDamageLevel()) {
             model.save();
+            setUpgradesPrice();
+            setButtonsState();
         }
     }
 
     public void onUpgradeRegenClicked(){
-        if(model.tryAddRegenLevel()) {
-            view.setRegenUpgradePrice(UpgradeModel.getCost(model.getRegenLevel()));
-            view.setMoney(model.getMoney());
+        if (model.tryAddRegenLevel()) {
             model.save();
+            setUpgradesPrice();
+            setButtonsState();
         }
     }
 
-    public boolean isAvailableHPUpgrade() {
+    private boolean isAvailableHPUpgrade() {
         return UpgradeModel.getCost(model.getHpLevel()) <= model.getMoney();
     }
 
-    public boolean isAvailableSpeedUpgrade() {
+    private boolean isAvailableSpeedUpgrade() {
         return UpgradeModel.getCost(model.getSpeedLevel()) <= model.getMoney();
     }
 
-    public boolean isAvailableDamageUpgrade() {
+    private boolean isAvailableDamageUpgrade() {
         return UpgradeModel.getCost(model.getDamageLevel()) <= model.getMoney();
     }
 
-    public boolean isAvailableRegenUpgrade() {
+    private boolean isAvailableRegenUpgrade() {
         return UpgradeModel.getCost(model.getRegenLevel()) <= model.getMoney();
     }
 

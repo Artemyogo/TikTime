@@ -5,7 +5,7 @@ import com.badlogic.gdx.physics.box2d.World;
 
 public class WorldModel {
     World world;
-    int grid[][];
+    int[][] grid;
 
     WorldModel(int h, int w){
         grid = new int[h][w];
