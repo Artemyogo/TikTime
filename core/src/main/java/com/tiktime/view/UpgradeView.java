@@ -73,7 +73,7 @@ public class UpgradeView implements Disposable {
         upgrades.add(hpUpgradeButton).height(100).padTop(200).padBottom(70).row();
         upgrades.add(speedUpgradeButton).height(100).padBottom(70).row();
         upgrades.add(damageUpgradeButton).height(100).padBottom(70).row();
-        upgrades.add(regenUpgradeButton).height(100).padBottom(70).row();
+        upgrades.add(regenUpgradeButton).height(100).row();
     }
 
     public void setHpUpgradePrice(int price) {

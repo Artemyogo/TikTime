@@ -1,26 +1,25 @@
 package com.tiktime.controller;
 
-import com.badlogic.gdx.Game;
 import com.tiktime.Main;
-import com.tiktime.model.Player;
+import com.tiktime.model.UpgradeModel;
 import com.tiktime.screens.MenuScreen;
 import com.tiktime.view.UpgradeView;
 
 public class UpgradeController {
     private final Main game;
-    private final Player player;
+    private final UpgradeModel model;
     private final UpgradeView view;
 
     public UpgradeController(Main game, UpgradeView view){
         this.game = game;
-        this.player = game.getPlayer();
         this.view = view;
+        this.model = UpgradeModel.getInstance();
 
-        this.view.setHpUpgradePrice(Player.getCost(this.player.getHpLevel()));
-        this.view.setSpeedUpgradePrice(Player.getCost(this.player.getSpeedLevel()));
-        this.view.setDamageUpgradePrice(Player.getCost(this.player.getDamageLevel()));
-        this.view.setRegenUpgradePrice(Player.getCost(this.player.getRegenLevel()));
-        this.view.setMoney(this.player.getMoney());
+        this.view.setHpUpgradePrice(UpgradeModel.getCost(this.model.getHpLevel()));
+        this.view.setSpeedUpgradePrice(UpgradeModel.getCost(this.model.getSpeedLevel()));
+        this.view.setDamageUpgradePrice(UpgradeModel.getCost(this.model.getDamageLevel()));
+        this.view.setRegenUpgradePrice(UpgradeModel.getCost(this.model.getRegenLevel()));
+        this.view.setMoney(this.model.getMoney());
     }
 
     public void onExitClicked(){
@@ -29,34 +28,34 @@ public class UpgradeController {
     }
 
     public void onUpgradeHPClicked(){
-        if(player.tryAddHpLevel()) {
-            view.setHpUpgradePrice(Player.getCost(player.getHpLevel()));
-            view.setMoney(player.getMoney());
-            player.save();
+        if(model.tryAddHpLevel()) {
+            view.setHpUpgradePrice(UpgradeModel.getCost(model.getHpLevel()));
+            view.setMoney(model.getMoney());
+            model.save();
         }
     }
 
     public void onUpgradeSpeedClicked(){
-        if(player.tryAddSpeedLevel()) {
-            view.setSpeedUpgradePrice(Player.getCost(player.getSpeedLevel()));
-            view.setMoney(player.getMoney());
-            player.save();
+        if(model.tryAddSpeedLevel()) {
+            view.setSpeedUpgradePrice(UpgradeModel.getCost(model.getSpeedLevel()));
+            view.setMoney(model.getMoney());
+            model.save();
         }
     }
 
     public void onUpgradeDamageClicked(){
-        if(player.tryAddDamageLevel()) {
-            view.setDamageUpgradePrice(Player.getCost(player.getDamageLevel()));
-            view.setMoney(player.getMoney());
-            player.save();
+        if(model.tryAddDamageLevel()) {
+            view.setDamageUpgradePrice(UpgradeModel.getCost(model.getDamageLevel()));
+            view.setMoney(model.getMoney());
+            model.save();
         }
     }
 
     public void onUpgradeRegenClicked(){
-        if(player.tryAddRegenLevel()) {
-            view.setRegenUpgradePrice(Player.getCost(player.getRegenLevel()));
-            view.setMoney(player.getMoney());
-            player.save();
+        if(model.tryAddRegenLevel()) {
+            view.setRegenUpgradePrice(UpgradeModel.getCost(model.getRegenLevel()));
+            view.setMoney(model.getMoney());
+            model.save();
         }
     }
 
