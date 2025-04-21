@@ -2,14 +2,20 @@ package com.tiktime.model;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.tiktime.model.components.HealthComponent;
+import com.tiktime.model.enums.Faction;
+import com.tiktime.model.gameobjects.Entity;
 
-public class UpgradeModel {
+public class Player extends Entity {
     private final Preferences prefs;
     private int money;
     private int hpLevel, speedLevel, damageLevel, regenLevel;
 
-    public UpgradeModel() {
-        prefs = Gdx.app.getPreferences("upgrade");
+    public Player(String id, float x, float y, float width, float height, TextureRegion texture,
+                  HealthComponent healthComponent, Faction faction) {
+        super(id, x, y, width, height, texture, healthComponent, faction);
+        prefs = Gdx.app.getPreferences("stats");
         load();
     }
 

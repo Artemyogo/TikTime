@@ -2,14 +2,15 @@ package com.tiktime.controller;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.tiktime.Main;
 import com.tiktime.screens.GameScreen;
 import com.tiktime.screens.SettingsScreen;
 import com.tiktime.screens.UpgradeScreen;
 
 public class MenuController {
-    private final Game game;
+    private final Main game;
 
-    public MenuController(Game game) {
+    public MenuController(Main game) {
         this.game = game;
     }
 

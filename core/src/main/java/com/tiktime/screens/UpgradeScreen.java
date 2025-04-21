@@ -2,19 +2,19 @@ package com.tiktime.screens;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.ScreenAdapter;
+import com.tiktime.Main;
 import com.tiktime.controller.UpgradeController;
-import com.tiktime.model.UpgradeModel;
+import com.tiktime.model.Player;
 import com.tiktime.view.UpgradeView;
 
 public class UpgradeScreen extends ScreenAdapter {
     UpgradeController controller;
-    UpgradeModel model;
+    Player player;
     UpgradeView view;
 
-    public UpgradeScreen(Game game){
-        model = new UpgradeModel();
+    public UpgradeScreen(Main game){
         view = new UpgradeView();
-        controller = new UpgradeController(game, model, view);
+        controller = new UpgradeController(game, view);
         view.setController(controller);
     }
 
