@@ -1,4 +1,4 @@
-package com.tiktime.controller;
+package com.tiktime.model;
 
 public class SettingsModel {
     boolean shown;
