@@ -1,40 +1,37 @@
 package com.tiktime.screens;
 
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.ScreenAdapter;
+import com.tiktime.Main;
+import com.tiktime.controller.WorldController;
+import com.tiktime.view.GameView;
 
-public class GameScreen implements Screen {
+public class GameScreen extends ScreenAdapter {
+    private final WorldController worldController;
+    private final GameView gameView;
+
+    public GameScreen(Main game) {
+        worldController = new WorldController(game);
+        gameView = new GameView(worldController);
+    }
+
     @Override
     public void show() {
-
+        gameView.show();
     }
 
     @Override
     public void render(float v) {
-
+        gameView.render(v);
     }
 
     @Override
-    public void resize(int i, int i1) {
-
-    }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
-
+    public void resize(int width, int height) {
+        gameView.resize(width, height);
     }
 
     @Override
     public void dispose() {
-
+        gameView.dispose();
     }
 }
