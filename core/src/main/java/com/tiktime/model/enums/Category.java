@@ -1,0 +1,27 @@
+package com.tiktime.model.enums;
+
+public enum Category {
+    PLAYER   (0x0001),
+    ENEMY    (0x0002),
+    WALL     (0x0004),
+    BULLET   (0x0008),
+    FLOOR    (0x0010);
+
+    private final short bit;
+
+    Category(int bit) {
+        this.bit = (short) bit;
+    }
+
+    public short getBit() {
+        return bit;
+    }
+
+    public static short combine(Category... categories) {
+        short mask = 0;
+        for (Category c : categories) {
+            mask |= c.getBit();
+        }
+        return mask;
+    }
+}

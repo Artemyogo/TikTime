@@ -1,9 +1,24 @@
 {
-  "player":
-  {
+  "player": {
     "baseHP": 100,
     "baseSpeed": 20,
     "baseDamage": 10,
     "baseRegen": 5
+  },
+  "entity": {
+    "density": 1.0,
+    "restitution": 0.2,
+    "friction": 0.4,
+    "acceleration": 50.0
+  },
+  "wall": {
+    "density": 1.0,
+    "restitution": 0.0,
+    "friction": 0.5
+  },
+  "floor": {
+    "density": 1.0,
+    "restitution": 0.0,
+    "friction": 0.3
   }
 }
