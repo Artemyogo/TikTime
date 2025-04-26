@@ -15,7 +15,7 @@ public class MenuController {
     }
 
     public void onPlayClicked() {
-        game.setScreen(new GameScreen());
+        game.setScreen(new GameScreen(game));
     }
 
     public void onUpgradeClicked() {

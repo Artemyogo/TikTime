@@ -9,7 +9,7 @@ public class UpgradeModel {
     private int hpLevel, speedLevel, damageLevel, regenLevel;
 
     private UpgradeModel() {
-        prefs = Gdx.app.getPreferences("stats");
+        prefs = Gdx.app.getPreferences("com.tiktime.upgrades");
         clear(); // delete this line later
         load();
     }
@@ -25,6 +25,8 @@ public class UpgradeModel {
     }
 
     private void load() {
+        prefs.putInteger("money", 1000);
+        prefs.flush();
         money = prefs.getInteger("money", 0);
         hpLevel = prefs.getInteger("HpLevel", 0);
         speedLevel = prefs.getInteger("SpeedLevel", 0);
