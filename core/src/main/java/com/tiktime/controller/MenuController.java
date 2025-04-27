@@ -15,7 +15,8 @@ public class MenuController {
     }
 
     public void onPlayClicked() {
-        game.setScreen(new GameScreen(game));
+        /// TODO SET FIRST MAP NAME
+        game.setScreen(new GameScreen(game, "BaseMap.tmx"));
     }
 
     public void onUpgradeClicked() {

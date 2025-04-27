@@ -44,7 +44,7 @@ public class HealthComponent {
 
     public void setMaxHealth(int maxHealth) {
         this.maxHealth = maxHealth;
-        /// I want to believe that all is OK
+        /// TODO I want to believe that all is OK
         setCurrentHealth(Math.min(currentHealth, maxHealth));
     }
 

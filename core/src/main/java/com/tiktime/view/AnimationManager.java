@@ -1,5 +1,6 @@
 package com.tiktime.view;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
@@ -24,6 +25,7 @@ public class AnimationManager {
     }
 
     public TextureRegion getCurrentFrame() {
+//        Gdx.app.log("AnimationManager", "Current frame: " + currentAnim);
         return animations.get(currentAnim).getKeyFrame(stateTime);
     }
 

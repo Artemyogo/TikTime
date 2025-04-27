@@ -53,8 +53,9 @@ public abstract class EntityModel {
 
     public void move(Vector2 direction){
         EntityConfig entityConfig = GameConfig.getInstance().getEntityConfig();
-        Vector2 force = new Vector2(direction).scl(entityConfig.getAcceleration());
-        body.applyForceToCenter(force, true);
+        ///  TODO THERE ALSO
+//        Vector2 force = new Vector2(direction).scl(entityConfig.getAcceleration());
+//        body.applyForceToCenter(force, true);
     }
 
 }

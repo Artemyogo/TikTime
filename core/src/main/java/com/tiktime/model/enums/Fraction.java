@@ -1,6 +1,6 @@
 package com.tiktime.model.enums;
 
-public enum Fraction {
+public enum  Fraction {
     PLAYER,
     ENEMY,
     NEUTRAL

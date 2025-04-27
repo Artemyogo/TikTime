@@ -17,12 +17,18 @@ public abstract class EntityView {
     protected final TextureAtlas atlas;
     protected AnimationManager animManager;
     protected Direction direction = Direction.SOUTH;
-    protected EntityState state = EntityState.IDLE;
+    /// TODO CHANGE TO IDLE
+//    protected EntityState state = EntityState.IDLE;
+    protected EntityState state = EntityState.RUNNING;
     protected float x, y, width, height;
     protected boolean isAttacked = false;
 
     public EntityView(float x, float y, float width, float height, String atlasPath) {
         this.atlas = new TextureAtlas(Gdx.files.internal(atlasPath));
+        if (atlas.getRegions().size == 0) {
+            Gdx.app.log("ERROR", "atlas is empty");
+            Gdx.app.exit();
+        }
         this.animManager = new AnimationManager();
         this.x = x;
         this.y = y;
@@ -33,6 +39,10 @@ public abstract class EntityView {
 
     public EntityView(float x, float y, float width, float height, Direction direction, EntityState state, String atlasPath) {
         this.atlas = new TextureAtlas(Gdx.files.internal(atlasPath));
+//        if (atlas.getRegions().size > 0) {
+//            Gdx.app.log("ERROR", "atlas is empty");
+//            Gdx.app.exit();
+//        }
         this.animManager = new AnimationManager();
         this.x = x;
         this.y = y;
@@ -45,26 +55,64 @@ public abstract class EntityView {
 
     protected abstract void loadAnimations();
 
-    public void updateState(Direction direction, EntityState state) {
-        boolean stateChanged = (this.state != state);
+    public void setDirection(Direction direction) {
         boolean directionChanged = (this.direction != direction);
 
-        this.state = state;
         this.direction = direction;
 
-        if (stateChanged || directionChanged) {
+        if (directionChanged) {
             updateAnimation();
         }
     }
 
+    public void setState(EntityState state) {
+        boolean stateChanged = (this.state != state);
+
+        this.state = state;
+
+        if (stateChanged) {
+            updateAnimation();
+        }
+    }
+
+    public void setCoordinates(float x, float y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    public void setSizes(float width, float height) {
+        this.width = width;
+        this.height = height;
+    }
+
     protected Animation<TextureRegion> loadAnimation(String pathPrefix, float frameDuration) {
         ///  TODO
-        Array<TextureAtlas.AtlasRegion> regions = atlas.findRegions(pathPrefix);
-
-        if (regions.size == 0) {
-            atlas.dispose();
-            throw new GdxRuntimeException("Animation doesnt found: " + pathPrefix);
+        Array<TextureAtlas.AtlasRegion> regions = new Array<>();
+        for (TextureAtlas.AtlasRegion region : atlas.getRegions()) {
+            if (region.name.startsWith(pathPrefix)) {
+                regions.add(region);
+            }
+//            Gdx.app.log("REGION", "Name: " + region.name);
         }
+//        Array<TextureAtlas.AtlasRegion> regions = atlas.findRegions(pathPrefix);
+//
+//        if (regions.size == 0) {
+//            regions.sort((a, b) -> a.name.compareTo(b.name));
+//            for (TextureAtlas.AtlasRegion region : atlas.getRegions()) {
+//                Gdx.app.log("REGION", "Name: " + region.name);
+//            }
+//
+//            Gdx.app.log("ERROR", "atlas is empty");
+////            Gdx.app.exit();
+////            System.exit(-1);
+////            while (true) {
+////                System.out.println(pathPrefix);
+////            }
+//            throw new GdxRuntimeException( atlas.findRegions("player-running-0").isEmpty() + "   " + "   " +
+//                atlas.findRegions(pathPrefix).isEmpty() + "||" + atlas.getRegions().get(0).name + "||" +
+//                "   Animation doesnt foundHIHI: " + pathPrefix);
+////            atlas.dispose();
+//        }
 
         regions.sort(Comparator.comparing(region -> region.name));
 
@@ -80,10 +128,13 @@ public abstract class EntityView {
 
     protected void updateAnimation() {
         /// TODO BEWARE animName should be translated to the correct one
-        String animName = String.format("%s_%s",
-            state.name().toLowerCase(),
-            getDirectionKey(this.direction));
+        String animName = String.format("%s-%s",
+            "player",
+            state.name().toLowerCase());
+            //getDirectionKey(this.direction));
 
+//        Gdx.app.log("PIWOO", "animName: " + animName);
+//        Gdx.app.log(animName, animName);
         animManager.set(animName);
     }
 

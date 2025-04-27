@@ -121,14 +121,15 @@ public final class GameConfig {
         private final float density;
         private final float restitution;
         private final float friction;
-        private final float acceleration;
+//        private final float acceleration;
 
         private EntityConfig(EntityData data) {
             this.density = data.density;
             this.restitution = data.restitution;
             this.friction = data.friction;
+            /// TODO WE NEED TO RETURN ACCELEREATION
             // Default to 10.0f if acceleration is not provided
-            this.acceleration = data.acceleration > 0 ? data.acceleration : 10.0f;
+//            this.acceleration = data.acceleration > 0 ? data.acceleration : 10.0f;
         }
 
         public float getDensity() {
@@ -143,9 +144,9 @@ public final class GameConfig {
             return friction;
         }
 
-        public float getAcceleration() {
-            return acceleration;
-        }
+//        public float getAcceleration() {
+//            return acceleration;
+//        }
     }
 
     public static final class PlayerConfig {
@@ -190,7 +191,6 @@ public final class GameConfig {
         private float restitution;
         private float friction;
     }
-
 
     private static class WallData {
         private float density;

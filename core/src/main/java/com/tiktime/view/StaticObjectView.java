@@ -20,7 +20,7 @@ public abstract class StaticObjectView {
             height);
     }
 
-    protected void loadTexture(String texturePath) {
-        texture = Assets.getTexture(texturePath);
-    }
+//    protected void loadTexture(String texturePath) {
+//        texture = Assets.getTexture(texturePath);
+//    }
 }

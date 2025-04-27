@@ -63,18 +63,16 @@ public class WorldModel {
     public WorldModel(int h, int w, EntityData playerData, float px, float py, TiledMap map) throws IllegalAccessException {
         this.map = map;
 
-        BodyDef floorDef = new BodyDef();
-        floorDef.type = BodyDef.BodyType.StaticBody;
-        floorDef.position.set(h/2F, w/2F);
+
 
         world = new World(new Vector2(0, 0), true);
 
         this.player = new PlayerModel(world, px, py, playerData);
-        Body floorBody = world.createBody(floorDef);
+        /// TODO THERE ALSO
+//        Body floorBody = world.createBody(floorDef);
 
-        floorBody.createFixture(getFloorFixture(h, w));
+//        floorBody.createFixture(getFloorFixture(h, w));
     }
-
 
     EntityData getPlayerData(){
         return player.getData();

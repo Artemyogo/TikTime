@@ -12,16 +12,23 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 import java.util.Comparator;
 
 public class EnemyView extends EntityView {
+    private final int id;
     private final EnemyType enemyType;
-    public EnemyView(float x, float y, float width, float height, String atlasPath, EnemyType enemyType) {
-        super(x, y, width, height, atlasPath);
+    /// TODO ATLAS PATH
+    public static String[] atlasPaths = {"1, 2, 3", "s2"};
+    public EnemyView(float x, float y, float width, float height, int id, EnemyType enemyType) {
+        /// TODO CALC ATLAS PATH WITH THE CONSTANCE WITH ENEMY TYPE
+        super(x, y, width, height, atlasPaths[enemyType.getId()]);
         this.enemyType = enemyType;
+        this.id = id;
     }
 
-    public EnemyView(float x, float y, float width, float height, Direction direction, EntityState entityState, String atlasPath,
+    public EnemyView(float x, float y, float width, float height, int id, Direction direction, EntityState entityState,
             EnemyType enemyType) {
-        super(x, y, width, height, direction, entityState, atlasPath);
+        /// SAME
+        super(x, y, width, height, direction, entityState, atlasPaths[enemyType.getId()]);
         this.enemyType = enemyType;
+        this.id = id;
     }
 
     @Override

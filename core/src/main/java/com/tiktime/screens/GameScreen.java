@@ -10,9 +10,9 @@ public class GameScreen extends ScreenAdapter {
     private final WorldController worldController;
     private final GameView gameView;
 
-    public GameScreen(Main game) {
-        worldController = new WorldController(game);
-        gameView = new GameView(worldController);
+    public GameScreen(Main game, String mapName) {
+        gameView = new GameView();
+        worldController = new WorldController(game, gameView, mapName);
     }
 
     @Override
@@ -22,6 +22,7 @@ public class GameScreen extends ScreenAdapter {
 
     @Override
     public void render(float v) {
+        worldController.update(v);
         gameView.render(v);
     }
 
