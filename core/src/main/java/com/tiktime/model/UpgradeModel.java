@@ -3,14 +3,14 @@ package com.tiktime.model;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 
-public class UpgradeModel {
+public final class UpgradeModel {
     private final Preferences prefs;
     private int money;
     private int hpLevel, speedLevel, damageLevel, regenLevel;
 
     private UpgradeModel() {
         prefs = Gdx.app.getPreferences("com.tiktime.upgrades");
-        clear(); // delete this line later
+        clear(); /// TODO: delete this line later
         load();
     }
 

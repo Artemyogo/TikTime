@@ -25,7 +25,8 @@ public abstract class EntityModel {
         fixtureDef.friction = entityConfig.getFriction();
 
         fixtureDef.filter.categoryBits = data.category.getBit();
-        fixtureDef.filter.maskBits = Category.combine(Category.BULLET, Category.ENEMY, Category.WALL, Category.PLAYER);
+        fixtureDef.filter.maskBits = Category.combine(Category.BULLET, Category.WALL);
+//        fixtureDef.filter.maskBits = Category.combine(Category.BULLET, Category.ENEMY, Category.WALL, Category.PLAYER);
         shape.dispose();
         return fixtureDef;
     }
@@ -40,7 +41,6 @@ public abstract class EntityModel {
         body = world.createBody(bodyDef);
 
         body.createFixture(getFixtureDef(data.getWidth(), data.getHeight()));
-
     }
 
     public EntityData getData(){

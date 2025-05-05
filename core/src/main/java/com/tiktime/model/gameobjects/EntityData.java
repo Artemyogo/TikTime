@@ -4,7 +4,6 @@ import com.tiktime.model.components.HealthComponent;
 import com.tiktime.model.enums.Category;
 
 public class EntityData {
-
     private HealthComponent healthComponent;
     private float maxSpeed;
     private float width;

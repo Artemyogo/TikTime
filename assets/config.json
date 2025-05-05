@@ -1,6 +1,6 @@
 {
   "player": {
-    "baseHP": 100,
+    "baseHp": 100,
     "baseSpeed": 20,
     "baseDamage": 10,
     "baseRegen": 5

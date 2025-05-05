@@ -4,15 +4,19 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
+import sun.font.PhysicalFont;
 
 public final class GameConfig {
     private static final String CONFIG_FILE_PATH = "config.json";
     private static GameConfig instance;
 
     private final PlayerConfig playerConfig;
-    private final EntityConfig entityConfig;
     private final WallConfig wallConfig;
     private final FloorConfig floorConfig;
+    private final MarksmanEnemyConfig marksmanEnemyConfig;
+    private final AnimanEnemyConfig animanEnemyConfig;
+    private final RusherEnemyConfig rusherEnemyConfig;
+    private final Ak47WeaponConfig ak47WeaponConfig;
 
     public static GameConfig getInstance() {
         if (instance == null) {
@@ -25,8 +29,20 @@ public final class GameConfig {
         return playerConfig;
     }
 
-    public EntityConfig getEntityConfig() {
-        return entityConfig;
+    public AnimanEnemyConfig getAnimanEnemyConfig() {
+        return animanEnemyConfig;
+    }
+
+    public MarksmanEnemyConfig getMarksmanEnemyConfig() {
+        return marksmanEnemyConfig;
+    }
+
+    public RusherEnemyConfig getRusherEnemyConfig() {
+        return rusherEnemyConfig;
+    }
+
+    public Ak47WeaponConfig getAk47WeaponConfig() {
+        return ak47WeaponConfig;
     }
 
     public WallConfig getWallConfig() {
@@ -51,7 +67,10 @@ public final class GameConfig {
         }
 
         this.playerConfig = new PlayerConfig(configData.player);
-        this.entityConfig = new EntityConfig(configData.entity);
+        this.animanEnemyConfig = new AnimanEnemyConfig(configData.animanEnemyConfig);
+        this.marksmanEnemyConfig = new MarksmanEnemyConfig(configData.marksmanEnemyConfig);
+        this.rusherEnemyConfig = new RusherEnemyConfig(configData.rusherEnemyConfig);
+        this.ak47WeaponConfig = new Ak47WeaponConfig(configData.ak47WeaponConfig);
 
         // Initialize wall and floor configs - use default values if not present
         if (configData.wall != null) {
@@ -67,69 +86,19 @@ public final class GameConfig {
         }
     }
 
-    public static final class WallConfig {
-        private final float density;
-        private final float restitution;
-        private final float friction;
+    public static abstract class PhysicsConfig {
+        protected float density;
+        protected final float restitution;
+        protected final float friction;
+        protected final float width;
+        protected final float height;
 
-        private WallConfig(WallData data) {
-            // Use provided values or defaults if null
-            this.density = data.density > 0 ? data.density : 1.0f;
-            this.restitution = data.restitution > 0 ? data.restitution : 0.0f;
-            this.friction = data.friction > 0 ? data.friction : 0.5f;
-        }
-
-        public float getDensity() {
-            return density;
-        }
-
-        public float getRestitution() {
-            return restitution;
-        }
-
-        public float getFriction() {
-            return friction;
-        }
-    }
-
-    public static final class FloorConfig {
-        private final float density;
-        private final float restitution;
-        private final float friction;
-
-        private FloorConfig(FloorData data) {
-            // Use provided values or defaults if null
-            this.density = data.density > 0 ? data.density : 1.0f;
-            this.restitution = data.restitution > 0 ? data.restitution : 0.0f;
-            this.friction = data.friction > 0 ? data.friction : 0.3f;
-        }
-
-        public float getDensity() {
-            return density;
-        }
-
-        public float getRestitution() {
-            return restitution;
-        }
-
-        public float getFriction() {
-            return friction;
-        }
-    }
-
-    public static final class EntityConfig {
-        private final float density;
-        private final float restitution;
-        private final float friction;
-//        private final float acceleration;
-
-        private EntityConfig(EntityData data) {
+        public PhysicsConfig(PhysicsData data) {
             this.density = data.density;
             this.restitution = data.restitution;
             this.friction = data.friction;
-            /// TODO WE NEED TO RETURN ACCELEREATION
-            // Default to 10.0f if acceleration is not provided
-//            this.acceleration = data.acceleration > 0 ? data.acceleration : 10.0f;
+            this.width = data.width > 0 ? data.width : 1.0f;
+            this.height = data.height > 0 ? data.height : 1.0f;
         }
 
         public float getDensity() {
@@ -144,19 +113,36 @@ public final class GameConfig {
             return friction;
         }
 
-//        public float getAcceleration() {
-//            return acceleration;
-//        }
+        public float getWidth() {
+            return width;
+        }
+
+        public float getHeight() {
+            return height;
+        }
     }
 
-    public static final class PlayerConfig {
-        private final int baseHp;
-        private final int baseSpeed;
-        private final int baseDamage;
-        private final int baseRegen;
+    public static final class WallConfig extends PhysicsConfig {
+        private WallConfig(WallData data) {
+            super(data);
+        }
+    }
 
-        private PlayerConfig(PlayerData data) {
-            this.baseHp = data.baseHP;
+
+    public static final class FloorConfig extends PhysicsConfig {
+        private FloorConfig(FloorData data) {
+            super(data);
+        }
+    }
+
+    public static abstract class EntityConfig extends PhysicsConfig {
+        private int baseHp;
+        private int baseSpeed;
+        private float baseDamage;
+        private int baseRegen;
+        private EntityConfig(EntityData data) {
+            super(data);
+            this.baseHp = data.baseHp;
             this.baseSpeed = data.baseSpeed;
             this.baseDamage = data.baseDamage;
             this.baseRegen = data.baseRegen;
@@ -170,7 +156,7 @@ public final class GameConfig {
             return baseSpeed;
         }
 
-        public int getBaseDamage() {
+        public float getBaseDamage() {
             return baseDamage;
         }
 
@@ -179,35 +165,121 @@ public final class GameConfig {
         }
     }
 
-    private static class PlayerData {
-        private int baseHP;
-        private int baseSpeed;
-        private int baseDamage;
-        private int baseRegen;
+    public static final class PlayerConfig extends EntityConfig {
+        private PlayerConfig(PlayerData data) {
+            super(data);
+        }
     }
 
-    private static class EntityData {
-        private float density;
-        private float restitution;
-        private float friction;
+    public static final class MarksmanEnemyConfig extends EntityConfig {
+        private MarksmanEnemyConfig(MarksmanEnemyData data) {
+            super(data);
+        }
     }
 
-    private static class WallData {
-        private float density;
-        private float restitution;
-        private float friction;
+    public static final class AnimanEnemyConfig extends EntityConfig {
+        private AnimanEnemyConfig(AnimanEnemyData data) {
+            super(data);
+        }
     }
 
-    private static class FloorData {
-        private float density;
-        private float restitution;
-        private float friction;
+    public static final class RusherEnemyConfig extends EntityConfig {
+        private RusherEnemyConfig(RusherEnemyData data) {
+            super(data);
+        }
     }
+
+    public static abstract class WeaponsConfig {
+        protected int damage;
+        protected int fireRate;
+        protected int speed;
+        protected float width;
+        protected float height;
+
+        public WeaponsConfig(WeaponsData data) {
+           this.damage = data.damage;
+           this.fireRate = data.fireRate;
+           this.speed = data.speed;
+           this.width = data.width;
+           this.height = data.height;
+        }
+
+        public int getDamage() {
+            return damage;
+        }
+
+        public int getFireRate() {
+            return fireRate;
+        }
+
+        public int getSpeed() {
+            return speed;
+        }
+
+        public float getWidth() {
+            return width;
+        }
+
+        public float getHeight() {
+            return height;
+        }
+    }
+
+    public static final class Ak47WeaponConfig extends WeaponsConfig {
+        private Ak47WeaponConfig(Ak47WeaponData data) {
+            super(data);
+        }
+    }
+
+    private static abstract class PhysicsData {
+        protected float density;
+        protected float restitution;
+        protected float friction;
+        protected float width;
+        protected float height;
+    }
+
+    private static abstract class EntityData extends PhysicsData {
+        protected int baseHp;
+        protected int baseRegen;
+        protected int baseSpeed;
+        protected float baseDamage;
+    }
+
+    private static final class PlayerData extends EntityData { }
+
+    /**
+     * MARKSMAN(0),
+     *     ANIMAN(1),
+     *     RUSHER(2);
+     *     names of enemies
+     */
+
+    private static final class MarksmanEnemyData extends EntityData { }
+    private static final class AnimanEnemyData extends EntityData { }
+    private static final class RusherEnemyData extends EntityData { }
+
+    private static abstract class WeaponsData {
+        protected int damage;
+        protected int fireRate;
+        protected int speed;
+        protected float width;
+        protected float height;
+    }
+
+    private static final class Ak47WeaponData extends WeaponsData { }
+
+    private static class WallData extends PhysicsData { }
+
+    private static class FloorData extends PhysicsData { }
 
     private static class ConfigData {
         private PlayerData player;
-        private EntityData entity;
+        private MarksmanEnemyData marksman;
+        private AnimanEnemyData animan;
+        private RusherEnemyData rusher;
         private WallData wall;
         private FloorData floor;
+        private Ak47WeaponData ak47;
     }
 }
