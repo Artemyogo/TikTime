@@ -5,17 +5,20 @@ import com.tiktime.model.enums.Category;
 
 public class EntityData {
     private HealthComponent healthComponent;
-    private float maxSpeed;
-    private float width;
-    private float height;
+//    private float maxSpeed;
     public Category category;
+    private float height;
+    private float width;
+    private float speed;
 
-    EntityData(float width, float height, HealthComponent healthComponent, Category category){
+    EntityData(float width, float height, float speed, int currentHealth, int maxHealth, Category category){
         this.width = width;
         this.height = height;
-        this.healthComponent = healthComponent;
+        this.healthComponent = new HealthComponent(currentHealth, maxHealth);
         this.category = category;
+        this.speed = speed;
     }
+
     public int getMaxHealth() {
         return healthComponent.getMaxHealth();
     }
@@ -37,5 +40,7 @@ public class EntityData {
     public float getHeight(){
         return height;
     }
-
+    public float getSpeed(){
+        return speed;
+    }
 }

@@ -67,10 +67,10 @@ public final class GameConfig {
         }
 
         this.playerConfig = new PlayerConfig(configData.player);
-        this.animanEnemyConfig = new AnimanEnemyConfig(configData.animanEnemyConfig);
-        this.marksmanEnemyConfig = new MarksmanEnemyConfig(configData.marksmanEnemyConfig);
-        this.rusherEnemyConfig = new RusherEnemyConfig(configData.rusherEnemyConfig);
-        this.ak47WeaponConfig = new Ak47WeaponConfig(configData.ak47WeaponConfig);
+        this.animanEnemyConfig = new AnimanEnemyConfig(configData.animanEnemy);
+        this.marksmanEnemyConfig = new MarksmanEnemyConfig(configData.marksmanEnemy);
+        this.rusherEnemyConfig = new RusherEnemyConfig(configData.rusherEnemy);
+        this.ak47WeaponConfig = new Ak47WeaponConfig(configData.ak47Weapon);
 
         // Initialize wall and floor configs - use default values if not present
         if (configData.wall != null) {
@@ -137,8 +137,9 @@ public final class GameConfig {
 
     public static abstract class EntityConfig extends PhysicsConfig {
         private int baseHp;
-        private int baseSpeed;
+        private float baseSpeed;
         private float baseDamage;
+        ///  TODO can move it into PlayerConfig
         private int baseRegen;
         private EntityConfig(EntityData data) {
             super(data);
@@ -152,7 +153,7 @@ public final class GameConfig {
             return baseHp;
         }
 
-        public int getBaseSpeed() {
+        public float getBaseSpeed() {
             return baseSpeed;
         }
 
@@ -242,7 +243,7 @@ public final class GameConfig {
     private static abstract class EntityData extends PhysicsData {
         protected int baseHp;
         protected int baseRegen;
-        protected int baseSpeed;
+        protected float baseSpeed;
         protected float baseDamage;
     }
 

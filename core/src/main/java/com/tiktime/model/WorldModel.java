@@ -1,11 +1,13 @@
 package com.tiktime.model;
 
+import com.badlogic.gdx.maps.MapLayer;
+import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
-import com.tiktime.model.consts.GameConstants;
 import com.tiktime.model.enums.Category;
 import com.tiktime.model.gameobjects.EnemyModel;
 import com.tiktime.model.gameobjects.EntityData;
@@ -20,21 +22,24 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 
 public class WorldModel {
-    private World world;
-    private TiledMap map;
+    private final World world;
+    private final float timeStep = 1 / 60f;
+    private final int velocityIterations = 6;
+    private final int positionIterations = 2;
+
+    private final TiledMap map;
     private PlayerModel player;
     private Array<EnemyModel> enemies;
 
     private FixtureDef getFloorFixture(){
-        float width = GameConstants.FLOOR_WIDTH, height = GameConstants.FLOOR_HEIGHT;
+        FloorConfig floorConfig = GameConfig.getInstance().getFloorConfig();
         PolygonShape floorShape = new PolygonShape();
-        floorShape.setAsBox(height / 2F, width / 2F);
+        floorShape.setAsBox(floorConfig.getHeight() / 2F, floorConfig.getWidth() / 2F);
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = floorShape;
 
         // Get floor properties from GameConfig
-        FloorConfig floorConfig = GameConfig.getInstance().getFloorConfig();
         fixtureDef.density = floorConfig.getDensity();
         fixtureDef.restitution = floorConfig.getRestitution();
         fixtureDef.friction = floorConfig.getFriction();
@@ -49,15 +54,14 @@ public class WorldModel {
     }
 
     private FixtureDef getWallFixture(){
-        float width = GameConstants.WALL_WIDTH, height = GameConstants.WALL_HEIGHT;
+        WallConfig wallConfig = GameConfig.getInstance().getWallConfig();
         PolygonShape wallShape = new PolygonShape();
-        wallShape.setAsBox(height / 2F, width / 2F);
+        wallShape.setAsBox(wallConfig.getHeight() / 2F, wallConfig.getWidth() / 2F);
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = wallShape;
 
         // Get wall properties from GameConfig
-        WallConfig wallConfig = GameConfig.getInstance().getWallConfig();
         fixtureDef.density = wallConfig.getDensity();
         fixtureDef.restitution = wallConfig.getRestitution();
         fixtureDef.friction = wallConfig.getFriction();
@@ -69,61 +73,34 @@ public class WorldModel {
         return fixtureDef;
     }
 
-//    private FixtureDef getPlayerFixture(){
-//        float width = GameConstants.PLAYER_WIDTH, height = GameConstants.PLAYER_HEIGHT;
-//        PolygonShape playerShape = new PolygonShape();
-//        playerShape.setAsBox(height / 2F, width / 2F);
-//
-//        FixtureDef fixtureDef = new FixtureDef();
-//        fixtureDef.shape = playerShape;
-//
-//        // Get player(entity) properties from GameConfig
-//        EntityConfig playerConfig = GameConfig.getInstance().getEntityConfig();
-//        fixtureDef.density = playerConfig.getDensity();
-//        fixtureDef.restitution = playerConfig.getRestitution();
-//        fixtureDef.friction = playerConfig.getFriction();
-//
-//        fixtureDef.filter.categoryBits = Category.PLAYER.getBit();
-//        fixtureDef.filter.maskBits = Category.combine(Category.WALL, Category.BULLET);
-//
-//        playerShape.dispose();
-//        return fixtureDef;
-//    }
-//
-//    private FixtureDef getEnemyFixture(String enemyName){
-//        float width = GameConstants.ENEMY_WIDTH.get(enemyName), height = GameConstants.ENEMY_HEIGHT.get(enemyName);
-//        PolygonShape enemyShape = new PolygonShape();
-//        enemyShape.setAsBox(height / 2F, width / 2F);
-//
-//        FixtureDef fixtureDef = new FixtureDef();
-//        fixtureDef.shape = enemyShape;
-//
-//        // Get player(entity) properties from GameConfig
-//        EntityConfig playerConfig = GameConfig.getInstance().getEntityConfig();
-//        fixtureDef.density = playerConfig.getDensity();
-//        fixtureDef.restitution = playerConfig.getRestitution();
-//        fixtureDef.friction = playerConfig.getFriction();
-//
-//        fixtureDef.filter.categoryBits = Category.ENEMY.getBit();
-//        fixtureDef.filter.maskBits = Category.combine(Category.WALL, Category.BULLET);
-//
-//        enemyShape.dispose();
-//        return fixtureDef;
-//    }
+    public void update(float delta){
+        world.step(delta, velocityIterations, positionIterations);
+    }
 
-    public WorldModel(TiledMap map) throws IllegalAccessException {
+    public WorldModel(TiledMap map) {
         this.map = map;
-        this.world = new World(new Vector2(0, -9.8f), true);
+        this.world = new World(new Vector2(0, 0), true);
+        MapProperties properties = map.getLayers().get("objects").getObjects().get("playerSpawn").getProperties();
+        this.player = new PlayerModel(world, properties.get("x", Float.class), properties.get("y", Float.class));
+        TiledMapTileLayer wallLayer = (TiledMapTileLayer) map.getLayers().get("walls");
 
-
-//        this.player = new PlayerModel(world, px, py, playerData);
-        /// TODO THERE ALSO
-//        Body floorBody = world.createBody(floorDef);
-
-//        floorBody.createFixture(getFloorFixture(h, w));
+        for (int x = 0; x < wallLayer.getWidth(); x++) {
+            for (int y = 0; y < wallLayer.getHeight(); y++) {
+                if (wallLayer.getCell(x, y) == null) continue;
+                BodyDef bodyDef = new BodyDef();
+                bodyDef.type = BodyDef.BodyType.StaticBody;
+                bodyDef.position.set(x, y);
+                Body body = world.createBody(bodyDef);
+                body.createFixture(getWallFixture());
+            }
+        }
     }
 
     EntityData getPlayerData(){
         return player.getData();
+    }
+
+    public void updateMovementDirection(Vector2 movementDirection){
+        player.move(movementDirection);
     }
 }

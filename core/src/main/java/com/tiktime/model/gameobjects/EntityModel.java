@@ -12,6 +12,7 @@ import com.tiktime.model.consts.GameConfig.EntityConfig;
 public abstract class EntityModel {
     private final Body body;
     private final EntityData data;
+    private final EntityConfig config;
 
     private FixtureDef getFixtureDef(float width, float height){
         FixtureDef fixtureDef = new FixtureDef();
@@ -19,10 +20,9 @@ public abstract class EntityModel {
         shape.setAsBox(width, height);
         fixtureDef.shape = shape;
 
-        EntityConfig entityConfig = GameConfig.getInstance().getEntityConfig();
-        fixtureDef.density = entityConfig.getDensity();
-        fixtureDef.restitution = entityConfig.getRestitution();
-        fixtureDef.friction = entityConfig.getFriction();
+        fixtureDef.density = config.getDensity();
+        fixtureDef.restitution = config.getRestitution();
+        fixtureDef.friction = config.getFriction();
 
         fixtureDef.filter.categoryBits = data.category.getBit();
         fixtureDef.filter.maskBits = Category.combine(Category.BULLET, Category.WALL);
@@ -32,8 +32,9 @@ public abstract class EntityModel {
     }
 
     public EntityModel(World world, float x, float y,
-                       EntityData data) {
+                       EntityData data, EntityConfig config) {
         this.data = data;
+        this.config = config;
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.fixedRotation = true;
@@ -51,11 +52,25 @@ public abstract class EntityModel {
         return body.getPosition();
     }
 
-    public void move(Vector2 direction){
-        EntityConfig entityConfig = GameConfig.getInstance().getEntityConfig();
-        ///  TODO THERE ALSO
-//        Vector2 force = new Vector2(direction).scl(entityConfig.getAcceleration());
-//        body.applyForceToCenter(force, true);
+//    public void move(Vector2 direction){
+//        EntityConfig entityConfig = GameConfig.getInstance().getEntityConfig();
+//        ///  TODO THERE ALSO
+////        Vector2 force = new Vector2(direction).scl(entityConfig.getAcceleration());
+////        body.applyForceToCenter(force, true);
+//    }
+
+    public void move(Vector2 direction) {
+        if (direction.x < -1 || direction.x > 1 || direction.y < -1 || direction.y > 1) {
+            throw new IllegalArgumentException("Invalid move direction");
+        }
+
+        Vector2 velocity = new Vector2(direction);
+        velocity.x *= data.getSpeed();
+        velocity.y *= data.getSpeed();
+        body.setLinearVelocity(velocity);
     }
 
+    public Body getBody() {
+        return body;
+    }
 }

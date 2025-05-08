@@ -4,15 +4,6 @@ public class HealthComponent {
     private int currentHealth;
     private int maxHealth;
 
-    public HealthComponent(int maxHealth) {
-        if (maxHealth <= 0) {
-            throw new IllegalArgumentException("maxHealth out of range");
-        }
-
-        this.maxHealth = maxHealth;
-        this.currentHealth = maxHealth;
-    }
-
     public HealthComponent(int maxHealth, int currentHealth) {
         if (currentHealth <= 0 || maxHealth < currentHealth) {
             throw new IllegalArgumentException("currentHealth or maxHealth out of range");
