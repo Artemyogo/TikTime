@@ -46,6 +46,7 @@ public class WorldController {
             Direction.EAST,
             EntityState.RUNNING
         );
+        gameView.setHud(400, 50, entityData.getCurrentHealth() - 10, entityData.getMaxHealth(), 10);
     }
 
     public void update(float delta) {
@@ -79,7 +80,10 @@ public class WorldController {
         if (direction.equals(new Vector2(0, 0))) {
             gameView.setPlayerState(EntityState.IDLE);
         } else {
-            gameView.setPlayerDirection(getDirection(direction));
+            if (!direction.equals(new Vector2(0, 1)) &&
+            !direction.equals(new Vector2(0, -1))) {
+                gameView.setPlayerDirection(getDirection(direction));
+            }
             gameView.setPlayerState(EntityState.RUNNING);
         }
     }

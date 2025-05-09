@@ -21,28 +21,32 @@ import java.util.Map;
 import static com.tiktime.model.consts.ScreenConstants.PPM;
 
 public class GameView {
+    private boolean paused = false;
 //    private boolean debug = true;
-    private boolean debug = false;
+    private final boolean debug = false;
     private WorldController worldController;
     /// TODO DELETE THIS
     private World world;
 
-    private OrthographicCamera camera;
-    private SpriteBatch batch;
-    private Viewport viewport;
+    private final OrthographicCamera camera;
+    private final OrthographicCamera hudCamera;
+    private final SpriteBatch batch;
+    private final Viewport viewport;
     private OrthogonalTiledMapRenderer mapRenderer;
-    private Box2DDebugRenderer debugRenderer;
-    private ShapeRenderer shapeRenderer;
+    private final Box2DDebugRenderer debugRenderer;
+    private final ShapeRenderer shapeRenderer;
 
     private Map<Integer, EnemyView> enemies;
     private PlayerView player;
-    private boolean paused = false;
+    private HudView hud;
 
     public GameView() {
         shapeRenderer = new ShapeRenderer();
         batch = new SpriteBatch();
         camera = new OrthographicCamera();
+        hudCamera = new OrthographicCamera();
         camera.setToOrtho(false, ScreenConstants.VIEWPORT_WIDTH / PPM, ScreenConstants.VIEWPORT_HEIGHT / PPM);
+        hudCamera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         debugRenderer = new Box2DDebugRenderer();
         viewport = new ExtendViewport(
             ScreenConstants.VIEWPORT_WIDTH,
@@ -88,6 +92,18 @@ public class GameView {
         player.updateAnimation();
     }
 
+    public void setHud(float width, float height, int curHealth, int maxHealth, int coins) {
+        hud = new HudView(
+            Gdx.graphics.getWidth() - width - 25,
+            Gdx.graphics.getHeight() - height - 25,
+            width,
+            height,
+            curHealth,
+            maxHealth,
+            coins);
+
+    }
+
     public void render(float delta) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -104,6 +120,11 @@ public class GameView {
         }
 
         player.render(delta, batch);
+        batch.end();
+
+        batch.setProjectionMatrix(hudCamera.combined);
+        batch.begin();
+        hud.render(delta, batch);
         batch.end();
 
         /// TODO DELTE
