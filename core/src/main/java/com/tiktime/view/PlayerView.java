@@ -26,8 +26,7 @@ public class PlayerView extends EntityView {
 
     @Override
     protected void loadAnimations() {
-        /// TODO
-        /// MAYBE THERE CONSTANT runFrame should be
+        /// TODO MAYBE THERE CONSTANT runFrame should be
         float runFrameDuration  = 0.1f;
 
         ///  PATHPREFIX TO ATLAS

@@ -116,12 +116,12 @@ public class GameView {
             Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
 
-//            float width = ScreenConstants.VIEWPORT_WIDTH;
+//            float width = ScreenConstants.VIEWPORT_WIDTH * PPM;
+//            float height = ScreenConstants.VIEWPORT_HEIGHT * PPM;
             float width = Gdx.graphics.getWidth();
             float height = Gdx.graphics.getHeight();
 //            Gdx.app.log("GameView", "width: " + width + ", height: " + height);
-//            Gdx.app.log("GameView", "width: " + ScreenConstants.VIEWPORT_WIDTH + ", height: " + ScreenConstants.VIEWPORT_HEIGHT);
-//            float height = ScreenConstants.VIEWPORT_HEIGHT;
+//            Gdx.app.log("GameView", "width: " + ScreenConstants.VIEWPORT_WIDTH * PPM + ", height: " + ScreenConstants.VIEWPORT_HEIGHT * PPM);
             float centerX = width / 2f;
             float centerY = height / 2f;
             int steps = 40;
@@ -227,5 +227,6 @@ public class GameView {
 
     public void dispose() {
         batch.dispose();
+        shapeRenderer.dispose();
     }
 }
