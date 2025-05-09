@@ -6,10 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.GdxRuntimeException;
 
 import java.util.Comparator;
 
@@ -20,10 +17,11 @@ public abstract class EntityView {
     protected AnimationManager animManager;
     protected Direction direction = Direction.SOUTH;
     /// TODO CHANGE TO IDLE
-//    protected EntityState state = EntityState.IDLE;
-    protected EntityState state = EntityState.RUNNING;
+    protected EntityState state = EntityState.IDLE;
+//    protected EntityState state = EntityState.RUNNING;
     protected float x, y, width, height;
     protected boolean isAttacked = false;
+    protected boolean pause = false;
 
     public EntityView(float x, float y, float width, float height, String atlasPath) {
         this.atlas = new TextureAtlas(Gdx.files.internal(atlasPath));
@@ -37,6 +35,10 @@ public abstract class EntityView {
         this.width = width;
         this.height = height;
         loadAnimations();
+    }
+
+    public void setPause(boolean paused) {
+        this.pause = paused;
     }
 
     public EntityView(float x, float y, float width, float height, Direction direction, EntityState state, String atlasPath) {
@@ -77,7 +79,7 @@ public abstract class EntityView {
         }
     }
 
-    public void setCoordinates(float x, float y) {
+    public void setPosition(float x, float y) {
         this.x = x;
         this.y = y;
     }
@@ -88,35 +90,14 @@ public abstract class EntityView {
     }
 
     protected Animation<TextureRegion> loadAnimation(String pathPrefix, float frameDuration) {
-        ///  TODO
         Array<TextureAtlas.AtlasRegion> regions = new Array<>();
         for (TextureAtlas.AtlasRegion region : atlas.getRegions()) {
             if (region.name.startsWith(pathPrefix)) {
                 regions.add(region);
             }
-//            Gdx.app.log("REGION", "Name: " + region.name);
         }
-//        Array<TextureAtlas.AtlasRegion> regions = atlas.findRegions(pathPrefix);
-//
-//        if (regions.size == 0) {
-//            regions.sort((a, b) -> a.name.compareTo(b.name));
-//            for (TextureAtlas.AtlasRegion region : atlas.getRegions()) {
-//                Gdx.app.log("REGION", "Name: " + region.name);
-//            }
-//
-//            Gdx.app.log("ERROR", "atlas is empty");
-////            Gdx.app.exit();
-////            System.exit(-1);
-////            while (true) {
-////                System.out.println(pathPrefix);
-////            }
-//            throw new GdxRuntimeException( atlas.findRegions("player-running-0").isEmpty() + "   " + "   " +
-//                atlas.findRegions(pathPrefix).isEmpty() + "||" + atlas.getRegions().get(0).name + "||" +
-//                "   Animation doesnt foundHIHI: " + pathPrefix);
-////            atlas.dispose();
-//        }
 
-        regions.sort(Comparator.comparing(region -> region.name));
+        regions.sort(Comparator.comparing(region -> region.index));
 
         Animation<TextureRegion> animation = new Animation<>(frameDuration, regions);
         animation.setPlayMode(state.getPlayMode());
@@ -163,13 +144,12 @@ public abstract class EntityView {
         }
     }
 
-    public void setPosition(float x, float y) {
-        this.x = x;
-        this.y = y;
-    }
-
     public void render(float delta, SpriteBatch batch) {
-        animManager.update(delta);
+        if (!pause) {
+            animManager.update(delta);
+        }
+
+//        Gdx.app.log(this.getClass().getSimpleName(), "Rendering : x:" + x + ", y:" + y + ", w:" + width + ", h:" + height);
         TextureRegion frame = animManager.getCurrentFrame();
         boolean flip = needFlipTexture();
 
@@ -178,12 +158,12 @@ public abstract class EntityView {
         }
 
         batch.draw(frame,
-            x - width*PPM/2f,
-            y - height*PPM/2f,
-            width*PPM/2f,
-            height*PPM/2f,
-            width * PPM,
-            height * PPM,
+            x - width / 2f,
+            y - height / 2f,
+            width / 2f,
+            height / 2f,
+            width,
+            height,
             flip ? -1 : 1,
             1,
             0

@@ -18,11 +18,14 @@ import com.tiktime.view.GameView;
 import java.io.Console;
 import java.util.Iterator;
 
+import static com.tiktime.model.consts.ScreenConstants.PPM;
+
 public class WorldController {
     Game game;
     GameView gameView;
     WorldModel worldModel;
     TiledMap tiledMap;
+    boolean paused = false;
 
     public WorldController(Main game, GameView gameView, String mapName) {
         this.game = game;
@@ -46,6 +49,15 @@ public class WorldController {
     }
 
     public void update(float delta) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+            paused = !paused;
+            gameView.setPause(paused);
+        }
+
+        if (paused) {
+            return;
+        }
+
         Vector2 direction = new Vector2();
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             direction.x -= 1;
@@ -64,5 +76,45 @@ public class WorldController {
         worldModel.update(delta);
         Vector2 position = worldModel.getPlayerPosition();
         gameView.setPlayerCoordinates(position.x, position.y);
+        if (direction.equals(new Vector2(0, 0))) {
+            gameView.setPlayerState(EntityState.IDLE);
+        } else {
+            gameView.setPlayerDirection(getDirection(direction));
+            gameView.setPlayerState(EntityState.RUNNING);
+        }
+    }
+
+    Direction getDirection(Vector2 dir) {
+        if (dir == null) {
+            throw new IllegalArgumentException("Direction argument was null");
+        }
+
+        if (dir.equals(new Vector2(1f, 1f))) {
+//            this.angleDeg = 45;
+            return Direction.NORTH_EAST;
+        } else if (dir.equals(new Vector2(-1f, 1f))) {
+//            this.angleDeg = 135;
+            return Direction.NORTH_WEST;
+        } else if (dir.equals(new Vector2(1f, -1f))) {
+//            this.angleDeg = 315;
+            return Direction.SOUTH_EAST;
+        } else if (dir.equals(new Vector2(-1f, -1f))) {
+//            this.angleDeg = 225;
+            return Direction.SOUTH_WEST;
+        } else if (dir.equals(new Vector2(0, 1f))) {
+//            this.angleDeg = 90;
+            return Direction.NORTH;
+        } else if (dir.equals(new Vector2(0, -1f))) {
+//            this.angleDeg = 270;
+            return Direction.SOUTH;
+        } else if (dir.equals(new Vector2(1f, 0))) {
+//            this.angleDeg = 0;
+            return Direction.EAST;
+        } else if (dir.equals(new Vector2(-1f, 0))) {
+//            this.angleDeg = 180;
+            return Direction.WEST;
+        } else {
+            throw new IllegalArgumentException("Direction argument was null");
+        }
     }
 }

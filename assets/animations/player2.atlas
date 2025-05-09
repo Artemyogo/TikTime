@@ -1,0 +1,55 @@
+
+player2.png
+size: 128, 256
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+Run2
+  rotate: false
+  xy: 2, 35
+  size: 24, 32
+  orig: 24, 32
+  offset: 0, 0
+  index: 1
+Run2
+  rotate: false
+  xy: 68, 165
+  size: 24, 32
+  orig: 24, 32
+  offset: 0, 0
+  index: 4
+Run2
+  rotate: false
+  xy: 2, 2
+  size: 24, 31
+  orig: 24, 31
+  offset: 0, 0
+  index: 3
+Run2
+  rotate: false
+  xy: 28, 36
+  size: 24, 31
+  orig: 24, 31
+  offset: 0, 0
+  index: 6
+Run2
+  rotate: false
+  xy: 68, 131
+  size: 18, 32
+  orig: 18, 32
+  offset: 0, 0
+  index: 2
+Run2
+  rotate: false
+  xy: 94, 165
+  size: 18, 32
+  orig: 18, 32
+  offset: 0, 0
+  index: 5
+player
+  rotate: false
+  xy: 2, 69
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1

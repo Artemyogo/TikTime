@@ -1,0 +1,76 @@
+
+player_1.png
+size: 256, 64
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+player-idle
+  rotate: false
+  xy: 106, 2
+  size: 18, 34
+  orig: 18, 34
+  offset: 0, 0
+  index: 2
+player-idle
+  rotate: false
+  xy: 126, 2
+  size: 18, 34
+  orig: 18, 34
+  offset: 0, 0
+  index: 3
+player-idle
+  rotate: false
+  xy: 146, 2
+  size: 17, 34
+  orig: 17, 34
+  offset: 0, 0
+  index: 1
+player-idle
+  rotate: false
+  xy: 165, 2
+  size: 17, 34
+  orig: 17, 34
+  offset: 0, 0
+  index: 4
+player-running
+  rotate: false
+  xy: 2, 4
+  size: 24, 32
+  orig: 24, 32
+  offset: 0, 0
+  index: 1
+player-running
+  rotate: false
+  xy: 28, 4
+  size: 24, 32
+  orig: 24, 32
+  offset: 0, 0
+  index: 4
+player-running
+  rotate: false
+  xy: 54, 5
+  size: 24, 31
+  orig: 24, 31
+  offset: 0, 0
+  index: 3
+player-running
+  rotate: false
+  xy: 80, 5
+  size: 24, 31
+  orig: 24, 31
+  offset: 0, 0
+  index: 6
+player-running
+  rotate: false
+  xy: 184, 4
+  size: 18, 32
+  orig: 18, 32
+  offset: 0, 0
+  index: 2
+player-running
+  rotate: false
+  xy: 204, 4
+  size: 18, 32
+  orig: 18, 32
+  offset: 0, 0
+  index: 5

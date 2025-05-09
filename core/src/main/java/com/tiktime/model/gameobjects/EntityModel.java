@@ -1,5 +1,7 @@
 package com.tiktime.model.gameobjects;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.tiktime.model.components.HealthComponent;
@@ -19,7 +21,7 @@ public abstract class EntityModel {
     private FixtureDef getFixtureDef(float width, float height){
         FixtureDef fixtureDef = new FixtureDef();
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(PPM * width / 2, PPM * height / 2);
+        shape.setAsBox(width / 2, height / 2);
         fixtureDef.shape = shape;
 
         fixtureDef.density = config.getDensity();
@@ -40,7 +42,7 @@ public abstract class EntityModel {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.fixedRotation = true;
-        bodyDef.position.set(x + data.getWidth() / 2 * PPM, y + data.getHeight() / 2 * PPM);
+        bodyDef.position.set(x - data.getWidth() / 2, y - data.getHeight() / 2);
         this.body = world.createBody(bodyDef);
 
         this.body.createFixture(getFixtureDef(data.getWidth(), data.getHeight()));
@@ -67,11 +69,19 @@ public abstract class EntityModel {
         }
 
         Vector2 velocity = new Vector2(direction);
-        velocity.x *= 3000;
-//        velocity.x *= data.getSpeed();
-        velocity.y *= 3000;
-//        velocity.y *= data.getSpeed();
+//        velocity.x *= 10000;
+        velocity.x *= data.getSpeed();
+//        velocity.y *= 10000;
+        velocity.y *= data.getSpeed();
+//        if (!direction.equals(Vector2.Zero)) {
+//            Gdx.app.log(this.getClass().getSimpleName(), "Moving " + velocity);
+//        }
+//        velocity.scl(1f / PPM);
+
         body.setLinearVelocity(velocity);
+//        body.setTransform(32, 32, 0);
+        ///  TODO MAY BE NOT GOOD
+//        body.setBullet(true);
     }
 
     public Body getBody() {

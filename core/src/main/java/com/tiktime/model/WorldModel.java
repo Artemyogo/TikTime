@@ -63,7 +63,7 @@ public class WorldModel {
     private FixtureDef getWallFixture(){
         WallConfig wallConfig = GameConfig.getInstance().getWallConfig();
         PolygonShape wallShape = new PolygonShape();
-        wallShape.setAsBox(PPM * wallConfig.getHeight() / 2, PPM * wallConfig.getWidth() / 2);
+        wallShape.setAsBox(wallConfig.getHeight() / 2, wallConfig.getWidth() / 2);
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = wallShape;
@@ -87,7 +87,7 @@ public class WorldModel {
         this.map = map;
         this.world = new World(new Vector2(0, 0), true);
         MapProperties properties = map.getLayers().get("objects").getObjects().get("playerSpawn").getProperties();
-        this.player = new PlayerModel(world, properties.get("x", Float.class), properties.get("y", Float.class));
+        this.player = new PlayerModel(world, properties.get("x", Float.class) / PPM, properties.get("y", Float.class) / PPM);
         TiledMapTileLayer wallLayer = (TiledMapTileLayer) map.getLayers().get("walls");
 
         int width = map.getProperties().get("width", Integer.class);
@@ -101,7 +101,7 @@ public class WorldModel {
                 BodyDef bodyDef = new BodyDef();
                 bodyDef.type = BodyDef.BodyType.StaticBody;
                 WallConfig wallConfig = GameConfig.getInstance().getWallConfig();
-                bodyDef.position.set(PPM * (x + wallConfig.getHeight() / 2), PPM * (y + wallConfig.getWidth() / 2));
+                bodyDef.position.set(x + wallConfig.getHeight() / 2f, y + wallConfig.getWidth() / 2f);
                 Body body = world.createBody(bodyDef);
                 body.createFixture(getWallFixture());
                 Gdx.app.log("WorldModel", "Creating " + bodyDef.type + " at " + body.getPosition());

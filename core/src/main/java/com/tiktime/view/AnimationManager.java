@@ -18,6 +18,7 @@ public class AnimationManager {
 
     public void set(String name) {
         /// TODO i think that here should just start from the begining frames (stateTime to 0)
+        /// TODO now i dont think so 09.05
         if (!name.equals(currentAnim)) {
             currentAnim = name;
             stateTime = 0;

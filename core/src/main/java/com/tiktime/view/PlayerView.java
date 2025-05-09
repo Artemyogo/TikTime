@@ -14,7 +14,8 @@ import java.util.Comparator;
 
 public class PlayerView extends EntityView {
     /// TODO ADD ATLAS PATH
-    public static String atlasPath = "animations/player.atlas";
+    public static String atlasPath = "animations/player_1.atlas";
+//    public static String atlasPath = "animations/player.atlas";
     public PlayerView(float x, float y, float width, float height) {
         super(x, y, width, height, atlasPath);
     }
@@ -30,7 +31,8 @@ public class PlayerView extends EntityView {
         float runFrameDuration  = 0.1f;
 
         ///  PATHPREFIX TO ATLAS
-        animManager.add("player-running", loadAnimation("player-running-", runFrameDuration));
+        animManager.add("player-running", loadAnimation("player-running", runFrameDuration));
+        animManager.add("player-idle", loadAnimation("player-idle", runFrameDuration));
         /// BEWARE OF NAMES OF THE PAST, MB THEY WILL BE DIFFERENT
 //        animManager.add("run_north", loadAnimation("run_n", runFrameDuration));
 //        animManager.add("run_east", loadAnimation("run_e", runFrameDuration));

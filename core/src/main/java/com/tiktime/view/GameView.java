@@ -1,22 +1,15 @@
 package com.tiktime.view;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileSet;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.tiktime.controller.WorldController;
@@ -28,6 +21,8 @@ import java.util.Map;
 import static com.tiktime.model.consts.ScreenConstants.PPM;
 
 public class GameView {
+//    private boolean debug = true;
+    private boolean debug = false;
     private WorldController worldController;
     /// TODO DELETE THIS
     private World world;
@@ -37,16 +32,23 @@ public class GameView {
     private Viewport viewport;
     private OrthogonalTiledMapRenderer mapRenderer;
     private Box2DDebugRenderer debugRenderer;
+    private ShapeRenderer shapeRenderer;
 
     private Map<Integer, EnemyView> enemies;
     private PlayerView player;
+    private boolean paused = false;
 
     public GameView() {
+        shapeRenderer = new ShapeRenderer();
         batch = new SpriteBatch();
         camera = new OrthographicCamera();
+        camera.setToOrtho(false, ScreenConstants.VIEWPORT_WIDTH / PPM, ScreenConstants.VIEWPORT_HEIGHT / PPM);
         debugRenderer = new Box2DDebugRenderer();
-        viewport = new ExtendViewport(ScreenConstants.VIEWPORT_WIDTH * PPM, ScreenConstants.VIEWPORT_HEIGHT * PPM, camera);
-//        viewport = new ExtendViewport(100 * PPM, 100 * PPM, camera);
+        viewport = new ExtendViewport(
+            ScreenConstants.VIEWPORT_WIDTH,
+            ScreenConstants.VIEWPORT_HEIGHT,
+            camera);
+//        camera.zoom = 1f;
         enemies = new HashMap<>();
         viewport.apply();
         camera.update();
@@ -61,6 +63,14 @@ public class GameView {
         this.world = world;
     }
 
+    public void setPause(boolean paused) {
+        this.paused = paused;
+        this.player.setPause(paused);
+        for (EnemyView e: enemies.values()) {
+            e.setPause(paused);
+        }
+    }
+
     public void setMapRenderer(TiledMap map) {
         for (TiledMapTileSet tileSet : map.getTileSets()) {
             /// TODO BEWARE IF TILES NOT GOOD MAY BE ERROR
@@ -70,22 +80,23 @@ public class GameView {
             }
         }
 
-        mapRenderer = new OrthogonalTiledMapRenderer(map);
+        mapRenderer = new OrthogonalTiledMapRenderer(map, 1f / PPM);
     }
 
     public void setPlayer(float x, float y, float width, float height, Direction direction, EntityState state) {
         player = new PlayerView(x, y, width, height, direction, state);
         player.updateAnimation();
-//        player.
     }
 
     public void render(float delta) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        batch.begin();
+
         mapRenderer.setView(camera);
         mapRenderer.render();
-        /// TODO DELTE
-        debugRenderer.render(world, camera.combined);
+
+        batch.setProjectionMatrix(camera.combined);
+
+        batch.begin();
 
         /// TODO SORT BY 'Y' COORD NEED TO
         for (EnemyView enemy : enemies.values()) {
@@ -93,8 +104,69 @@ public class GameView {
         }
 
         player.render(delta, batch);
-
         batch.end();
+
+        /// TODO DELTE
+        if (debug) {
+            debugRenderer.render(world, camera.combined);
+        }
+
+        if (paused) {
+            Gdx.gl.glEnable(GL20.GL_BLEND);
+            Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+
+//            float width = ScreenConstants.VIEWPORT_WIDTH;
+            float width = Gdx.graphics.getWidth();
+            float height = Gdx.graphics.getHeight();
+//            Gdx.app.log("GameView", "width: " + width + ", height: " + height);
+//            Gdx.app.log("GameView", "width: " + ScreenConstants.VIEWPORT_WIDTH + ", height: " + ScreenConstants.VIEWPORT_HEIGHT);
+//            float height = ScreenConstants.VIEWPORT_HEIGHT;
+            float centerX = width / 2f;
+            float centerY = height / 2f;
+            int steps = 40;
+            float maxAlpha = 0.75f;
+
+            float sliceH = centerY / steps;
+            float sliceW = centerX / steps;
+
+            for (int i = 0; i < steps; i++) {
+                float t = i / (float)(steps - 1);
+                float alpha = t * maxAlpha;
+                shapeRenderer.setColor(0, 0, 0, alpha);
+
+                shapeRenderer.rect(
+                    0,
+                    centerY + i * sliceH,
+                    width,
+                    sliceH
+                );
+
+                shapeRenderer.rect(
+                    0,
+                    centerY - (i + 1) * sliceH,
+                    width,
+                    sliceH
+                );
+
+                shapeRenderer.rect(
+                    centerX - (i + 1) * sliceW,
+                    0,
+                    sliceW,
+                    height
+                );
+
+                shapeRenderer.rect(
+                    centerX + i * sliceW,
+                    0,
+                    sliceW,
+                    height
+                );
+            }
+
+            shapeRenderer.end();
+            Gdx.gl.glDisable(GL20.GL_BLEND);
+        }
     }
 
     public void addEnemy(float x, float y, float width, float height, int id, Direction direction,
@@ -104,7 +176,7 @@ public class GameView {
 
     public void setEnemyCoordinates(float x, float y, int id) {
         EnemyView enemyView = enemies.get(id);
-        enemyView.setCoordinates(x, y);
+        enemyView.setPosition(x, y);
     }
 
     public void setEnemySizes(float width, float height, int id) {
@@ -123,7 +195,7 @@ public class GameView {
     }
 
     public void setPlayerCoordinates(float x, float y) {
-        player.setCoordinates(x, y);
+        player.setPosition(x, y);
         camera.position.set(x, y, 0);
         camera.update();
     }
