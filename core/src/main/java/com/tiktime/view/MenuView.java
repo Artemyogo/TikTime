@@ -12,7 +12,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.Disposable;
 import com.tiktime.controller.MenuController;
 
-public class MenuView implements Disposable {
+public class MenuView {
     private final MenuController menuController;
     private final Stage stage;
     private final Skin skin;
@@ -35,8 +35,14 @@ public class MenuView implements Disposable {
         Gdx.input.setInputProcessor(stage);
     }
 
+    public void hide() {
+        Gdx.input.setInputProcessor(null);
+        dispose();
+    }
+
     public void render(float delta) {
         Gdx.gl.glClear(Gdx.gl.GL_COLOR_BUFFER_BIT);
+        Gdx.app.log("SCREEN", "Show: " + this.getClass().getSimpleName());
         stage.act(delta);
         stage.draw();
     }
@@ -45,7 +51,6 @@ public class MenuView implements Disposable {
         stage.getViewport().update(width, height, true);
     }
 
-    @Override
     public void dispose() {
         stage.dispose();
         skin.dispose();
@@ -95,13 +100,5 @@ public class MenuView implements Disposable {
 
     public Stage getStage() {
         return stage;
-    }
-
-    public TextButton getStartButton() {
-        return startButton;
-    }
-
-    public TextButton getExitButton() {
-        return exitButton;
     }
 }

@@ -35,7 +35,7 @@ public class PlayerModel extends EntityModel{
         super(world, x, y,
             new EntityData(GameConfig.getInstance().getPlayerConfig().getWidth(),
                 GameConfig.getInstance().getPlayerConfig().getHeight(),
-                GameConfig.getInstance().getPlayerConfig().getBaseSpeed(),
+                CurrentStats.getSpeed(),
                 CurrentStats.getHealth(),
                 CurrentStats.getHealth(),
                 Category.PLAYER),

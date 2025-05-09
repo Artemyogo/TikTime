@@ -26,6 +26,11 @@ public class MenuScreen extends ScreenAdapter {
     }
 
     @Override
+    public void hide() {
+        menuView.hide();
+    }
+
+    @Override
     public void resize(int width, int height) {
         menuView.resize(width, height);
     }

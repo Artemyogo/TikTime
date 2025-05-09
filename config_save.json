@@ -9,10 +9,10 @@
     "restitution": 0.2,
     "friction": 0.4,
     "acceleration": 50.0,
-    "width": 64,
-    "height": 64,
-    "baseHp": 60,
-    "baseSpeed": 100000,
+    "width": 1.5,
+    "height": 2.5,
+    "baseHp": 100,
+    "baseSpeed": 5,
     "baseDamage": 10,
     "baseRegen": 5
   },
@@ -25,16 +25,12 @@
   },
   "wall": {
     "density": 1.0,
-    "restitution": 1.0,
-    "friction": 0.5,
-    "width": 1,
-    "height": 1
+    "restitution": 0.0,
+    "friction": 0.5
   },
   "floor": {
     "density": 1.0,
-    "restitution": 1.0,
-    "friction": 0.3,
-    "width": 1,
-    "height": 1
+    "restitution": 0.0,
+    "friction": 0.3
   }
 }

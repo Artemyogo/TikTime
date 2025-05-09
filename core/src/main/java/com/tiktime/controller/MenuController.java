@@ -16,6 +16,7 @@ public class MenuController {
 
     public void onPlayClicked() {
         /// TODO SET FIRST MAP NAME
+        Gdx.app.log("SCREEN", "Show: " + this.getClass().getSimpleName());
         game.setScreen(new GameScreen(game, "BaseMap.tmx"));
     }
 

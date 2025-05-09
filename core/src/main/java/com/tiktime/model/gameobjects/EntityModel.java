@@ -17,7 +17,7 @@ public abstract class EntityModel {
     private FixtureDef getFixtureDef(float width, float height){
         FixtureDef fixtureDef = new FixtureDef();
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(width, height);
+        shape.setAsBox(width / 2, height / 2);
         fixtureDef.shape = shape;
 
         fixtureDef.density = config.getDensity();
@@ -27,7 +27,7 @@ public abstract class EntityModel {
         fixtureDef.filter.categoryBits = data.category.getBit();
         fixtureDef.filter.maskBits = Category.combine(Category.BULLET, Category.WALL);
 //        fixtureDef.filter.maskBits = Category.combine(Category.BULLET, Category.ENEMY, Category.WALL, Category.PLAYER);
-        shape.dispose();
+
         return fixtureDef;
     }
 
@@ -39,9 +39,9 @@ public abstract class EntityModel {
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.fixedRotation = true;
         bodyDef.position.set(x, y);
-        body = world.createBody(bodyDef);
+        this.body = world.createBody(bodyDef);
 
-        body.createFixture(getFixtureDef(data.getWidth(), data.getHeight()));
+        this.body.createFixture(getFixtureDef(data.getWidth(), data.getHeight()));
     }
 
     public EntityData getData(){
@@ -65,8 +65,10 @@ public abstract class EntityModel {
         }
 
         Vector2 velocity = new Vector2(direction);
-        velocity.x *= data.getSpeed();
-        velocity.y *= data.getSpeed();
+        velocity.x *= 3000;
+//        velocity.x *= data.getSpeed();
+        velocity.y *= 3000;
+//        velocity.y *= data.getSpeed();
         body.setLinearVelocity(velocity);
     }
 

@@ -35,4 +35,9 @@ public class GameScreen extends ScreenAdapter {
     public void dispose() {
         gameView.dispose();
     }
+
+    @Override
+    public void hide() {
+        gameView.hide();
+    }
 }

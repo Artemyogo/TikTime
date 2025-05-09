@@ -15,10 +15,7 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.Fixture;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.badlogic.gdx.physics.box2d.Shape;
+import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -32,24 +29,26 @@ import static com.tiktime.model.consts.ScreenConstants.PPM;
 
 public class GameView {
     private WorldController worldController;
+    /// TODO DELETE THIS
+    private World world;
 
     private OrthographicCamera camera;
     private SpriteBatch batch;
     private Viewport viewport;
     private OrthogonalTiledMapRenderer mapRenderer;
+    private Box2DDebugRenderer debugRenderer;
 
     private Map<Integer, EnemyView> enemies;
     private PlayerView player;
-    InputProcessor inputProcessor;
 
     public GameView() {
         batch = new SpriteBatch();
         camera = new OrthographicCamera();
+        debugRenderer = new Box2DDebugRenderer();
         viewport = new ExtendViewport(ScreenConstants.VIEWPORT_WIDTH * PPM, ScreenConstants.VIEWPORT_HEIGHT * PPM, camera);
 //        viewport = new ExtendViewport(100 * PPM, 100 * PPM, camera);
         enemies = new HashMap<>();
         viewport.apply();
-        camera.position.set(100 * PPM / 2, 100 * PPM / 2, 0);
         camera.update();
     }
 
@@ -57,8 +56,9 @@ public class GameView {
         this.worldController = worldController;
     }
 
-    public void setInputProcessor(InputProcessor inputProcessor) {
-        this.inputProcessor = inputProcessor;
+    ///  TODO DELTE THIS
+    public void setWorld(World world) {
+        this.world = world;
     }
 
     public void setMapRenderer(TiledMap map) {
@@ -84,6 +84,8 @@ public class GameView {
         batch.begin();
         mapRenderer.setView(camera);
         mapRenderer.render();
+        /// TODO DELTE
+        debugRenderer.render(world, camera.combined);
 
         /// TODO SORT BY 'Y' COORD NEED TO
         for (EnemyView enemy : enemies.values()) {
@@ -139,11 +141,16 @@ public class GameView {
     }
 
     public void show() {
-        Gdx.input.setInputProcessor(inputProcessor);
+        Gdx.input.setInputProcessor(Gdx.input.getInputProcessor());
     }
 
     public void resize(int width, int height) {
         viewport.update(width, height, false);
+    }
+
+    public void hide() {
+        Gdx.input.setInputProcessor(null);
+        dispose();
     }
 
     public void dispose() {
