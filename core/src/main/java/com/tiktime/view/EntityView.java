@@ -13,6 +13,8 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 
 import java.util.Comparator;
 
+import static com.tiktime.model.consts.ScreenConstants.PPM;
+
 public abstract class EntityView {
     protected final TextureAtlas atlas;
     protected AnimationManager animManager;
@@ -176,12 +178,12 @@ public abstract class EntityView {
         }
 
         batch.draw(frame,
-            x - frame.getRegionWidth()/2f,
-            y - frame.getRegionHeight()/2f,
-            frame.getRegionWidth()/2f,
-            frame.getRegionHeight()/2f,
-            width,
-            height,
+            x - width*PPM/2f,
+            y - height*PPM/2f,
+            width*PPM/2f,
+            height*PPM/2f,
+            width * PPM,
+            height * PPM,
             flip ? -1 : 1,
             1,
             0

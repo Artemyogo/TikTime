@@ -9,6 +9,8 @@ import com.tiktime.model.enums.Fraction;
 import com.tiktime.model.consts.GameConfig;
 import com.tiktime.model.consts.GameConfig.EntityConfig;
 
+import static com.tiktime.model.consts.ScreenConstants.PPM;
+
 public abstract class EntityModel {
     private final Body body;
     private final EntityData data;
@@ -17,7 +19,7 @@ public abstract class EntityModel {
     private FixtureDef getFixtureDef(float width, float height){
         FixtureDef fixtureDef = new FixtureDef();
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(width / 2, height / 2);
+        shape.setAsBox(PPM * width / 2, PPM * height / 2);
         fixtureDef.shape = shape;
 
         fixtureDef.density = config.getDensity();
@@ -38,7 +40,7 @@ public abstract class EntityModel {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.fixedRotation = true;
-        bodyDef.position.set(x, y);
+        bodyDef.position.set(x + data.getWidth() / 2 * PPM, y + data.getHeight() / 2 * PPM);
         this.body = world.createBody(bodyDef);
 
         this.body.createFixture(getFixtureDef(data.getWidth(), data.getHeight()));
