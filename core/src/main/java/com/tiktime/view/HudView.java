@@ -42,7 +42,7 @@ public class HudView {
     public void render(float delta, SpriteBatch batch) {
         health.render(delta, batch);
 
-        Gdx.app.log("HudView", Gdx.graphics.getWidth() + " " + Gdx.graphics.getHeight());
+     //   Gdx.app.log("HudView", Gdx.graphics.getWidth() + " " + Gdx.graphics.getHeight());
 //        batch.draw(coinTexture, x, y - 10 - 64, 64, 64);
         batch.draw(coinTexture, x, y - Gdx.graphics.getHeight() * (74f / 1570f), Gdx.graphics.getWidth() * (64f / 2560f),
             Gdx.graphics.getHeight() * (64f / 1570f));

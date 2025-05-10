@@ -1,17 +1,10 @@
 package com.tiktime.model.gameobjects;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import com.tiktime.model.components.HealthComponent;
 import com.tiktime.model.enums.Category;
-import com.tiktime.model.enums.Fraction;
 
-import com.tiktime.model.consts.GameConfig;
 import com.tiktime.model.consts.GameConfig.EntityConfig;
-
-import static com.tiktime.model.consts.ScreenConstants.PPM;
 
 public abstract class EntityModel {
     private final Body body;
@@ -29,8 +22,7 @@ public abstract class EntityModel {
         fixtureDef.friction = config.getFriction();
 
         fixtureDef.filter.categoryBits = data.category.getBit();
-        fixtureDef.filter.maskBits = Category.combine(Category.BULLET, Category.WALL);
-//        fixtureDef.filter.maskBits = Category.combine(Category.BULLET, Category.ENEMY, Category.WALL, Category.PLAYER);
+        fixtureDef.filter.maskBits = Category.combine(Category.BULLET, Category.ENEMY, Category.WALL, Category.PLAYER, Category.DOOR);
 
         return fixtureDef;
     }

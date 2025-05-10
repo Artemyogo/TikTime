@@ -44,7 +44,7 @@ public class ProgressBarView {
     public void render(float delta, SpriteBatch batch) {
         batch.draw(background, x, y, width, height);
         float mlt = curValue / maxValue;
-        Gdx.app.log("ProgressBarView", "curValue: " + curValue + ", maxValue: " + maxValue);
+      //  Gdx.app.log("ProgressBarView", "curValue: " + curValue + ", maxValue: " + maxValue);
         batch.end();
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         shapeRenderer.setColor(0.5f, 0.5f, 0.5f, 1);
@@ -54,7 +54,7 @@ public class ProgressBarView {
         batch.draw(fill, x + dx, y + dy, (width - 2 * dy) * mlt, height - 2 * dx);
 //        font.getData().setScale(2f);
         font.getData().setScale(width * (3.5f / 393.84616f), height * (2f / 52.333332f));
-        Gdx.app.log("ProgressBarView", width + "x" + height);
+   //     Gdx.app.log("ProgressBarView", width + "x" + height);
 //        font.getData().setScale(width * (), 2f);
 //        font.draw(batch, String.valueOf((int)curValue) + "/" + String.valueOf((int)maxValue), x + dx + 10, y + dy + (height - 2 * dx) / 2 + 12);
         font.draw(batch, String.valueOf((int)curValue) + "/" + String.valueOf((int)maxValue), x + dx + width * (10f / 393.84616f), y + dy + (height - 2 * dx) / 2 + height * (12f / 52.333332f));

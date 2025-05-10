@@ -1,16 +1,10 @@
 package com.tiktime.model.gameobjects;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Preferences;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.tiktime.model.UpgradeModel;
-import com.tiktime.model.components.HealthComponent;
 import com.tiktime.model.consts.GameConfig;
 import com.tiktime.model.enums.Category;
-import com.tiktime.model.enums.Fraction;
 import com.tiktime.model.consts.GameConfig.PlayerConfig;
-import com.tiktime.model.consts.GameConfig.EntityConfig;
 
 public class PlayerModel extends EntityModel{
     public static class CurrentStats {

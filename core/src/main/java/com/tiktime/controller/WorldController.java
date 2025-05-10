@@ -9,6 +9,7 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.tiktime.Main;
+import com.tiktime.controller.utils.MapSelector;
 import com.tiktime.model.WorldModel;
 import com.tiktime.model.gameobjects.EntityData;
 import com.tiktime.model.gameobjects.PlayerModel;
@@ -25,19 +26,21 @@ public class WorldController {
     Game game;
     GameView gameView;
     WorldModel worldModel;
-    TiledMap tiledMap;
+    MapSelector mapSelector;
     boolean paused = false;
+    boolean isInDoor = false;
 
 
-    public WorldController(Main game, GameView gameView, String mapName) {
+    public WorldController(Main game, GameView gameView) {
         this.game = game;
         this.gameView = gameView;
-        this.tiledMap = new TmxMapLoader().load("maps/" + mapName);
-        this.worldModel = new WorldModel(tiledMap, new CollisionController(this));
+        this.mapSelector = new MapSelector();
+        TiledMap map = mapSelector.getMap();
+        this.worldModel = new WorldModel(map, new CollisionController(this));
         gameView.setController(this);
         /// TODO DELETE THIS
         gameView.setWorld(worldModel.getWorld());
-        gameView.setMapRenderer(this.tiledMap);
+        gameView.setMapRenderer(map);
 
         EntityData entityData = worldModel.getPlayerData();
         gameView.setPlayer(
@@ -60,6 +63,14 @@ public class WorldController {
         if (paused) {
             return;
         }
+        if (isInDoor && Gdx.input.isKeyPressed(Input.Keys.E)) {
+            Gdx.app.log("WorldController", "Entered door");
+            isInDoor = false;
+            TiledMap map = mapSelector.getMap();
+            this.worldModel = new WorldModel(map, new CollisionController(this));
+            gameView.setMapRenderer(map);
+        }
+
 
         Vector2 direction = new Vector2();
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
@@ -125,9 +136,10 @@ public class WorldController {
     }
 
     public void onDoorEntry(){
-
+        isInDoor = true;
     }
     public void onDoorExit(){
+        isInDoor = false;
 
     }
 

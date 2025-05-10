@@ -35,6 +35,7 @@ public class WorldModel {
     private PlayerModel player;
     private Array<EnemyModel> enemies;
 
+
     /// TODO DELETE THIS
     public World getWorld() {
         return world;
@@ -61,7 +62,28 @@ public class WorldModel {
         return fixtureDef;
     }
 
-    private FixtureDef getWallFixture(){
+    private FixtureDef getDoorFixture() {
+        FloorConfig floorConfig = GameConfig.getInstance().getFloorConfig();
+        PolygonShape floorShape = new PolygonShape();
+        floorShape.setAsBox(floorConfig.getHeight() / 2, floorConfig.getWidth() / 2);
+
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape = floorShape;
+
+        // Get floor properties from GameConfig
+        fixtureDef.density = floorConfig.getDensity();
+        fixtureDef.restitution = floorConfig.getRestitution();
+        fixtureDef.friction = floorConfig.getFriction();
+
+        fixtureDef.filter.categoryBits = Category.DOOR.getBit();
+        fixtureDef.filter.maskBits = Category.PLAYER.getBit();
+
+        fixtureDef.isSensor = true;
+        return fixtureDef;
+
+    }
+
+        private FixtureDef getWallFixture(){
         WallConfig wallConfig = GameConfig.getInstance().getWallConfig();
         PolygonShape wallShape = new PolygonShape();
         wallShape.setAsBox(wallConfig.getHeight() / 2, wallConfig.getWidth() / 2);
@@ -112,11 +134,20 @@ public class WorldModel {
         for (int x = 0; x < doorLayer.getWidth(); x++) {
             for (int y = 0; y < doorLayer.getHeight(); y++) {
                 if (doorLayer.getCell(x, y) == null) continue;
+                BodyDef bodyDef = new BodyDef();
+                bodyDef.type = BodyDef.BodyType.StaticBody;
+                FloorConfig Config = GameConfig.getInstance().getFloorConfig();
+                bodyDef.position.set(x + Config.getHeight() / 2f, y + Config.getWidth() / 2f);
+                Body body = world.createBody(bodyDef);
+                body.createFixture(getDoorFixture());
+                Gdx.app.log("WorldModel", "Creating " + bodyDef.type + " at " + body.getPosition());
 
             }
         }
         world.setContactListener(collisionController);
     }
+
+
 
     public EntityData getPlayerData(){
         return player.getData();
@@ -131,4 +162,5 @@ public class WorldModel {
     public void updateMovementDirection(Vector2 movementDirection){
         player.move(movementDirection);
     }
+
 }
