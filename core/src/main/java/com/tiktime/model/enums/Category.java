@@ -5,7 +5,8 @@ public enum Category {
     ENEMY    (0x0002),
     WALL     (0x0004),
     BULLET   (0x0008),
-    FLOOR    (0x0010);
+    FLOOR    (0x0010),
+    DOOR     (0x0020);
 
     private final short bit;
 
@@ -15,6 +16,9 @@ public enum Category {
 
     public short getBit() {
         return bit;
+    }
+    public boolean is(short mask) {
+        return mask == (mask | bit);
     }
 
     public static short combine(Category... categories) {

@@ -9,6 +9,7 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
+import com.tiktime.controller.CollisionController;
 import com.tiktime.model.enums.Category;
 import com.tiktime.model.gameobjects.EnemyModel;
 import com.tiktime.model.gameobjects.EntityData;
@@ -83,7 +84,7 @@ public class WorldModel {
         world.step(delta, velocityIterations, positionIterations);
     }
 
-    public WorldModel(TiledMap map) {
+    public WorldModel(TiledMap map, CollisionController collisionController) {
         this.map = map;
         this.world = new World(new Vector2(0, 0), true);
         MapProperties properties = map.getLayers().get("objects").getObjects().get("playerSpawn").getProperties();
@@ -107,7 +108,14 @@ public class WorldModel {
                 Gdx.app.log("WorldModel", "Creating " + bodyDef.type + " at " + body.getPosition());
             }
         }
-        Gdx.app.log("WorldModel", getPlayerPosition().x + " " + getPlayerPosition().y);
+        TiledMapTileLayer doorLayer = (TiledMapTileLayer) map.getLayers().get("doors");
+        for (int x = 0; x < doorLayer.getWidth(); x++) {
+            for (int y = 0; y < doorLayer.getHeight(); y++) {
+                if (doorLayer.getCell(x, y) == null) continue;
+
+            }
+        }
+        world.setContactListener(collisionController);
     }
 
     public EntityData getPlayerData(){

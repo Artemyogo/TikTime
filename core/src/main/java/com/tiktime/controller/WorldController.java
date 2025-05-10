@@ -28,11 +28,12 @@ public class WorldController {
     TiledMap tiledMap;
     boolean paused = false;
 
+
     public WorldController(Main game, GameView gameView, String mapName) {
         this.game = game;
         this.gameView = gameView;
         this.tiledMap = new TmxMapLoader().load("maps/" + mapName);
-        this.worldModel = new WorldModel(tiledMap);
+        this.worldModel = new WorldModel(tiledMap, new CollisionController(this));
         gameView.setController(this);
         /// TODO DELETE THIS
         gameView.setWorld(worldModel.getWorld());
@@ -122,4 +123,12 @@ public class WorldController {
             throw new IllegalArgumentException("Direction argument was null");
         }
     }
+
+    public void onDoorEntry(){
+
+    }
+    public void onDoorExit(){
+
+    }
+
 }
