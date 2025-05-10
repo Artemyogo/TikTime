@@ -2,6 +2,7 @@ package com.tiktime.view;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
@@ -17,6 +18,7 @@ public class ProgressBarView {
     private float curValue;
     private float maxValue;
     private final ShapeRenderer shapeRenderer;
+    private final BitmapFont font;
 
     public ProgressBarView(String backgroundPath, String fillPath, float x, float y, float dx, float dy, float width, float height, float curValue, float maxValue) {
         this.background = new Texture(Gdx.files.internal(backgroundPath));
@@ -32,6 +34,7 @@ public class ProgressBarView {
         this.curValue = curValue;
         this.maxValue = maxValue;
         this.shapeRenderer = new ShapeRenderer();
+        this.font = new BitmapFont();
         if (curValue > maxValue) {
             throw new IllegalArgumentException("curValue can't be greater than maxValue");
         }
@@ -44,13 +47,17 @@ public class ProgressBarView {
         batch.end();
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         shapeRenderer.setColor(0.5f, 0.5f, 0.5f, 1);
-        shapeRenderer.rect(x + dx, y + dy, (width - 2 * dy), height - 2 * dx);
+        shapeRenderer.rect(x + dx, y + dy, (width - 2 * dy), (height - 2 * dx));
         shapeRenderer.end();
         batch.begin();
         batch.draw(fill, x + dx, y + dy, (width - 2 * dy) * mlt, height - 2 * dx);
+//        font.getData().setScale(2f);
+        font.getData().setScale(3.5f, 2f);
+        font.draw(batch, String.valueOf((int)curValue) + "/" + String.valueOf((int)maxValue), x + dx + 10, y + dy + (height - 2 * dx) / 2 + 12);
     }
 
     public void dispose() {
+        shapeRenderer.dispose();
         background.dispose();
         fill.dispose();
     }
