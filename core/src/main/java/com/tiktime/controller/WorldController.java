@@ -11,6 +11,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.tiktime.Main;
 import com.tiktime.model.WorldModel;
 import com.tiktime.model.gameobjects.EntityData;
+import com.tiktime.model.gameobjects.PlayerModel;
 import com.tiktime.view.Direction;
 import com.tiktime.view.EntityState;
 import com.tiktime.view.GameView;
@@ -44,9 +45,9 @@ public class WorldController {
             entityData.getWidth(),
             entityData.getHeight(),
             Direction.EAST,
-            EntityState.RUNNING
+            EntityState.IDLE
         );
-        gameView.setHud(400, 50, entityData.getCurrentHealth() - 10, entityData.getMaxHealth(), 10);
+        gameView.setHud(Gdx.graphics.getWidth() / 6.5f, Gdx.graphics.getHeight() / 30f, entityData.getCurrentHealth() - 10, entityData.getMaxHealth(), PlayerModel.CurrentStats.getCoins());
     }
 
     public void update(float delta) {

@@ -28,6 +28,10 @@ public class PlayerModel extends EntityModel{
         public static float getDamage() {
             return (upgradeModel.getDamageLevel() * 10) + playerConfig.getBaseDamage();
         }
+
+        public static int getCoins() {
+            return upgradeModel.getMoney();
+        }
     }
 
     public PlayerModel(World world, float x, float y) {

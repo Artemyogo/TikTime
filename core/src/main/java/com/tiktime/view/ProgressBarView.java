@@ -56,6 +56,14 @@ public class ProgressBarView {
         font.draw(batch, String.valueOf((int)curValue) + "/" + String.valueOf((int)maxValue), x + dx + 10, y + dy + (height - 2 * dx) / 2 + 12);
     }
 
+    public void setCurValue(float curValue) {
+        this.curValue = curValue;
+    }
+
+    public void setMaxValue(float maxValue) {
+        this.maxValue = maxValue;
+    }
+
     public void dispose() {
         shapeRenderer.dispose();
         background.dispose();
