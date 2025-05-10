@@ -40,6 +40,7 @@ public class ProgressBarView {
         }
     }
 
+//    393.84616x52.333332
     public void render(float delta, SpriteBatch batch) {
         batch.draw(background, x, y, width, height);
         float mlt = curValue / maxValue;
@@ -52,8 +53,11 @@ public class ProgressBarView {
         batch.begin();
         batch.draw(fill, x + dx, y + dy, (width - 2 * dy) * mlt, height - 2 * dx);
 //        font.getData().setScale(2f);
-        font.getData().setScale(3.5f, 2f);
-        font.draw(batch, String.valueOf((int)curValue) + "/" + String.valueOf((int)maxValue), x + dx + 10, y + dy + (height - 2 * dx) / 2 + 12);
+        font.getData().setScale(width * (3.5f / 393.84616f), height * (2f / 52.333332f));
+        Gdx.app.log("ProgressBarView", width + "x" + height);
+//        font.getData().setScale(width * (), 2f);
+//        font.draw(batch, String.valueOf((int)curValue) + "/" + String.valueOf((int)maxValue), x + dx + 10, y + dy + (height - 2 * dx) / 2 + 12);
+        font.draw(batch, String.valueOf((int)curValue) + "/" + String.valueOf((int)maxValue), x + dx + width * (10f / 393.84616f), y + dy + (height - 2 * dx) / 2 + height * (12f / 52.333332f));
     }
 
     public void setCurValue(float curValue) {

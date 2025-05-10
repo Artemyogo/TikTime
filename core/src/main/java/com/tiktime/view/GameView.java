@@ -93,9 +93,18 @@ public class GameView {
     }
 
     public void setHud(float width, float height, int curHealth, int maxHealth, int coins) {
+//        hud = new HudView(
+//            Gdx.graphics.getWidth() - width - 25,
+//            Gdx.graphics.getHeight() - height - 25,
+//            width,
+//            height,
+//            curHealth,
+//            maxHealth,
+//            coins);
+
         hud = new HudView(
-            Gdx.graphics.getWidth() - width - 25,
-            Gdx.graphics.getHeight() - height - 25,
+            Gdx.graphics.getWidth() - width - Gdx.graphics.getWidth() * (25f / 2560f),
+            Gdx.graphics.getHeight() - height - Gdx.graphics.getHeight() * (25f / 1570),
             width,
             height,
             curHealth,
