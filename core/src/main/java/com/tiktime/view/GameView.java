@@ -11,6 +11,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileSet;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.tiktime.controller.WorldController;
 import com.tiktime.model.consts.ScreenConstants;
@@ -28,34 +29,39 @@ public class GameView {
     /// TODO DELETE THIS
     private World world;
 
-    private final OrthographicCamera camera;
+    private final OrthographicCamera worldCamera;
     private final OrthographicCamera hudCamera;
-    private final SpriteBatch batch;
-    private final Viewport viewport;
+    private final SpriteBatch worldBatch;
+    private final Viewport worldViewport;
+    private final Viewport screenViewport;
     private OrthogonalTiledMapRenderer mapRenderer;
     private final Box2DDebugRenderer debugRenderer;
-    private final ShapeRenderer shapeRenderer;
+    private final ShapeRenderer hudShape;
+    private final SpriteBatch hudBatch;
 
     private Map<Integer, EnemyView> enemies;
     private PlayerView player;
     private HudView hud;
 
     public GameView() {
-        shapeRenderer = new ShapeRenderer();
-        batch = new SpriteBatch();
-        camera = new OrthographicCamera();
+        worldCamera = new OrthographicCamera();
         hudCamera = new OrthographicCamera();
-        camera.setToOrtho(false, ScreenConstants.VIEWPORT_WIDTH / PPM, ScreenConstants.VIEWPORT_HEIGHT / PPM);
-        hudCamera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+
+        worldBatch = new SpriteBatch();
+        hudShape = new ShapeRenderer();
+        hudBatch = new SpriteBatch();
         debugRenderer = new Box2DDebugRenderer();
-        viewport = new ExtendViewport(
+
+        worldViewport = new ExtendViewport(
             ScreenConstants.VIEWPORT_WIDTH,
             ScreenConstants.VIEWPORT_HEIGHT,
-            camera);
-//        camera.zoom = 1f;
+            worldCamera);
+        worldViewport.update((int) ScreenConstants.VIEWPORT_WIDTH, (int) ScreenConstants.VIEWPORT_HEIGHT, false);
+        screenViewport = new ScreenViewport(hudCamera);
+        screenViewport.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        hudCamera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+
         enemies = new HashMap<>();
-        viewport.apply();
-        camera.update();
     }
 
     public void setController(WorldController worldController) {
@@ -92,109 +98,77 @@ public class GameView {
         player.updateAnimation();
     }
 
-    public void setHud(float width, float height, int curHealth, int maxHealth, int coins) {
-//        hud = new HudView(
-//            Gdx.graphics.getWidth() - width - 25,
-//            Gdx.graphics.getHeight() - height - 25,
-//            width,
-//            height,
-//            curHealth,
-//            maxHealth,
-//            coins);
-
+    public void setHud(int curHealth, int maxHealth, int coins) {
         hud = new HudView(
-            Gdx.graphics.getWidth() - width - Gdx.graphics.getWidth() * (25f / 2560f),
-            Gdx.graphics.getHeight() - height - Gdx.graphics.getHeight() * (25f / 1570),
-            width,
-            height,
+            screenViewport,
             curHealth,
             maxHealth,
             coins);
-
     }
 
     public void render(float delta) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-        mapRenderer.setView(camera);
+        mapRenderer.setView(worldCamera);
         mapRenderer.render();
 
-        batch.setProjectionMatrix(camera.combined);
+        worldBatch.setProjectionMatrix(worldCamera.combined);
+        hudBatch.setProjectionMatrix(hudCamera.combined);
+        hudShape.setProjectionMatrix(hudCamera.combined);
 
-        batch.begin();
-
+        worldBatch.begin();
         /// TODO SORT BY 'Y' COORD NEED TO
         for (EnemyView enemy : enemies.values()) {
-            enemy.render(delta, batch);
+            enemy.render(delta, worldBatch);
         }
+        player.render(delta, worldBatch);
+        worldBatch.end();
 
-        player.render(delta, batch);
-        batch.end();
-
-        batch.setProjectionMatrix(hudCamera.combined);
-        batch.begin();
-        hud.render(delta, batch);
-        batch.end();
+        hudBatch.begin();
+        hud.render(delta, hudBatch, hudShape);
+        hudBatch.end();
 
         /// TODO DELTE
         if (debug) {
-            debugRenderer.render(world, camera.combined);
+            debugRenderer.render(world, worldCamera.combined);
         }
 
         if (paused) {
             Gdx.gl.glEnable(GL20.GL_BLEND);
             Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+            hudShape.setProjectionMatrix(hudCamera.combined);
+            hudShape.begin(ShapeRenderer.ShapeType.Filled);
 
-//            float width = ScreenConstants.VIEWPORT_WIDTH * PPM;
-//            float height = ScreenConstants.VIEWPORT_HEIGHT * PPM;
-            float width = Gdx.graphics.getWidth();
-            float height = Gdx.graphics.getHeight();
-//            Gdx.app.log("GameView", "width: " + width + ", height: " + height);
-//            Gdx.app.log("GameView", "width: " + ScreenConstants.VIEWPORT_WIDTH * PPM + ", height: " + ScreenConstants.VIEWPORT_HEIGHT * PPM);
+            float width = screenViewport.getScreenWidth();
+            float height = screenViewport.getScreenHeight();
+            int stepW = 40;
+            int stepH = 40;
+            float rectWidth = width / stepW;
+            float rectHeight = height / stepH;
             float centerX = width / 2f;
             float centerY = height / 2f;
-            int steps = 40;
-            float maxAlpha = 0.75f;
+            float maxDist = (float) Math.sqrt(centerX * centerX + centerY * centerY);
+            float maxAlpha = 1.1f;
 
-            float sliceH = centerY / steps;
-            float sliceW = centerX / steps;
-
-            for (int i = 0; i < steps; i++) {
-                float t = i / (float)(steps - 1);
-                float alpha = t * maxAlpha;
-                shapeRenderer.setColor(0, 0, 0, alpha);
-
-                shapeRenderer.rect(
-                    0,
-                    centerY + i * sliceH,
-                    width,
-                    sliceH
-                );
-
-                shapeRenderer.rect(
-                    0,
-                    centerY - (i + 1) * sliceH,
-                    width,
-                    sliceH
-                );
-
-                shapeRenderer.rect(
-                    centerX - (i + 1) * sliceW,
-                    0,
-                    sliceW,
-                    height
-                );
-
-                shapeRenderer.rect(
-                    centerX + i * sliceW,
-                    0,
-                    sliceW,
-                    height
-                );
+            Gdx.app.log("GameView", width + "x" + height);
+            Gdx.app.log("GameView", centerX + "x" + centerY);
+            Gdx.app.log("GameView", centerX + "x" + centerY);
+            for (int i = 0; i < stepW; i++) {
+                for (int j = 0; j < stepH; j++) {
+                    float x = i * rectWidth, y = j * rectHeight;
+                    float curDist = (float) Math.sqrt((x - centerX) * (x - centerX) + (y - centerY) * (y - centerY));
+                    float t = (maxAlpha * (curDist / maxDist));
+                    float alpha = t * maxAlpha;
+                    hudShape.setColor(0, 0, 0, alpha);
+                    hudShape.rect(
+                        x,
+                        y,
+                        rectWidth,
+                        rectHeight
+                    );
+                }
             }
 
-            shapeRenderer.end();
+            hudShape.end();
             Gdx.gl.glDisable(GL20.GL_BLEND);
         }
     }
@@ -226,8 +200,8 @@ public class GameView {
 
     public void setPlayerCoordinates(float x, float y) {
         player.setPosition(x, y);
-        camera.position.set(x, y, 0);
-        camera.update();
+        worldCamera.position.set(x, y, 0);
+        worldCamera.update();
     }
 
     public void setPlayerSizes(float width, float height) {
@@ -247,7 +221,11 @@ public class GameView {
     }
 
     public void resize(int width, int height) {
-        viewport.update(width, height, false);
+        worldViewport.update(width, height, false);
+        screenViewport.update(width, height, false);
+        hudCamera.update();
+        worldCamera.update();
+        hudCamera.setToOrtho(false, width, height);
     }
 
     public void hide() {
@@ -256,7 +234,9 @@ public class GameView {
     }
 
     public void dispose() {
-        batch.dispose();
-        shapeRenderer.dispose();
+        worldBatch.dispose();
+        hudBatch.dispose();
+        hudShape.dispose();
+        hud.dispose();
     }
 }

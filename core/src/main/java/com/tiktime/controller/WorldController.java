@@ -30,7 +30,6 @@ public class WorldController {
     boolean paused = false;
     boolean isInDoor = false;
 
-
     public WorldController(Main game, GameView gameView) {
         this.game = game;
         this.gameView = gameView;
@@ -51,7 +50,7 @@ public class WorldController {
             Direction.EAST,
             EntityState.IDLE
         );
-        gameView.setHud(Gdx.graphics.getWidth() / 6.5f, Gdx.graphics.getHeight() / 30f, entityData.getCurrentHealth() - 10, entityData.getMaxHealth(), PlayerModel.CurrentStats.getCoins());
+        gameView.setHud(entityData.getCurrentHealth() - 10, entityData.getMaxHealth(), PlayerModel.CurrentStats.getCoins());
     }
 
     public void update(float delta) {
@@ -63,6 +62,7 @@ public class WorldController {
         if (paused) {
             return;
         }
+
         if (isInDoor && Gdx.input.isKeyPressed(Input.Keys.E)) {
             Gdx.app.log("WorldController", "Entered door");
             isInDoor = false;
@@ -131,7 +131,7 @@ public class WorldController {
 //            this.angleDeg = 180;
             return Direction.WEST;
         } else {
-            throw new IllegalArgumentException("Direction argument was null");
+            throw new IllegalArgumentException("Direction argument was bad");
         }
     }
 

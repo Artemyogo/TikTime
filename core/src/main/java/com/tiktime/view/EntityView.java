@@ -82,6 +82,7 @@ public abstract class EntityView {
     public void setPosition(float x, float y) {
         this.x = x;
         this.y = y;
+        Gdx.app.log("Position", "x=" + x + ", y=" + y);
     }
 
     public void setSizes(float width, float height) {

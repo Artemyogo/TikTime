@@ -1,5 +1,6 @@
 package com.tiktime.controller.utils;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 
@@ -14,8 +15,14 @@ import java.util.stream.Collectors;
 public class MapSelector {
     private List<TiledMap> maps;
     public MapSelector(){
+//        Path mapsDir = Paths.get(Gdx.files.internal("maps").toString());
+//        if (!Files.exists(mapsDir)) {
+//            throw new RuntimeException("Папка 'maps' не существует!");
+//        }
+
+//        Gdx.app.log("MapSelector", Gdx.files.internal("maps/").toString());
         try {
-            List<Path> paths = Files.walk(Paths.get("maps/")).filter(Files::isRegularFile).filter(path -> {
+            List<Path> paths = Files.walk(Paths.get("assets/maps/")).filter(Files::isRegularFile).filter(path -> {
                 String fileName = path.getFileName().toString().toLowerCase();
                 return fileName.endsWith(".tmx");
             }).collect(Collectors.toList());
@@ -24,7 +31,7 @@ public class MapSelector {
                 maps.add(new TmxMapLoader().load(String.valueOf(path)));
             }
         } catch (Exception e) {
-            throw new RuntimeException("MapSelector cannot load maps");
+            throw new RuntimeException("MapSelector cannot load maps   " + e.getMessage());
         }
     }
     public TiledMap getMap() {
