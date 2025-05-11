@@ -11,33 +11,33 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.tiktime.controller.UpgradeController;
+import com.tiktime.model.Upgrade;
+import com.tiktime.model.UpgradeManager;
+import com.tiktime.model.UpgradeType;
+
+import java.util.EnumMap;
+import java.util.Map;
 
 public class UpgradeView implements Disposable {
-
     private final Stage stage;
     private final Skin skin;
     private final BitmapFont font;
     private final Label coinLabel;
     private final TextButton backButton;
-    private final TextButton hpUpgradeButton;
-    private final TextButton speedUpgradeButton;
-    private final TextButton damageUpgradeButton;
-    private final TextButton regenUpgradeButton;
+    private final Map<UpgradeType, TextButton> upgradeButtons;
 
-    public UpgradeView(){
+    public UpgradeView(UpgradeManager upgradeManager) {
         stage = new Stage(new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
         skin = new Skin(Gdx.files.internal("flat-earth/skin/flat-earth-ui.json"));
         font = new BitmapFont(Gdx.files.internal("flat-earth/raw/font-title-export.fnt"));
         font.getData().setScale(1.3f);
         Label.LabelStyle labelStyle = new Label.LabelStyle(font, Color.WHITE);
         coinLabel = new Label("", labelStyle);
-
         backButton = new TextButton("Back", skin);
-        hpUpgradeButton = new TextButton("", skin);
-        speedUpgradeButton = new TextButton("", skin);
-        damageUpgradeButton = new TextButton("", skin);
-        regenUpgradeButton = new TextButton("", skin);
-
+        upgradeButtons = new EnumMap<>(UpgradeType.class);
+        for (Upgrade upgrade : upgradeManager.getUpgrades()) {
+            upgradeButtons.put(upgrade.getType(), new TextButton("", skin));
+        }
         createUI();
     }
 
@@ -50,33 +50,14 @@ public class UpgradeView implements Disposable {
             }
         });
 
-        hpUpgradeButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                controller.onUpgradeHPClicked();
-            }
-        });
-
-        speedUpgradeButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                controller.onUpgradeSpeedClicked();
-            }
-        });
-
-        damageUpgradeButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                controller.onUpgradeDamageClicked();
-            }
-        });
-
-        regenUpgradeButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                controller.onUpgradeRegenClicked();
-            }
-        });
+        for (Map.Entry<UpgradeType, TextButton> entry : upgradeButtons.entrySet()) {
+            entry.getValue().addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    controller.onBuyClicked(entry.getKey());
+                }
+            });
+        }
 
     }
 
@@ -95,51 +76,27 @@ public class UpgradeView implements Disposable {
 
         topLeft.add(backButton).width(252).height(80).padTop(56).padLeft(32);
 
-        Texture coin = new Texture("coin.png");
+        Texture coin = new Texture("Fantasy Minimal Pixel Art GUI by eta-commercial-free/UI/CoinIcon_16x18.png");
         Image coinImage = new Image(coin);
         topRight.add(coinImage).size(64, 64).padTop(64).padRight(32);
         topRight.add(coinLabel).padTop(64).padRight(52);
 
-        upgrades.add(hpUpgradeButton).height(100).width(552).padTop(152).padBottom(70).row();
-        upgrades.add(speedUpgradeButton).height(100).width(552).padBottom(70).row();
-        upgrades.add(damageUpgradeButton).height(100).width(552).padBottom(70).row();
-        upgrades.add(regenUpgradeButton).height(100).width(552).row();
+        upgrades.add(upgradeButtons.get(UpgradeType.HP)).height(100).width(552).padTop(152).padBottom(70).row();
+        upgrades.add(upgradeButtons.get(UpgradeType.SPEED)).height(100).width(552).padBottom(70).row();
+        upgrades.add(upgradeButtons.get(UpgradeType.DAMAGE)).height(100).width(552).padBottom(70).row();
+        upgrades.add(upgradeButtons.get(UpgradeType.REGEN)).height(100).width(552).row();
     }
 
-    public void setHpUpgradePrice(int price) {
-        hpUpgradeButton.setText("To upgrade health: " + price + " coins");
-    }
-
-    public void setSpeedUpgradePrice(int price) {
-        speedUpgradeButton.setText("To upgrade speed: " + price + " coins");
-    }
-
-    public void setDamageUpgradePrice(int price) {
-        damageUpgradeButton.setText("To upgrade damage: " + price + " coins");
-    }
-
-    public void setRegenUpgradePrice(int price) {
-        regenUpgradeButton.setText("To upgrade regeneration: " + price + " coins");
+    public void setUpgradePrice(UpgradeType upgradeType, int price) {
+        upgradeButtons.get(upgradeType).setText("To upgrade " + upgradeType.getName() + ": " + price + " coins");
     }
 
     public void setMoney(int money) {
         coinLabel.setText(money + "");
     }
 
-    public TextButton getHPUpgradeButton() {
-        return hpUpgradeButton;
-    }
-
-    public TextButton getSpeedUpgradeButton() {
-        return speedUpgradeButton;
-    }
-
-    public TextButton getDamageUpgradeButton() {
-        return damageUpgradeButton;
-    }
-
-    public TextButton getRegenUpgradeButton() {
-        return regenUpgradeButton;
+    public TextButton getButton(UpgradeType upgradeType) {
+        return upgradeButtons.get(upgradeType);
     }
 
     public void show() {

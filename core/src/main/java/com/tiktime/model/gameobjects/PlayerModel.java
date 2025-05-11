@@ -2,6 +2,7 @@ package com.tiktime.model.gameobjects;
 
 import com.badlogic.gdx.physics.box2d.World;
 import com.tiktime.model.UpgradeModel;
+import com.tiktime.model.UpgradeType;
 import com.tiktime.model.consts.GameConfig;
 import com.tiktime.model.enums.Category;
 import com.tiktime.model.consts.GameConfig.PlayerConfig;
@@ -12,15 +13,15 @@ public class PlayerModel extends EntityModel{
         private static final UpgradeModel upgradeModel = UpgradeModel.getInstance();
         ///  TODO DODELAT BLIN BLINSKIY
         public static int getHealth() {
-            return upgradeModel.getHpLevel() * 10 + playerConfig.getBaseHp();
+            return upgradeModel.getUpgrade(UpgradeType.HP).getLevel() * 10 + playerConfig.getBaseHp();
         }
 
         public static float getSpeed() {
-            return upgradeModel.getSpeedLevel() * 3 + playerConfig.getBaseSpeed();
+            return upgradeModel.getUpgrade(UpgradeType.SPEED).getLevel() * 3 + playerConfig.getBaseSpeed();
         }
 
         public static float getDamage() {
-            return (upgradeModel.getDamageLevel() * 10) + playerConfig.getBaseDamage();
+            return upgradeModel.getUpgrade(UpgradeType.DAMAGE).getLevel() * 10 + playerConfig.getBaseDamage();
         }
 
         public static int getCoins() {
