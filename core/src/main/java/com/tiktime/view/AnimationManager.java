@@ -23,6 +23,8 @@ public class AnimationManager {
             currentAnim = name;
             stateTime = 0;
         }
+//        currentAnim = name;
+//        stateTime = 0;
     }
 
     public TextureRegion getCurrentFrame() {

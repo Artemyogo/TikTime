@@ -25,7 +25,6 @@ public class GameView {
     private boolean paused = false;
 //    private boolean debug = true;
     private final boolean debug = false;
-    private WorldController worldController;
     /// TODO DELETE THIS
     private World world;
 
@@ -64,9 +63,7 @@ public class GameView {
         enemies = new HashMap<>();
     }
 
-    public void setController(WorldController worldController) {
-        this.worldController = worldController;
-    }
+    public void setController(WorldController worldController) {}
 
     ///  TODO DELTE THIS
     public void setWorld(World world) {
@@ -93,9 +90,10 @@ public class GameView {
         mapRenderer = new OrthogonalTiledMapRenderer(map, 1f / PPM);
     }
 
-    public void setPlayer(float x, float y, float width, float height, Direction direction, EntityState state) {
+    public void setPlayer(float x, float y, float width, float height, Direction direction, LivingEntityState state) {
+//        Gdx.app.log("GameView", state.toString());
         player = new PlayerView(x, y, width, height, direction, state);
-        player.updateAnimation();
+//        player.updateAnimation();
     }
 
     public void setHud(int curHealth, int maxHealth, int coins) {
@@ -117,9 +115,9 @@ public class GameView {
 
         worldBatch.begin();
         /// TODO SORT BY 'Y' COORD NEED TO
-        for (EnemyView enemy : enemies.values()) {
-            enemy.render(delta, worldBatch);
-        }
+//        for (EnemyView enemy : enemies.values()) {
+//            enemy.render(delta, worldBatch);
+//        }
         player.render(delta, worldBatch);
         worldBatch.end();
 
@@ -140,8 +138,8 @@ public class GameView {
 
             float width = screenViewport.getScreenWidth();
             float height = screenViewport.getScreenHeight();
-            int stepW = 40;
-            int stepH = 40;
+            int stepW = 100;
+            int stepH = 100;
             float rectWidth = width / stepW;
             float rectHeight = height / stepH;
             float centerX = width / 2f;
@@ -149,9 +147,9 @@ public class GameView {
             float maxDist = (float) Math.sqrt(centerX * centerX + centerY * centerY);
             float maxAlpha = 1.1f;
 
-            Gdx.app.log("GameView", width + "x" + height);
-            Gdx.app.log("GameView", centerX + "x" + centerY);
-            Gdx.app.log("GameView", centerX + "x" + centerY);
+//            Gdx.app.log("GameView", width + "x" + height);
+//            Gdx.app.log("GameView", centerX + "x" + centerY);
+//            Gdx.app.log("GameView", centerX + "x" + centerY);
             for (int i = 0; i < stepW; i++) {
                 for (int j = 0; j < stepH; j++) {
                     float x = i * rectWidth, y = j * rectHeight;
@@ -174,7 +172,7 @@ public class GameView {
     }
 
     public void addEnemy(float x, float y, float width, float height, int id, Direction direction,
-                         EntityState state, EnemyType enemyType) {
+                         LivingEntityState state, EnemyType enemyType) {
         enemies.put(id, new EnemyView(x, y, width, height, id, direction, state, enemyType));
     }
 
@@ -185,10 +183,10 @@ public class GameView {
 
     public void setEnemySizes(float width, float height, int id) {
         EnemyView enemyView = enemies.get(id);
-        enemyView.setSizes(width, height);
+        enemyView.setSize(width, height);
     }
 
-    public void setEnemyState(EntityState state, int id) {
+    public void setEnemyState(LivingEntityState state, int id) {
         EnemyView enemyView = enemies.get(id);
         enemyView.setState(state);
     }
@@ -205,10 +203,10 @@ public class GameView {
     }
 
     public void setPlayerSizes(float width, float height) {
-        player.setSizes(width, height);
+        player.setSize(width, height);
     }
 
-    public void setPlayerState(EntityState state) {
+    public void setPlayerState(LivingEntityState state) {
         player.setState(state);
     }
 

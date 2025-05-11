@@ -1,0 +1,41 @@
+
+ak47Weapon.png
+size: 64, 128
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+AK47-SpriteSheet
+  rotate: false
+  xy: 2, 70
+  size: 59, 16
+  orig: 59, 16
+  offset: 0, 0
+  index: 2
+AK47-SpriteSheet
+  rotate: false
+  xy: 2, 53
+  size: 50, 15
+  orig: 50, 15
+  offset: 0, 0
+  index: 3
+AK47-SpriteSheet
+  rotate: false
+  xy: 2, 36
+  size: 48, 15
+  orig: 48, 15
+  offset: 0, 0
+  index: 5
+AK47-SpriteSheet
+  rotate: false
+  xy: 2, 19
+  size: 45, 15
+  orig: 45, 15
+  offset: 0, 0
+  index: 1
+AK47-SpriteSheet
+  rotate: false
+  xy: 2, 2
+  size: 45, 15
+  orig: 45, 15
+  offset: 0, 0
+  index: 4

@@ -1,26 +1,16 @@
 package com.tiktime.controller;
 
 import com.badlogic.gdx.*;
-import com.badlogic.gdx.maps.MapLayer;
-import com.badlogic.gdx.maps.MapObject;
-import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.World;
 import com.tiktime.Main;
 import com.tiktime.controller.utils.MapSelector;
 import com.tiktime.model.WorldModel;
 import com.tiktime.model.gameobjects.EntityData;
 import com.tiktime.model.gameobjects.PlayerModel;
 import com.tiktime.view.Direction;
-import com.tiktime.view.EntityState;
+import com.tiktime.view.LivingEntityState;
 import com.tiktime.view.GameView;
-
-import java.io.Console;
-import java.util.Iterator;
-
-import static com.tiktime.model.consts.ScreenConstants.PPM;
 
 public class WorldController {
     Game game;
@@ -48,7 +38,7 @@ public class WorldController {
             entityData.getWidth(),
             entityData.getHeight(),
             Direction.EAST,
-            EntityState.IDLE
+            LivingEntityState.IDLE
         );
         gameView.setHud(entityData.getCurrentHealth() - 10, entityData.getMaxHealth(), PlayerModel.CurrentStats.getCoins());
     }
@@ -91,13 +81,13 @@ public class WorldController {
         Vector2 position = worldModel.getPlayerPosition();
         gameView.setPlayerCoordinates(position.x, position.y);
         if (direction.equals(new Vector2(0, 0))) {
-            gameView.setPlayerState(EntityState.IDLE);
+            gameView.setPlayerState(LivingEntityState.IDLE);
         } else {
             if (!direction.equals(new Vector2(0, 1)) &&
             !direction.equals(new Vector2(0, -1))) {
                 gameView.setPlayerDirection(getDirection(direction));
             }
-            gameView.setPlayerState(EntityState.RUNNING);
+            gameView.setPlayerState(LivingEntityState.RUNNING);
         }
     }
 
