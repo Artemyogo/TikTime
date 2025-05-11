@@ -22,7 +22,7 @@ public class MapSelector {
 
 //        Gdx.app.log("MapSelector", Gdx.files.internal("maps/").toString());
         try {
-            List<Path> paths = Files.walk(Paths.get("assets/maps/")).filter(Files::isRegularFile).filter(path -> {
+            List<Path> paths = Files.walk(Paths.get("maps/")).filter(Files::isRegularFile).filter(path -> {
                 String fileName = path.getFileName().toString().toLowerCase();
                 return fileName.endsWith(".tmx");
             }).collect(Collectors.toList());
