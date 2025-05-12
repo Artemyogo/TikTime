@@ -2,6 +2,7 @@ package com.tiktime.model;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
+import com.tiktime.model.enums.UpgradeType;
 
 public final class UpgradeModel {
     private final Preferences prefs;

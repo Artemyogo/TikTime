@@ -248,13 +248,13 @@ public final class GameConfig {
         protected float offsetY;
 
         private WeaponConfig(WeaponData data) {
-           this.damage = data.damage;
-           this.fireRate = data.fireRate;
-           this.reloadTime = data.reloadTime;
-           this.width = data.width;
-           this.height = data.height;
-           this.offsetX = data.offsetX;
-           this.offsetY = data.offsetY;
+            this.damage = data.damage;
+            this.fireRate = data.fireRate;
+            this.reloadTime = data.reloadTime;
+            this.width = data.width;
+            this.height = data.height;
+            this.offsetX = data.offsetX;
+            this.offsetY = data.offsetY;
         }
 
         public int getDamage() {
@@ -312,7 +312,7 @@ public final class GameConfig {
     }
 
 
-        private static final class PlayerData extends EntityData { }
+    private static final class PlayerData extends EntityData { }
 
     /**
      * MARKSMAN(0),
@@ -345,12 +345,12 @@ public final class GameConfig {
 
     private static class ConfigData {
         private PlayerData player;
-//        private MarksmanEnemyData marksman;
+        //        private MarksmanEnemyData marksman;
 //        private AnimanEnemyData animan;
 //        private RusherEnemyData rusher;
         private WallData wall;
         private FloorData floor;
-//        private Ak47WeaponData ak47;
+        //        private Ak47WeaponData ak47;
         private EntityData entity;
         private WeaponData weapon;
         private DynamiteData dynamite;

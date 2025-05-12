@@ -13,8 +13,9 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.tiktime.controller.UpgradeController;
 import com.tiktime.model.Upgrade;
 import com.tiktime.model.UpgradeManager;
-import com.tiktime.model.UpgradeType;
+import com.tiktime.model.enums.UpgradeType;
 
+import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.Map;
 
@@ -25,9 +26,13 @@ public class UpgradeView implements Disposable {
     private final Label coinLabel;
     private final TextButton backButton;
     private final Map<UpgradeType, TextButton> upgradeButtons;
+    private final Table upgrades;
 
     public UpgradeView(UpgradeManager upgradeManager) {
         stage = new Stage(new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
+        upgrades = new Table();
+        upgrades.setFillParent(true);
+        stage.addActor(upgrades);
         skin = new Skin(Gdx.files.internal("flat-earth/skin/flat-earth-ui.json"));
         font = new BitmapFont(Gdx.files.internal("flat-earth/raw/font-title-export.fnt"));
         font.getData().setScale(1.3f);
@@ -70,10 +75,6 @@ public class UpgradeView implements Disposable {
         topRight.setFillParent(true);
         stage.addActor(topRight);
 
-        Table upgrades = new Table();
-        upgrades.setFillParent(true);
-        stage.addActor(upgrades);
-
         topLeft.add(backButton).width(252).height(80).padTop(56).padLeft(32);
 
         Texture coin = new Texture("Fantasy Minimal Pixel Art GUI by eta-commercial-free/UI/CoinIcon_16x18.png");
@@ -81,10 +82,27 @@ public class UpgradeView implements Disposable {
         topRight.add(coinImage).size(64, 64).padTop(64).padRight(32);
         topRight.add(coinLabel).padTop(64).padRight(52);
 
-        upgrades.add(upgradeButtons.get(UpgradeType.HP)).height(100).width(552).padTop(152).padBottom(70).row();
+        drawUpgradeButtons();
+    }
+
+    private void drawUpgradeButtons() {
+        boolean first = true;
+        for (Map.Entry<UpgradeType, TextButton> entry : upgradeButtons.entrySet()) {
+            float topPadding = 0f;
+            if (first) {
+                topPadding = 100f;
+            }
+
+            upgrades.add(entry.getValue()).height(100).width(552).padBottom(70).padTop(topPadding).row();
+            first = false;
+        }
+
+        /*
+        upgrades.add(upgradeButtons.get(UpgradeType.HP)).height(buttonHeight).width(buttonWidth).padTop(100).padBottom(70).row();
         upgrades.add(upgradeButtons.get(UpgradeType.SPEED)).height(100).width(552).padBottom(70).row();
         upgrades.add(upgradeButtons.get(UpgradeType.DAMAGE)).height(100).width(552).padBottom(70).row();
         upgrades.add(upgradeButtons.get(UpgradeType.REGEN)).height(100).width(552).row();
+        */
     }
 
     public void setUpgradePrice(UpgradeType upgradeType, int price) {
@@ -121,6 +139,8 @@ public class UpgradeView implements Disposable {
 
     public void resize(int width, int height) {
         stage.getViewport().update(width, height, true);
+        //upgrades.clear();
+        //drawUpgradeButtons();
     }
 
     @Override

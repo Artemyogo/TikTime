@@ -2,7 +2,7 @@ package com.tiktime.model.gameobjects;
 
 import com.badlogic.gdx.physics.box2d.World;
 import com.tiktime.model.UpgradeModel;
-import com.tiktime.model.UpgradeType;
+import com.tiktime.model.enums.UpgradeType;
 import com.tiktime.model.consts.GameConfig;
 import com.tiktime.model.enums.Category;
 import com.tiktime.model.consts.GameConfig.PlayerConfig;

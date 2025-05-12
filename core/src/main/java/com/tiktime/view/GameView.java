@@ -12,6 +12,12 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileSet;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -42,6 +48,10 @@ public class GameView {
     private final Box2DDebugRenderer debugRenderer;
     private final ShapeRenderer hudShape;
     private final SpriteBatch hudBatch;
+    private final Stage stage;
+    private final TextButton continueButton;
+    private final TextButton exitButton;
+    private final Table pauseMenu;
 
     private Map<Integer, EnemyView> enemies;
     private PlayerView player;
@@ -66,9 +76,36 @@ public class GameView {
         hudCamera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
         enemies = new HashMap<>();
+
+        stage = new Stage(screenViewport);
+        pauseMenu = new Table();
+        pauseMenu.setFillParent(true);
+        //pauseMenu.setVisible(false);
+        continueButton = new TextButton("Continue game", new Skin(Gdx.files.internal("flat-earth/skin/flat-earth-ui.json")));
+        exitButton = new TextButton("Exit to menu", new Skin(Gdx.files.internal("flat-earth/skin/flat-earth-ui.json")));
+        pauseMenu.center();
+        pauseMenu.add(continueButton).width(300).height(80).padBottom(20).row();
+        pauseMenu.add(exitButton).width(300).height(80);
+        stage.addActor(pauseMenu);
     }
 
-    public void setController(WorldController worldController) {}
+    public void setController(WorldController worldController) {
+
+        continueButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                worldController.setPaused(false);
+            }
+        });
+
+        exitButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                worldController.goToMenu();
+            }
+        });
+
+    }
 
     ///  TODO DELETE THIS
     public void setWorld(World world) {
@@ -80,6 +117,12 @@ public class GameView {
         this.player.setPause(paused);
         for (EnemyView e: enemies.values()) {
             e.setPause(paused);
+        }
+
+        if (paused) {
+            Gdx.input.setInputProcessor(stage);
+        } else {
+            Gdx.input.setInputProcessor(Gdx.input.getInputProcessor());
         }
     }
 
@@ -137,6 +180,8 @@ public class GameView {
 
         if (paused) {
             drawPauseDarkening(delta);
+            stage.act(delta);
+            stage.draw();
         }
     }
 

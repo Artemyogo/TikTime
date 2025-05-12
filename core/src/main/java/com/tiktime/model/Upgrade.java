@@ -1,5 +1,7 @@
 package com.tiktime.model;
 
+import com.tiktime.model.enums.UpgradeType;
+
 public class Upgrade {
     private int level;
     private final UpgradeType type;
@@ -12,11 +14,10 @@ public class Upgrade {
     }
 
     public Upgrade(UpgradeType type, int level) {
-        if (type == null) throw new IllegalArgumentException("Type cannot be null");
+        this(type);
         if (level < 0) throw new IllegalArgumentException("Level cannot be negative");
 
         this.level = level;
-        this.type = type;
     }
 
     public static int getCost(int level) {

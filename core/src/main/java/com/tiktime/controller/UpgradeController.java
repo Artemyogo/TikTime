@@ -3,7 +3,7 @@ package com.tiktime.controller;
 import com.tiktime.Main;
 import com.tiktime.model.Upgrade;
 import com.tiktime.model.UpgradeModel;
-import com.tiktime.model.UpgradeType;
+import com.tiktime.model.enums.UpgradeType;
 import com.tiktime.screens.MenuScreen;
 import com.tiktime.view.UpgradeView;
 
