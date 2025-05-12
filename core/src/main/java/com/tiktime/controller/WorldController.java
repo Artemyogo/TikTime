@@ -10,13 +10,14 @@ import com.tiktime.model.WorldModel;
 import com.tiktime.model.consts.GameConfig;
 import com.tiktime.model.gameobjects.EntityData;
 import com.tiktime.model.gameobjects.PlayerModel;
+import com.tiktime.screens.MenuScreen;
 import com.tiktime.view.Direction;
 import com.tiktime.view.LivingEntityState;
 import com.tiktime.view.GameView;
 import com.tiktime.view.WeaponType;
 
 public class WorldController {
-    private final Game game;
+    private final Main game;
     private GameView gameView;
     private WorldModel worldModel;
     private MapSelector mapSelector;
@@ -49,8 +50,7 @@ public class WorldController {
 
     public void update(float delta) {
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
-            paused = !paused;
-            gameView.setPause(paused);
+            setPaused(!paused);
         }
 
         if (paused) {
@@ -154,6 +154,17 @@ public class WorldController {
 
     public void explosion(float x, float y, float radius, float force) {
         worldModel.explosion(x, y, radius, force);
+    }
+
+
+    public void setPaused(boolean paused) {
+        this.paused = paused;
+        gameView.setPause(paused);
+    }
+
+
+    public void goToMenu() {
+        game.setScreen(new MenuScreen(game));
     }
 
 

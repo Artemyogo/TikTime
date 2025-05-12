@@ -1,5 +1,7 @@
 package com.tiktime.model;
 
+import com.tiktime.model.enums.UpgradeType;
+
 import java.util.ArrayList;
 
 public class UpgradeManager {
@@ -16,7 +18,7 @@ public class UpgradeManager {
     public void addUpgrade(Upgrade upgrade) {
         for (Upgrade upg : upgrades) {
             if (upg.getType() == upgrade.getType()) {
-                throw new IllegalArgumentException("Trying to add existing upgrade");
+                throw new RuntimeException("Trying to add existing upgrade");
             }
         }
         upgrades.add(upgrade);
