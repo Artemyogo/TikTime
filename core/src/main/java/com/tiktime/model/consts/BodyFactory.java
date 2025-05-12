@@ -32,7 +32,9 @@ public class BodyFactory {
         for (int x = 0; x < layer.getWidth(); x++) {
             for (int y = 0; y < layer.getHeight(); y++) {
                 if (layer.getCell(x, y) == null) continue;
-                res.add(createBody(world, BodyDefFactory.getBodyDef(x, y, bodyType), fixtureDef));
+                Body body = createBody(world, BodyDefFactory.getBodyDef(x, y, bodyType), fixtureDef);
+                body.setUserData(layer.getCell(x, y));
+                res.add(body);
             }
         }
         return res;

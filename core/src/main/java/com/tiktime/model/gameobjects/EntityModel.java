@@ -7,6 +7,8 @@ import com.tiktime.model.enums.Category;
 
 import com.tiktime.model.consts.GameConfig.EntityConfig;
 
+import static com.badlogic.gdx.math.MathUtils.ceil;
+
 public abstract class EntityModel {
     private final Body body;
     private final EntityData data;
@@ -88,7 +90,7 @@ public abstract class EntityModel {
         Vector2 impulseVec = directionAwayFromExplosion.scl(impulseMagnitude);
 
         getBody().applyLinearImpulse(impulseVec, getBody().getWorldCenter(), true);
-        takeDamage(1);
+        takeDamage(ceil(force/10));
 
     }
 }

@@ -47,7 +47,8 @@ public class CollisionController implements ContactListener {
         }
         if(masks.check(Category.PLAYER, Category.DYNAMITE)) {
             Fixture dynamiteFixture = masks.getFixture(Category.DYNAMITE);
-            worldController.explosion(dynamiteFixture.getBody().getPosition().x, dynamiteFixture.getBody().getPosition().y, 10, 100f);
+            worldController.explosion(dynamiteFixture.getBody(), 10, 100f);
+            worldController.deleteBody(dynamiteFixture.getBody());
         }
     }
 

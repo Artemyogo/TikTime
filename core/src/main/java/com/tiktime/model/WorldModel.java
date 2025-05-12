@@ -64,6 +64,7 @@ public class WorldModel {
         BodyFactory.createBodies(world, dynamiteLayer, FixtureFactory.getDynamiteFixture(), BodyDef.BodyType.StaticBody);
         world.setContactListener(collisionController);
 
+
     }
 
 
