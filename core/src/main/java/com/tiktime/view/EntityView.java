@@ -27,5 +27,13 @@ public abstract class EntityView {
         this.pause = pause;
     }
 
+    public float getX() {
+        return x;
+    }
+
+    public float getY() {
+        return y;
+    }
+
     public abstract void render(float delta, SpriteBatch batch);
 }

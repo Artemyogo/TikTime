@@ -3,6 +3,7 @@ package com.tiktime.view;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -18,6 +19,7 @@ import com.tiktime.controller.WorldController;
 import com.tiktime.model.consts.GameConfig;
 import com.tiktime.model.consts.ScreenConstants;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,6 +29,7 @@ public class GameView {
     private boolean paused = false;
 //    private boolean debug = true;
     private final boolean debug = false;
+    private boolean isInDoor = false;
     /// TODO DELETE THIS
     private World world;
 
@@ -114,11 +117,9 @@ public class GameView {
         hudShape.setProjectionMatrix(hudCamera.combined);
 
         worldBatch.begin();
-        /// TODO SORT BY 'Y' COORDINATES
-        for (EnemyView enemy : enemies.values()) {
-            enemy.render(delta, worldBatch);
-        }
-        player.render(delta, worldBatch);
+        ArrayList<LivingEntityView> allLivingEntities = new ArrayList<>(enemies.values());
+        allLivingEntities.add(player);
+        allLivingEntities.forEach(e -> {e.render(delta,  worldBatch);});
         worldBatch.end();
 
         hudBatch.begin();
@@ -130,9 +131,26 @@ public class GameView {
             debugRenderer.render(world, worldCamera.combined);
         }
 
+        if (isInDoor) {
+            printMessageNearDoor(hudBatch);
+        }
+
         if (paused) {
             drawPauseDarkening(delta);
         }
+    }
+
+    public void printMessageNearDoor(SpriteBatch batch) {
+        float x = screenViewport.getScreenWidth() / 2f - 170f, y = 200f;
+        BitmapFont font = new BitmapFont();
+        font.getData().scale(2f);
+        batch.begin();
+        font.draw(batch, "Press 'E' to exit door", x, y);
+        batch.end();
+    }
+
+    public void setIsInDoor(boolean isInDoor) {
+        this.isInDoor = isInDoor;
     }
 
     public void drawPauseDarkening(float delta) {
@@ -182,7 +200,7 @@ public class GameView {
         enemyView.setPosition(x, y);
     }
 
-    public void setEnemySizes(float width, float height, int id) {
+    public void setEnemySize(float width, float height, int id) {
         EnemyView enemyView = enemies.get(id);
         enemyView.setSize(width, height);
     }

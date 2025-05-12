@@ -16,12 +16,12 @@ import com.tiktime.view.GameView;
 import com.tiktime.view.WeaponType;
 
 public class WorldController {
-    Game game;
-    GameView gameView;
-    WorldModel worldModel;
-    MapSelector mapSelector;
-    boolean paused = false;
-    boolean isInDoor = false;
+    private final Game game;
+    private GameView gameView;
+    private WorldModel worldModel;
+    private MapSelector mapSelector;
+    private boolean paused = false;
+    private boolean isInDoor = false;
 
     public WorldController(Main game, GameView gameView) {
         this.game = game;
@@ -95,6 +95,7 @@ public class WorldController {
         Vector3 mousePosition = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
         gameView.updatePlayerWeaponRotation(mousePosition, getWeaponPosition(playerPosition.x, playerPosition.y, WeaponType.AK47));
         gameView.setPlayerCurHealth(worldModel.getPlayerData().getCurrentHealth());
+        gameView.setIsInDoor(isInDoor);
     }
 
     Vector3 getWeaponPosition(float x, float y, WeaponType weapon) {
