@@ -2,8 +2,11 @@ package com.tiktime.controller;
 
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.tiktime.Main;
 import com.tiktime.controller.utils.MapSelector;
 import com.tiktime.model.WorldModel;
@@ -16,6 +19,9 @@ import com.tiktime.view.LivingEntityState;
 import com.tiktime.view.GameView;
 import com.tiktime.view.WeaponType;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class WorldController {
     private final Main game;
     private GameView gameView;
@@ -23,6 +29,7 @@ public class WorldController {
     private MapSelector mapSelector;
     private boolean paused = false;
     private boolean isInDoor = false;
+    private List<Body> toDelete = new ArrayList<>();
 
     public WorldController(Main game, GameView gameView) {
         this.game = game;
@@ -31,10 +38,10 @@ public class WorldController {
         TiledMap map = mapSelector.getMap();
         this.worldModel = new WorldModel(map, new CollisionController(this));
         gameView.setController(this);
-        ///TODO DELETE THIS
+        /// TODO DELETE THIS
         gameView.setWorld(worldModel.getWorld());
-        ///
         gameView.setMapRenderer(map);
+
         EntityData entityData = worldModel.getPlayerData();
         gameView.setPlayer(
             worldModel.getPlayerPosition().x,
@@ -58,11 +65,13 @@ public class WorldController {
         }
 
         if (isInDoor && Gdx.input.isKeyPressed(Input.Keys.E)) {
+            Gdx.app.log("WorldController", "Entered door");
             isInDoor = false;
             TiledMap map = mapSelector.getMap();
             this.worldModel = new WorldModel(map, new CollisionController(this));
             gameView.setMapRenderer(map);
         }
+
 
         Vector2 direction = new Vector2();
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
@@ -96,6 +105,10 @@ public class WorldController {
         gameView.updatePlayerWeaponRotation(mousePosition, getWeaponPosition(playerPosition.x, playerPosition.y, WeaponType.AK47));
         gameView.setPlayerCurHealth(worldModel.getPlayerData().getCurrentHealth());
         gameView.setIsInDoor(isInDoor);
+        for(Body i : toDelete){
+            worldModel.getWorld().destroyBody(i);
+        }
+        toDelete.clear();
     }
 
     Vector3 getWeaponPosition(float x, float y, WeaponType weapon) {
@@ -152,8 +165,13 @@ public class WorldController {
         isInDoor = false;
     }
 
-    public void explosion(float x, float y, float radius, float force) {
-        worldModel.explosion(x, y, radius, force);
+    public void explosion(Body body, float radius, float force) {
+        TiledMapTileLayer.Cell cell = (TiledMapTileLayer.Cell) body.getUserData();
+        cell.setTile(null);
+        worldModel.explosion(body.getPosition().x, body.getPosition().y, radius, force);
+    }
+    void deleteBody(Body body){
+        toDelete.add(body);
     }
 
 
