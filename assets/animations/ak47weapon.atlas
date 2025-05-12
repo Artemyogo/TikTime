@@ -1,0 +1,47 @@
+ak47weapon.png
+size: 64, 128
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+ak47-attacking
+  rotate: false
+  xy: 2, 70
+  size: 59, 16
+  orig: 59, 16
+  offset: 0, 0
+  index: 2
+ak47-attacking
+  rotate: false
+  xy: 2, 53
+  size: 50, 15
+  orig: 50, 15
+  offset: 0, 0
+  index: 3
+ak47-attacking
+  rotate: false
+  xy: 2, 36
+  size: 48, 15
+  orig: 48, 15
+  offset: 0, 0
+  index: 5
+ak47-attacking
+  rotate: false
+  xy: 2, 19
+  size: 45, 15
+  orig: 45, 15
+  offset: 0, 0
+  index: 1
+ak47-attacking
+  rotate: false
+  xy: 2, 2
+  size: 45, 15
+  orig: 45, 15
+  offset: 0, 0
+  index: 4
+ak47-idle
+  rotate: false
+  xy: 2, 19
+  size: 45, 15
+  orig: 45, 15
+  offset: 0, 0
+  index: 1
