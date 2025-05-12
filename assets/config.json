@@ -20,8 +20,10 @@
     "damage": 10,
     "fireRate": 5,
     "reloadTime": 4,
-    "width": 1,
-    "height": 1
+    "width": 1.3,
+    "height": 0.7,
+    "offsetX": 0.06,
+    "offsetY": -0.05
   },
   "wall": {
     "density": 0,

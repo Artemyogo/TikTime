@@ -231,6 +231,8 @@ public final class GameConfig {
         protected float reloadTime;
         protected float width;
         protected float height;
+        protected float offsetX;
+        protected float offsetY;
 
         private WeaponsConfig(WeaponData data) {
            this.damage = data.damage;
@@ -238,6 +240,8 @@ public final class GameConfig {
            this.reloadTime = data.reloadTime;
            this.width = data.width;
            this.height = data.height;
+           this.offsetX = data.offsetX;
+           this.offsetY = data.offsetY;
         }
 
         public int getDamage() {
@@ -258,6 +262,14 @@ public final class GameConfig {
 
         public float getHeight() {
             return height;
+        }
+
+        public float getOffsetX() {
+            return offsetX;
+        }
+
+        public float getOffsetY() {
+            return offsetY;
         }
     }
 
@@ -306,6 +318,8 @@ public final class GameConfig {
         protected float reloadTime;
         protected float width;
         protected float height;
+        protected float offsetX;
+        protected float offsetY;
     }
 
     private static final class Ak47WeaponData extends WeaponData { }

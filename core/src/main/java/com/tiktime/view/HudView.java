@@ -68,6 +68,6 @@ public class HudView {
     }
 
     public void setCurHealth(int curHealth) {
-
+        health.setCurValue(curHealth);
     }
 }

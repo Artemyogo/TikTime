@@ -2,10 +2,13 @@ package com.tiktime.controller;
 
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.tiktime.Main;
 import com.tiktime.controller.utils.MapSelector;
 import com.tiktime.model.WorldModel;
+import com.tiktime.model.consts.GameConfig;
 import com.tiktime.model.gameobjects.EntityData;
 import com.tiktime.model.gameobjects.PlayerModel;
 import com.tiktime.view.Direction;
@@ -40,7 +43,7 @@ public class WorldController {
             Direction.EAST,
             LivingEntityState.IDLE
         );
-        gameView.setHud(entityData.getCurrentHealth() - 10, entityData.getMaxHealth(), PlayerModel.CurrentStats.getCoins());
+        gameView.setHud(entityData.getCurrentHealth(), entityData.getMaxHealth(), PlayerModel.CurrentStats.getCoins());
     }
 
     public void update(float delta) {
@@ -89,6 +92,21 @@ public class WorldController {
             }
             gameView.setPlayerState(LivingEntityState.RUNNING);
         }
+
+        Vector3 mousePosition = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+        gameView.updatePlayerWeaponRotation(mousePosition, getWeaponPosition(position.x, position.y));
+
+        int curHealth = worldModel.getPlayerData().getCurrentHealth();
+        gameView.setPlayerCurHealth(curHealth);
+    }
+
+    Vector3 getWeaponPosition(float x, float y) {
+        GameConfig.Ak47WeaponConfig ak47WeaponConfig = GameConfig.getInstance().getAk47WeaponConfig();
+        float xn = x + ak47WeaponConfig.getOffsetX();
+        float yn = y + ak47WeaponConfig.getOffsetY();
+        float width = ak47WeaponConfig.getWidth();
+        float height = ak47WeaponConfig.getHeight();
+        return new Vector3(xn - width / 2f, yn - height / 2f, 0);
     }
 
     Direction getDirection(Vector2 dir) {

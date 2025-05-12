@@ -9,11 +9,14 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 
 import java.util.Comparator;
+import java.util.Map;
 
 public abstract class LivingEntityView extends AnimatedEntityView {
     protected Direction direction;
     protected LivingEntityState state;
-    protected boolean isAttacked = false;
+    protected final float baseAttackedTicks = 100;
+    protected float curAttackedTicks = 0;
+    boolean isAttacked = false;
 
     protected LivingEntityView(float x, float y, float width, float height, Direction direction, LivingEntityState state, String atlasPath) {
         super(x, y, width, height, atlasPath);
@@ -35,26 +38,39 @@ public abstract class LivingEntityView extends AnimatedEntityView {
 
     public void setIsAttacked(boolean isAttacked) {
         this.isAttacked = isAttacked;
+        if (isAttacked) {
+            curAttackedTicks = baseAttackedTicks;
+        } else {
+            curAttackedTicks = 0;
+        }
+    }
+
+    @Override
+    public void update(float delta) {
+        if (pause)
+            return;
+
+        animManager.update(delta);
+
+        curAttackedTicks -= delta;
+        if (curAttackedTicks <= 0) {
+            this.isAttacked = false;
+            curAttackedTicks = 0;
+        }
     }
 
     @Override
     public void render(float delta, SpriteBatch batch) {
-        if (!pause) {
-            animManager.update(delta);
-        }
+        update(delta);
 
         TextureRegion frame = animManager.getCurrentFrame();
-//        Gdx.app.log(this.getClass().getSimpleName(), "frame: " + frame + " " + frame.getRegionWidth() + " " + frame.getRegionHeight());
-//        if (frame.getTexture() == null) {
-//            throw new RuntimeException("Texture could not be loaded");
-//        }
         boolean flip = needFlipTexture();
 
         if (isAttacked) {
             batch.setColor(Color.RED);
         }
 
-        Gdx.app.log(this.getClass().getSimpleName(), width + " " + height);
+//        Gdx.app.log(this.getClass().getSimpleName(), width + " " + height);
         batch.draw(frame,
             x - width / 2f,
             y - height / 2f,
@@ -67,27 +83,12 @@ public abstract class LivingEntityView extends AnimatedEntityView {
             0
         );
 
-//        batch.draw(frame, x, y, width, height);
-
-//        frame = loadAnimation("player-running", 0.1f).getKeyFrame(0);
-//        batch.draw(frame,
-//            x - width / 2f,
-//            y - height / 2f,
-//            width / 2f,
-//            height / 2f,
-//            width,
-//            height,
-//            flip ? -1 : 1,
-//            1,
-//            0
-//        );
-
         if (isAttacked) {
             batch.setColor(Color.WHITE);
         }
     }
 
-    private boolean needFlipTexture() {
+    protected boolean needFlipTexture() {
         return direction == Direction.NORTH_WEST ||
             direction == Direction.WEST ||
             direction == Direction.SOUTH_WEST;

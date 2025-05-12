@@ -9,11 +9,13 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileSet;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.tiktime.controller.WorldController;
+import com.tiktime.model.consts.GameConfig;
 import com.tiktime.model.consts.ScreenConstants;
 
 import java.util.HashMap;
@@ -40,6 +42,7 @@ public class GameView {
 
     private Map<Integer, EnemyView> enemies;
     private PlayerView player;
+    private WeaponView weapon;
     private HudView hud;
 
     public GameView() {
@@ -91,9 +94,8 @@ public class GameView {
     }
 
     public void setPlayer(float x, float y, float width, float height, Direction direction, LivingEntityState state) {
-//        Gdx.app.log("GameView", state.toString());
         player = new PlayerView(x, y, width, height, direction, state);
-//        player.updateAnimation();
+        weapon = new Ak47WeaponView(x, y);
     }
 
     public void setHud(int curHealth, int maxHealth, int coins) {
@@ -119,6 +121,7 @@ public class GameView {
 //            enemy.render(delta, worldBatch);
 //        }
         player.render(delta, worldBatch);
+        weapon.render(delta, worldBatch);
         worldBatch.end();
 
         hudBatch.begin();
@@ -198,6 +201,7 @@ public class GameView {
 
     public void setPlayerCoordinates(float x, float y) {
         player.setPosition(x, y);
+        weapon.setPosition(x, y);
         worldCamera.position.set(x, y, 0);
         worldCamera.update();
     }
@@ -212,6 +216,18 @@ public class GameView {
 
     public void setPlayerDirection(Direction direction) {
         player.setDirection(direction);
+    }
+
+    public void updatePlayerWeaponRotation(Vector3 screenCoords, Vector3 weaponCoords) {
+        Vector3 worldCoords = worldCamera.unproject(screenCoords);
+        float dx = worldCoords.x - weaponCoords.x;
+        float dy = worldCoords.y - weaponCoords.y;
+        float rotationDeg = (float) Math.toDegrees(Math.atan2(dy, dx));
+        weapon.setRotationDeg(rotationDeg);
+    }
+
+    public void setPlayerCurHealth(int curHealth) {
+        hud.setCurHealth(curHealth);
     }
 
     public void show() {

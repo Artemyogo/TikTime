@@ -21,13 +21,19 @@ public abstract class AnimatedEntityView extends EntityView {
         this.animManager = new AnimationManager();
     }
 
-    protected Animation<TextureRegion> getAnimation(String pathPrefix, float frameDuration, Animation.PlayMode animationPlayMode) {
+    protected Array<TextureAtlas.AtlasRegion> getRegions(String pathPrefix) {
         Array<TextureAtlas.AtlasRegion> regions = new Array<>();
         for (TextureAtlas.AtlasRegion region : atlas.getRegions()) {
             if (region.name.startsWith(pathPrefix)) {
                 regions.add(region);
             }
         }
+
+        return regions;
+    }
+
+    protected Animation<TextureRegion> getAnimation(String pathPrefix, float frameDuration, Animation.PlayMode animationPlayMode) {
+        Array<TextureAtlas.AtlasRegion> regions = getRegions(pathPrefix);
         regions.sort(Comparator.comparing(region -> region.index));
 
         Animation<TextureRegion> animation = new Animation<>(frameDuration, regions);
@@ -39,4 +45,6 @@ public abstract class AnimatedEntityView extends EntityView {
     protected abstract void loadAnimations();
 
     protected abstract void updateAnimation();
+
+    public abstract void update(float delta);
 }

@@ -1,6 +1,11 @@
 package com.tiktime.view;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.tiktime.model.consts.GameConfig;
 
 public class PlayerView extends LivingEntityView {
     /// TODO ADD ATLAS PATH
@@ -11,17 +16,17 @@ public class PlayerView extends LivingEntityView {
         super(x, y, width, height, direction, state, atlasPath);
         loadAnimations();
         updateAnimation();
-//        Gdx.app.log("PlayerView", state.toString());
+        GameConfig.Ak47WeaponConfig ak47WeaponConfig = GameConfig.getInstance().getAk47WeaponConfig();
     }
 
     @Override
     protected void loadAnimations() {
         /// TODO MAYBE THERE CONSTANT runFrame should be
-        float runFrameDuration  = 0.1f;
+        float frameDuration  = 0.1f;
 
         ///  PATHPREFIX TO ATLAS
-        animManager.add("player-running", getAnimation("player-running", runFrameDuration, LivingEntityState.RUNNING.playMode));
-        animManager.add("player-idle", getAnimation("player-idle", runFrameDuration, LivingEntityState.IDLE.playMode));
+        animManager.add("player-running", getAnimation("player-running", frameDuration, LivingEntityState.RUNNING.playMode));
+        animManager.add("player-idle", getAnimation("player-idle", frameDuration, LivingEntityState.IDLE.playMode));
         /// BEWARE OF NAMES OF THE PAST, MB THEY WILL BE DIFFERENT
 //        animManager.add("run_north", loadAnimation("run_n", runFrameDuration));
 //        animManager.add("run_east", loadAnimation("run_e", runFrameDuration));

@@ -1,30 +1,40 @@
 package com.tiktime.view;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.tiktime.model.consts.GameConfig;
 
 public class Ak47WeaponView extends WeaponView {
-    private static String atlasPath = "animations/ak47Weapon.atlas";
-    protected Ak47WeaponView(float width, float height, float x, float y, float originX, float originY) {
-        super(width, height, x, y, originX, originY, atlasPath);
+    private static String atlasPath = "animations/ak47weapon.atlas";
+    protected Ak47WeaponView(float x, float y) {
+        super(GameConfig.getInstance().getAk47WeaponConfig().getWidth(),
+            GameConfig.getInstance().getAk47WeaponConfig().getHeight(),
+            x, y,
+            GameConfig.getInstance().getAk47WeaponConfig().getOffsetX(),
+            GameConfig.getInstance().getAk47WeaponConfig().getOffsetY(),
+            atlasPath);
         loadAnimations();
         updateAnimation();
     }
 
     @Override
     protected void loadAnimations() {
-        float runFrameDuration  = 0.1f;
-
-        animManager.add("AK47-SpriteSheet", getAnimation("AK47-SpriteSheet", runFrameDuration, Animation.PlayMode.LOOP));
+        float attackFrameDuration = baseAttackTicks / getRegions("ak47-attacking").size;
+        animManager.add("ak47-attacking", getAnimation("ak47-attacking", attackFrameDuration, Animation.PlayMode.NORMAL));
+        float idleFrameDuration = 0.1f;
+        animManager.add("ak47-idle", getAnimation("ak47-idle", idleFrameDuration, Animation.PlayMode.LOOP));
     }
 
     @Override
     protected void updateAnimation() {
         /// TODO BEWARE animName should be translated to the correct one
         String animName;
-        if (isFire)
-            animName = "AK47-SpriteSheet";
-//        else
-//        animManager.set(animName);
+        if (isAttack)
+            animName = "ak47-attacking";
+        else
+            animName = "ak47-idle";
+        animManager.set(animName);
     }
 }
