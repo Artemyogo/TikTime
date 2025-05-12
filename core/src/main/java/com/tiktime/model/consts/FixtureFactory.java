@@ -7,7 +7,7 @@ import com.tiktime.model.enums.Category;
 public class FixtureFactory {
     private static FixtureDef getFixture(GameConfig.PhysicsConfig config, short categoryBits, short maskBits, boolean isSensor){
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(config.getHeight() / 2, config.getWidth() / 2);
+        shape.setAsBox(config.getWidth() / 2, config.getHeight() / 2);
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
