@@ -2,7 +2,6 @@ package com.tiktime.controller;
 
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.tiktime.Main;
@@ -14,6 +13,7 @@ import com.tiktime.model.gameobjects.PlayerModel;
 import com.tiktime.view.Direction;
 import com.tiktime.view.LivingEntityState;
 import com.tiktime.view.GameView;
+import com.tiktime.view.WeaponType;
 
 public class WorldController {
     Game game;
@@ -30,10 +30,10 @@ public class WorldController {
         TiledMap map = mapSelector.getMap();
         this.worldModel = new WorldModel(map, new CollisionController(this));
         gameView.setController(this);
-        /// TODO DELETE THIS
+        ///TODO DELETE THIS
         gameView.setWorld(worldModel.getWorld());
+        ///
         gameView.setMapRenderer(map);
-
         EntityData entityData = worldModel.getPlayerData();
         gameView.setPlayer(
             worldModel.getPlayerPosition().x,
@@ -41,7 +41,8 @@ public class WorldController {
             entityData.getWidth(),
             entityData.getHeight(),
             Direction.EAST,
-            LivingEntityState.IDLE
+            LivingEntityState.IDLE,
+            WeaponType.AK47
         );
         gameView.setHud(entityData.getCurrentHealth(), entityData.getMaxHealth(), PlayerModel.CurrentStats.getCoins());
     }
@@ -57,13 +58,11 @@ public class WorldController {
         }
 
         if (isInDoor && Gdx.input.isKeyPressed(Input.Keys.E)) {
-            Gdx.app.log("WorldController", "Entered door");
             isInDoor = false;
             TiledMap map = mapSelector.getMap();
             this.worldModel = new WorldModel(map, new CollisionController(this));
             gameView.setMapRenderer(map);
         }
-
 
         Vector2 direction = new Vector2();
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
@@ -81,31 +80,33 @@ public class WorldController {
 
         worldModel.updateMovementDirection(direction);
         worldModel.update(delta);
-        Vector2 position = worldModel.getPlayerPosition();
-        gameView.setPlayerCoordinates(position.x, position.y);
-        if (direction.equals(new Vector2(0, 0))) {
+
+        Vector2 playerPosition = worldModel.getPlayerPosition();
+        gameView.setPlayerCoordinates(playerPosition.x, playerPosition.y);
+        if (direction.equals(Vector2.Zero)) {
             gameView.setPlayerState(LivingEntityState.IDLE);
         } else {
-            if (!direction.equals(new Vector2(0, 1)) &&
-            !direction.equals(new Vector2(0, -1))) {
+            if (!direction.equals(new Vector2(0, 1)) && !direction.equals(new Vector2(0, -1))) {
                 gameView.setPlayerDirection(getDirection(direction));
             }
             gameView.setPlayerState(LivingEntityState.RUNNING);
         }
 
         Vector3 mousePosition = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
-        gameView.updatePlayerWeaponRotation(mousePosition, getWeaponPosition(position.x, position.y));
-
-        int curHealth = worldModel.getPlayerData().getCurrentHealth();
-        gameView.setPlayerCurHealth(curHealth);
+        gameView.updatePlayerWeaponRotation(mousePosition, getWeaponPosition(playerPosition.x, playerPosition.y, WeaponType.AK47));
+        gameView.setPlayerCurHealth(worldModel.getPlayerData().getCurrentHealth());
     }
 
-    Vector3 getWeaponPosition(float x, float y) {
-        GameConfig.Ak47WeaponConfig ak47WeaponConfig = GameConfig.getInstance().getAk47WeaponConfig();
-        float xn = x + ak47WeaponConfig.getOffsetX();
-        float yn = y + ak47WeaponConfig.getOffsetY();
-        float width = ak47WeaponConfig.getWidth();
-        float height = ak47WeaponConfig.getHeight();
+    Vector3 getWeaponPosition(float x, float y, WeaponType weapon) {
+        GameConfig.WeaponConfig weaponConfig = GameConfig.getInstance().getWeaponConfig(weapon);
+        if (weaponConfig == null) {
+            throw new RuntimeException("WeaponConfig is null");
+        }
+
+        float xn = x + weaponConfig.getOffsetX();
+        float yn = y + weaponConfig.getOffsetY();
+        float width = weaponConfig.getWidth();
+        float height = weaponConfig.getHeight();
         return new Vector3(xn - width / 2f, yn - height / 2f, 0);
     }
 
@@ -139,7 +140,7 @@ public class WorldController {
 //            this.angleDeg = 180;
             return Direction.WEST;
         } else {
-            throw new IllegalArgumentException("Direction argument was bad");
+            throw new IllegalArgumentException("Direction argument was incorrect");
         }
     }
 

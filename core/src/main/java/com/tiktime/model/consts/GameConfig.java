@@ -3,6 +3,7 @@ package com.tiktime.model.consts;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Json;
+import com.tiktime.view.WeaponType;
 
 public final class GameConfig {
     private static final String CONFIG_FILE_PATH = "config.json";
@@ -23,6 +24,18 @@ public final class GameConfig {
             instance = new GameConfig();
         }
         return instance;
+    }
+
+    public WeaponConfig getWeaponConfig(WeaponType weapon) {
+        switch (weapon) {
+            case AK47:
+                return getAk47WeaponConfig();
+            case GLOCK:
+            case SHOTGUN:
+                return null;
+            default:
+                throw new IllegalArgumentException("Unknown weapon type: " + weapon);
+        }
     }
 
     public EntityConfig getEntityConfig() {
@@ -57,7 +70,7 @@ public final class GameConfig {
         return floorConfig;
     }
 
-    public DynamiteConfig getDynamiteConfig() {return dynamiteConfig;}
+    public DynamiteConfig getDynamiteConfig() { return dynamiteConfig; }
 
     private GameConfig() {
         FileHandle configFile = Gdx.files.internal(CONFIG_FILE_PATH);
@@ -225,7 +238,7 @@ public final class GameConfig {
         }
     }
 
-    public static class WeaponsConfig {
+    public static class WeaponConfig {
         protected int damage;
         protected int fireRate;
         protected float reloadTime;
@@ -234,7 +247,7 @@ public final class GameConfig {
         protected float offsetX;
         protected float offsetY;
 
-        private WeaponsConfig(WeaponData data) {
+        private WeaponConfig(WeaponData data) {
            this.damage = data.damage;
            this.fireRate = data.fireRate;
            this.reloadTime = data.reloadTime;
@@ -273,7 +286,7 @@ public final class GameConfig {
         }
     }
 
-    public static final class Ak47WeaponConfig extends WeaponsConfig {
+    public static final class Ak47WeaponConfig extends WeaponConfig {
         private Ak47WeaponConfig(Ak47WeaponData data) {
             super(data);
         }

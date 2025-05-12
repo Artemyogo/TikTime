@@ -30,19 +30,18 @@ public class GameView {
     /// TODO DELETE THIS
     private World world;
 
+    private OrthogonalTiledMapRenderer mapRenderer;
     private final OrthographicCamera worldCamera;
     private final OrthographicCamera hudCamera;
     private final SpriteBatch worldBatch;
     private final Viewport worldViewport;
     private final Viewport screenViewport;
-    private OrthogonalTiledMapRenderer mapRenderer;
     private final Box2DDebugRenderer debugRenderer;
     private final ShapeRenderer hudShape;
     private final SpriteBatch hudBatch;
 
     private Map<Integer, EnemyView> enemies;
     private PlayerView player;
-    private WeaponView weapon;
     private HudView hud;
 
     public GameView() {
@@ -68,7 +67,7 @@ public class GameView {
 
     public void setController(WorldController worldController) {}
 
-    ///  TODO DELTE THIS
+    ///  TODO DELETE THIS
     public void setWorld(World world) {
         this.world = world;
     }
@@ -83,7 +82,6 @@ public class GameView {
 
     public void setMapRenderer(TiledMap map) {
         for (TiledMapTileSet tileSet : map.getTileSets()) {
-            /// TODO BEWARE IF TILES NOT GOOD MAY BE ERROR
             for (TiledMapTile tile : tileSet) {
                 Texture texture = tile.getTextureRegion().getTexture();
                 texture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
@@ -93,9 +91,9 @@ public class GameView {
         mapRenderer = new OrthogonalTiledMapRenderer(map, 1f / PPM);
     }
 
-    public void setPlayer(float x, float y, float width, float height, Direction direction, LivingEntityState state) {
-        player = new PlayerView(x, y, width, height, direction, state);
-        weapon = new Ak47WeaponView(x, y);
+    public void setPlayer(float x, float y, float width, float height,
+                          Direction direction, LivingEntityState state, WeaponType weapon) {
+        player = new PlayerView(x, y, width, height, direction, state, weapon);
     }
 
     public void setHud(int curHealth, int maxHealth, int coins) {
@@ -116,62 +114,62 @@ public class GameView {
         hudShape.setProjectionMatrix(hudCamera.combined);
 
         worldBatch.begin();
-        /// TODO SORT BY 'Y' COORD NEED TO
-//        for (EnemyView enemy : enemies.values()) {
-//            enemy.render(delta, worldBatch);
-//        }
+        /// TODO SORT BY 'Y' COORDINATES
+        for (EnemyView enemy : enemies.values()) {
+            enemy.render(delta, worldBatch);
+        }
         player.render(delta, worldBatch);
-        weapon.render(delta, worldBatch);
         worldBatch.end();
 
         hudBatch.begin();
         hud.render(delta, hudBatch, hudShape);
         hudBatch.end();
 
-        /// TODO DELTE
+        /// TODO DELETE
         if (debug) {
             debugRenderer.render(world, worldCamera.combined);
         }
 
         if (paused) {
-            Gdx.gl.glEnable(GL20.GL_BLEND);
-            Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-            hudShape.setProjectionMatrix(hudCamera.combined);
-            hudShape.begin(ShapeRenderer.ShapeType.Filled);
-
-            float width = screenViewport.getScreenWidth();
-            float height = screenViewport.getScreenHeight();
-            int stepW = 100;
-            int stepH = 100;
-            float rectWidth = width / stepW;
-            float rectHeight = height / stepH;
-            float centerX = width / 2f;
-            float centerY = height / 2f;
-            float maxDist = (float) Math.sqrt(centerX * centerX + centerY * centerY);
-            float maxAlpha = 1.1f;
-
-//            Gdx.app.log("GameView", width + "x" + height);
-//            Gdx.app.log("GameView", centerX + "x" + centerY);
-//            Gdx.app.log("GameView", centerX + "x" + centerY);
-            for (int i = 0; i < stepW; i++) {
-                for (int j = 0; j < stepH; j++) {
-                    float x = i * rectWidth, y = j * rectHeight;
-                    float curDist = (float) Math.sqrt((x - centerX) * (x - centerX) + (y - centerY) * (y - centerY));
-                    float t = (maxAlpha * (curDist / maxDist));
-                    float alpha = t * maxAlpha;
-                    hudShape.setColor(0, 0, 0, alpha);
-                    hudShape.rect(
-                        x,
-                        y,
-                        rectWidth,
-                        rectHeight
-                    );
-                }
-            }
-
-            hudShape.end();
-            Gdx.gl.glDisable(GL20.GL_BLEND);
+            drawPauseDarkening(delta);
         }
+    }
+
+    public void drawPauseDarkening(float delta) {
+        Gdx.gl.glEnable(GL20.GL_BLEND);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+        hudShape.setProjectionMatrix(hudCamera.combined);
+        hudShape.begin(ShapeRenderer.ShapeType.Filled);
+
+        float width = screenViewport.getScreenWidth();
+        float height = screenViewport.getScreenHeight();
+        int stepW = 100;
+        int stepH = 100;
+        float rectWidth = width / stepW;
+        float rectHeight = height / stepH;
+        float centerX = width / 2f;
+        float centerY = height / 2f;
+        float maxDist = (float) Math.sqrt(centerX * centerX + centerY * centerY);
+        float maxAlpha = 1.1f;
+
+        for (int i = 0; i < stepW; i++) {
+            for (int j = 0; j < stepH; j++) {
+                float x = i * rectWidth, y = j * rectHeight;
+                float curDist = (float) Math.sqrt((x - centerX) * (x - centerX) + (y - centerY) * (y - centerY));
+                float t = (maxAlpha * (curDist / maxDist));
+                float alpha = t * maxAlpha;
+                hudShape.setColor(0, 0, 0, alpha);
+                hudShape.rect(
+                    x,
+                    y,
+                    rectWidth,
+                    rectHeight
+                );
+            }
+        }
+
+        hudShape.end();
+        Gdx.gl.glDisable(GL20.GL_BLEND);
     }
 
     public void addEnemy(float x, float y, float width, float height, int id, Direction direction,
@@ -201,7 +199,6 @@ public class GameView {
 
     public void setPlayerCoordinates(float x, float y) {
         player.setPosition(x, y);
-        weapon.setPosition(x, y);
         worldCamera.position.set(x, y, 0);
         worldCamera.update();
     }
@@ -223,7 +220,7 @@ public class GameView {
         float dx = worldCoords.x - weaponCoords.x;
         float dy = worldCoords.y - weaponCoords.y;
         float rotationDeg = (float) Math.toDegrees(Math.atan2(dy, dx));
-        weapon.setRotationDeg(rotationDeg);
+        player.setWeaponRotationDeg(rotationDeg);
     }
 
     public void setPlayerCurHealth(int curHealth) {

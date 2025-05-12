@@ -70,7 +70,6 @@ public abstract class LivingEntityView extends AnimatedEntityView {
             batch.setColor(Color.RED);
         }
 
-//        Gdx.app.log(this.getClass().getSimpleName(), width + " " + height);
         batch.draw(frame,
             x - width / 2f,
             y - height / 2f,
