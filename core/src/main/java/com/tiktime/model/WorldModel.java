@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.tiktime.controller.CollisionController;
+import com.tiktime.model.consts.BodyFactory;
 import com.tiktime.model.enums.Category;
 import com.tiktime.model.gameobjects.EnemyModel;
 import com.tiktime.model.gameobjects.EntityData;
@@ -36,72 +37,6 @@ public class WorldModel {
     private Array<EnemyModel> enemies;
 
 
-    /// TODO DELETE THIS
-    public World getWorld() {
-        return world;
-    }
-
-    private FixtureDef getFloorFixture(){
-        FloorConfig floorConfig = GameConfig.getInstance().getFloorConfig();
-        PolygonShape floorShape = new PolygonShape();
-        floorShape.setAsBox(floorConfig.getHeight() / 2, floorConfig.getWidth() / 2);
-
-        FixtureDef fixtureDef = new FixtureDef();
-        fixtureDef.shape = floorShape;
-
-        // Get floor properties from GameConfig
-        fixtureDef.density = floorConfig.getDensity();
-        fixtureDef.restitution = floorConfig.getRestitution();
-        fixtureDef.friction = floorConfig.getFriction();
-
-        fixtureDef.filter.categoryBits = Category.FLOOR.getBit();
-        /// I think there should be maskBits = 0
-//        fixtureDef.filter.maskBits = Category.combine(Category.BULLET, Category.ENEMY, Category.PLAYER);
-        fixtureDef.filter.maskBits = 0;
-
-        return fixtureDef;
-    }
-
-    private FixtureDef getDoorFixture() {
-        FloorConfig floorConfig = GameConfig.getInstance().getFloorConfig();
-        PolygonShape floorShape = new PolygonShape();
-        floorShape.setAsBox(floorConfig.getHeight() / 2, floorConfig.getWidth() / 2);
-
-        FixtureDef fixtureDef = new FixtureDef();
-        fixtureDef.shape = floorShape;
-
-        // Get floor properties from GameConfig
-        fixtureDef.density = floorConfig.getDensity();
-        fixtureDef.restitution = floorConfig.getRestitution();
-        fixtureDef.friction = floorConfig.getFriction();
-
-        fixtureDef.filter.categoryBits = Category.DOOR.getBit();
-        fixtureDef.filter.maskBits = Category.PLAYER.getBit();
-
-        fixtureDef.isSensor = true;
-        return fixtureDef;
-
-    }
-
-        private FixtureDef getWallFixture(){
-        WallConfig wallConfig = GameConfig.getInstance().getWallConfig();
-        PolygonShape wallShape = new PolygonShape();
-        wallShape.setAsBox(wallConfig.getHeight() / 2, wallConfig.getWidth() / 2);
-
-        FixtureDef fixtureDef = new FixtureDef();
-        fixtureDef.shape = wallShape;
-
-        // Get wall properties from GameConfig
-        fixtureDef.density = wallConfig.getDensity();
-        fixtureDef.restitution = wallConfig.getRestitution();
-        fixtureDef.friction = wallConfig.getFriction();
-
-        fixtureDef.filter.categoryBits = Category.WALL.getBit();
-        fixtureDef.filter.maskBits = Category.combine(Category.PLAYER, Category.BULLET, Category.ENEMY);
-
-        return fixtureDef;
-    }
-
     public void update(float delta){
         world.step(delta, velocityIterations, positionIterations);
     }
@@ -121,28 +56,26 @@ public class WorldModel {
         for (int x = 0; x < wallLayer.getWidth(); x++) {
             for (int y = 0; y < wallLayer.getHeight(); y++) {
                 if (wallLayer.getCell(x, y) == null) continue;
-                BodyDef bodyDef = new BodyDef();
-                bodyDef.type = BodyDef.BodyType.StaticBody;
-                WallConfig wallConfig = GameConfig.getInstance().getWallConfig();
-                bodyDef.position.set(x + wallConfig.getHeight() / 2f, y + wallConfig.getWidth() / 2f);
-                Body body = world.createBody(bodyDef);
-                body.createFixture(getWallFixture());
-                Gdx.app.log("WorldModel", "Creating " + bodyDef.type + " at " + body.getPosition());
+                BodyFactory.createWallBody(world, x, y);
             }
         }
         TiledMapTileLayer doorLayer = (TiledMapTileLayer) map.getLayers().get("doors");
         for (int x = 0; x < doorLayer.getWidth(); x++) {
             for (int y = 0; y < doorLayer.getHeight(); y++) {
                 if (doorLayer.getCell(x, y) == null) continue;
-                BodyDef bodyDef = new BodyDef();
-                bodyDef.type = BodyDef.BodyType.StaticBody;
-                FloorConfig Config = GameConfig.getInstance().getFloorConfig();
-                bodyDef.position.set(x + Config.getHeight() / 2f, y + Config.getWidth() / 2f);
-                Body body = world.createBody(bodyDef);
-                body.createFixture(getDoorFixture());
-                Gdx.app.log("WorldModel", "Creating " + bodyDef.type + " at " + body.getPosition());
-
+                BodyFactory.createDoorBody(world, x, y);
             }
+        }
+
+        TiledMapTileLayer dynamiteLayer = (TiledMapTileLayer) map.getLayers().get("dynamite");
+        if(dynamiteLayer != null) {
+            for (int x = 0; x < dynamiteLayer.getWidth(); x++) {
+                for (int y = 0; y < dynamiteLayer.getHeight(); y++) {
+                    if (dynamiteLayer.getCell(x, y) == null) continue;
+                    BodyFactory.createDoorBody(world, x, y);
+                }
+            }
+
         }
         world.setContactListener(collisionController);
     }
@@ -163,4 +96,7 @@ public class WorldModel {
         player.move(movementDirection);
     }
 
+    public World getWorld() {
+        return world;
+    }
 }
