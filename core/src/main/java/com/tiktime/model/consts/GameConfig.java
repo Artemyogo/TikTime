@@ -3,8 +3,6 @@ package com.tiktime.model.consts;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Json;
-import com.badlogic.gdx.utils.JsonValue;
-import sun.font.PhysicalFont;
 
 public final class GameConfig {
     private static final String CONFIG_FILE_PATH = "config.json";
@@ -18,12 +16,17 @@ public final class GameConfig {
     private final RusherEnemyConfig rusherEnemyConfig;
     private final Ak47WeaponConfig ak47WeaponConfig;
     private final EntityConfig entityConfig;
+    private final DynamiteConfig dynamiteConfig;
 
     public static GameConfig getInstance() {
         if (instance == null) {
             instance = new GameConfig();
         }
         return instance;
+    }
+
+    public EntityConfig getEntityConfig() {
+        return entityConfig;
     }
 
     public PlayerConfig getPlayerConfig() {
@@ -53,6 +56,8 @@ public final class GameConfig {
     public FloorConfig getFloorConfig() {
         return floorConfig;
     }
+
+    public DynamiteConfig getDynamiteConfig() {return dynamiteConfig;}
 
     private GameConfig() {
         FileHandle configFile = Gdx.files.internal(CONFIG_FILE_PATH);
@@ -91,6 +96,13 @@ public final class GameConfig {
         } else {
             this.floorConfig = new FloorConfig(new FloorData());
         }
+
+        if (configData.dynamite != null) {
+            this.dynamiteConfig = new DynamiteConfig(configData.dynamite);
+        } else {
+            this.dynamiteConfig = new DynamiteConfig(new DynamiteData());
+        }
+
     }
 
     public static abstract class PhysicsConfig {
@@ -134,6 +146,12 @@ public final class GameConfig {
             super(data);
         }
     }
+    public static final class DynamiteConfig extends PhysicsConfig {
+        private DynamiteConfig(DynamiteData data) {
+            super(data);
+        }
+    }
+
 
     public static final class FloorConfig extends PhysicsConfig {
         private FloorConfig(FloorData data) {
@@ -145,7 +163,6 @@ public final class GameConfig {
         protected int baseHp;
         protected float baseSpeed;
         protected float baseDamage;
-        ///  TODO can move it into PlayerConfig
         protected int baseRegen;
         private EntityConfig(EntityData data) {
             super(data);
@@ -269,7 +286,8 @@ public final class GameConfig {
         protected float baseDamage;
     }
 
-    private static final class PlayerData extends EntityData { }
+
+        private static final class PlayerData extends EntityData { }
 
     /**
      * MARKSMAN(0),
@@ -296,6 +314,8 @@ public final class GameConfig {
 
     private static class FloorData extends PhysicsData { }
 
+    private static class DynamiteData extends PhysicsData {}
+
     private static class ConfigData {
         private PlayerData player;
 //        private MarksmanEnemyData marksman;
@@ -306,5 +326,6 @@ public final class GameConfig {
 //        private Ak47WeaponData ak47;
         private EntityData entity;
         private WeaponData weapon;
+        private DynamiteData dynamite;
     }
 }

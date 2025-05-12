@@ -15,11 +15,22 @@ public class CollisionController implements ContactListener {
     private class Masks{
         private short A;
         private short B;
+        private Fixture fixtureA;
+        private Fixture fixtureB;
         public Masks(Contact contact){
-            Fixture fixtureA = contact.getFixtureA();
-            Fixture fixtureB = contact.getFixtureB();
+            fixtureA = contact.getFixtureA();
+            fixtureB = contact.getFixtureB();
             A = fixtureA.getFilterData().categoryBits;
             B = fixtureB.getFilterData().categoryBits;
+        }
+        public Fixture getFixture(Category cat){
+            if(cat.is(A))
+                return fixtureA;
+            else if(cat.is(B))
+                return fixtureB;
+            else
+                throw new IllegalArgumentException("Category " + cat + " is not in this mask");
+
         }
         public boolean check(Category catA, Category catB){
             return (catA.is(A) && catB.is(B)) || (catA.is(B) && catB.is(A));
@@ -33,6 +44,10 @@ public class CollisionController implements ContactListener {
         Masks masks = new Masks(contact);
         if(masks.check(Category.PLAYER, Category.DOOR)) {
             worldController.onDoorEntry();
+        }
+        if(masks.check(Category.PLAYER, Category.DYNAMITE)) {
+            Fixture dynamiteFixture = masks.getFixture(Category.DYNAMITE);
+            worldController.explosion(dynamiteFixture.getBody().getPosition().x, dynamiteFixture.getBody().getPosition().y, 10, 100f);
         }
     }
 

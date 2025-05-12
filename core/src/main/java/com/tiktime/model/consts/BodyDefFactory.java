@@ -4,7 +4,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 
 public class BodyDefFactory {
-    private static BodyDef getBodyDef(float x, float y, BodyDef.BodyType bodyType){
+    public static BodyDef getBodyDef(float x, float y, BodyDef.BodyType bodyType){
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = bodyType;
         bodyDef.fixedRotation = true;

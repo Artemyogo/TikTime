@@ -23,16 +23,16 @@ public class BodyFactory {
     }
 
     public static Body createDoorBody(World world, float x, float y) {
-        return createBody(world, BodyDefFactory.getDoorBodyDef(x, y), FixtureFactory.getWallFixture());
+        return createBody(world, BodyDefFactory.getDoorBodyDef(x, y), FixtureFactory.getDoorFixture());
     }
 
-    public static List<Body> createBodies(World world, TiledMapTileLayer layer, BodyDef bodyDef, FixtureDef fixtureDef) {
+    public static List<Body> createBodies(World world, TiledMapTileLayer layer, FixtureDef fixtureDef, BodyDef.BodyType bodyType) {
         if(layer == null) return null;
         List<Body> res = new ArrayList<>();
         for (int x = 0; x < layer.getWidth(); x++) {
             for (int y = 0; y < layer.getHeight(); y++) {
                 if (layer.getCell(x, y) == null) continue;
-                res.add(createBody(world, bodyDef, fixtureDef));
+                res.add(createBody(world, BodyDefFactory.getBodyDef(x, y, bodyType), fixtureDef));
             }
         }
         return res;

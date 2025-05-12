@@ -5,7 +5,7 @@ public enum Category {
     ENEMY    (0x0002),
     WALL     (0x0004),
     BULLET   (0x0008),
-    FLOOR    (0x0010),
+    DYNAMITE    (0x0010),
     DOOR     (0x0020);
 
     private final short bit;

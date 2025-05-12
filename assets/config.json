@@ -30,11 +30,11 @@
     "width": 1,
     "height": 1
   },
-  "floor": {
-    "density": 1.0,
-    "restitution": 1.0,
-    "friction": 0.3,
+  "dynamite": {
+    "density": 0,
+    "restitution": 0,
+    "friction": 0.5,
     "width": 1,
-    "height": 1
+    "height": 0.5
   }
 }

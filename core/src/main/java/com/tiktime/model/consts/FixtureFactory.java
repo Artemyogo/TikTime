@@ -5,63 +5,38 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.tiktime.model.enums.Category;
 
 public class FixtureFactory {
-    public static FixtureDef getDoorFixture() {
-        GameConfig.FloorConfig floorConfig = GameConfig.getInstance().getFloorConfig();
-        PolygonShape floorShape = new PolygonShape();
-        floorShape.setAsBox(floorConfig.getHeight() / 2, floorConfig.getWidth() / 2);
+    private static FixtureDef getFixture(GameConfig.PhysicsConfig config, short categoryBits, short maskBits, boolean isSensor){
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox(config.getHeight() / 2, config.getWidth() / 2);
 
         FixtureDef fixtureDef = new FixtureDef();
-        fixtureDef.shape = floorShape;
+        fixtureDef.shape = shape;
 
-        // Get floor properties from GameConfig
-        fixtureDef.density = floorConfig.getDensity();
-        fixtureDef.restitution = floorConfig.getRestitution();
-        fixtureDef.friction = floorConfig.getFriction();
 
-        fixtureDef.filter.categoryBits = Category.DOOR.getBit();
-        fixtureDef.filter.maskBits = Category.PLAYER.getBit();
+        fixtureDef.density = config.getDensity();
+        fixtureDef.restitution = config.getRestitution();
+        fixtureDef.friction = config.getFriction();
 
-        fixtureDef.isSensor = true;
+        fixtureDef.filter.categoryBits = categoryBits;
+        fixtureDef.filter.maskBits = maskBits;
+
+        fixtureDef.isSensor = isSensor;
         return fixtureDef;
-
+    }
+    public static FixtureDef getDoorFixture() {
+        return getFixture(GameConfig.getInstance().getFloorConfig(), Category.DOOR.getBit(), Category.PLAYER.getBit(), true);
     }
     public static FixtureDef getWallFixture(){
-        GameConfig.WallConfig wallConfig = GameConfig.getInstance().getWallConfig();
-        PolygonShape wallShape = new PolygonShape();
-        wallShape.setAsBox(wallConfig.getHeight() / 2, wallConfig.getWidth() / 2);
-
-        FixtureDef fixtureDef = new FixtureDef();
-        fixtureDef.shape = wallShape;
-
-        // Get wall properties from GameConfig
-        fixtureDef.density = wallConfig.getDensity();
-        fixtureDef.restitution = wallConfig.getRestitution();
-        fixtureDef.friction = wallConfig.getFriction();
-
-        fixtureDef.filter.categoryBits = Category.WALL.getBit();
-        fixtureDef.filter.maskBits = Category.combine(Category.PLAYER, Category.BULLET, Category.ENEMY);
-
-        return fixtureDef;
+        return getFixture(GameConfig.getInstance().getWallConfig(),
+            Category.WALL.getBit(),
+            Category.combine(Category.PLAYER, Category.BULLET, Category.ENEMY), false);
     }
-    public static FixtureDef getFloorFixture(){
-        GameConfig.FloorConfig floorConfig = GameConfig.getInstance().getFloorConfig();
-        PolygonShape floorShape = new PolygonShape();
-        floorShape.setAsBox(floorConfig.getHeight() / 2, floorConfig.getWidth() / 2);
-
-        FixtureDef fixtureDef = new FixtureDef();
-        fixtureDef.shape = floorShape;
-
-        // Get floor properties from GameConfig
-        fixtureDef.density = floorConfig.getDensity();
-        fixtureDef.restitution = floorConfig.getRestitution();
-        fixtureDef.friction = floorConfig.getFriction();
-
-        fixtureDef.filter.categoryBits = Category.FLOOR.getBit();
-        /// I think there should be maskBits = 0
-//        fixtureDef.filter.maskBits = Category.combine(Category.BULLET, Category.ENEMY, Category.PLAYER);
-        fixtureDef.filter.maskBits = 0;
-
-        return fixtureDef;
+    public static FixtureDef getDynamiteFixture(){
+        return getFixture(GameConfig.getInstance().getDynamiteConfig(), Category.DYNAMITE.getBit(), Category.PLAYER.getBit(), false);
     }
-
+    public static FixtureDef getEntityFixtureDef(Category category){
+        return getFixture(GameConfig.getInstance().getEntityConfig(), category.getBit(),
+            Category.combine(Category.PLAYER, Category.BULLET, Category.DOOR, Category.DYNAMITE, Category.ENEMY, Category.WALL),
+            false);
+    }
 }

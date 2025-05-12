@@ -130,7 +130,11 @@ public class WorldController {
     }
     public void onDoorExit(){
         isInDoor = false;
-
     }
+
+    public void explosion(float x, float y, float radius, float force) {
+        worldModel.explosion(x, y, radius, force);
+    }
+
 
 }
