@@ -33,9 +33,9 @@ public abstract class EntityModel {
         if(data.getCurrentHealth() <= 0) return;
         data.setCurrentHealth(data.getCurrentHealth() - damage);
         if(data.getCurrentHealth() <= 0) {
-            body.setTransform(body.getPosition().x, body.getPosition().y, 0);
-            body.setLinearVelocity(Vector2.Zero);
-            body.setAngularVelocity(0);
+            //body.setTransform(body.getPosition().x, body.getPosition().y, 0);
+            //body.setLinearVelocity(Vector2.Zero);
+            //body.setAngularVelocity(0);
         }
     }
 

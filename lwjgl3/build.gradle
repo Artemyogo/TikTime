@@ -70,6 +70,7 @@ jar {
   manifest {
     attributes 'Main-Class': project.mainClassName
   }
+
 // this last step may help on some OSes that need extra instruction to make runnable JARs.
   doLast {
     file(archiveFile).setExecutable(true, false)
@@ -159,6 +160,21 @@ construo {
 // Equivalent to the jar task; here for compatibility with gdx-setup.
 tasks.register('dist') {
   dependsOn 'jar'
+  doLast {
+    def assetsDir = rootProject.file("assets")
+
+    copy {
+      from(assetsDir) {
+        include "**"
+      }
+      into("dist")
+    }
+
+    copy {
+      from(tasks.named('jar').get().archiveFile)
+      into("dist")
+    }
+  }
 }
 
 distributions {

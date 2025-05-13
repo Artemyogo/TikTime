@@ -1,6 +1,7 @@
 package com.tiktime.controller.utils;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 
@@ -16,6 +17,7 @@ public class MapSelector {
     private List<String> maps;
     public MapSelector(){
         try {
+            /*
             List<Path> paths = Files.walk(Paths.get("maps/")).filter(Files::isRegularFile).filter(path -> {
                 String fileName = path.getFileName().toString().toLowerCase();
                 return fileName.endsWith(".tmx");
@@ -23,6 +25,15 @@ public class MapSelector {
             maps = new ArrayList<>();
             for (Path path : paths) {
                 maps.add(String.valueOf(path));
+            }
+            */
+
+            FileHandle dirHandle = Gdx.files.internal("maps/");
+            maps = new ArrayList<>();
+            for (FileHandle file : dirHandle.list()) {
+                if (!file.isDirectory() && file.name().toLowerCase().endsWith(".tmx")) {
+                    maps.add(String.valueOf(file.path()));
+                }
             }
         } catch (Exception e) {
             throw new RuntimeException("MapSelector cannot load maps " + e.getMessage());

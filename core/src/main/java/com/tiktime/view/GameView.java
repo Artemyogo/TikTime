@@ -80,7 +80,6 @@ public class GameView {
         stage = new Stage(screenViewport);
         pauseMenu = new Table();
         pauseMenu.setFillParent(true);
-        //pauseMenu.setVisible(false);
         continueButton = new TextButton("Continue game", new Skin(Gdx.files.internal("flat-earth/skin/flat-earth-ui.json")));
         exitButton = new TextButton("Exit to menu", new Skin(Gdx.files.internal("flat-earth/skin/flat-earth-ui.json")));
         pauseMenu.center();
