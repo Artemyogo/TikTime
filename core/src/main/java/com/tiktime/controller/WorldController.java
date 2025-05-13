@@ -28,7 +28,7 @@ public class WorldController {
     private WorldModel worldModel;
     private MapSelector mapSelector;
     private boolean paused = false;
-    private boolean isInDoor = false;
+    private int isInDoor = 0;
     private List<Body> toDelete = new ArrayList<>();
 
     public WorldController(Main game, GameView gameView) {
@@ -38,7 +38,7 @@ public class WorldController {
         TiledMap map = mapSelector.getMap();
         this.worldModel = new WorldModel(map, new CollisionController(this));
         gameView.setController(this);
-        /// TODO DELETE THIS
+
         gameView.setWorld(worldModel.getWorld());
         gameView.setMapRenderer(map);
 
@@ -64,9 +64,9 @@ public class WorldController {
             return;
         }
 
-        if (isInDoor && Gdx.input.isKeyPressed(Input.Keys.E)) {
+        if (isInDoor == 1 && Gdx.input.isKeyPressed(Input.Keys.E)) {
             Gdx.app.log("WorldController", "Entered door");
-            isInDoor = false;
+            isInDoor = 0;
             TiledMap map = mapSelector.getMap();
             this.worldModel = new WorldModel(map, new CollisionController(this));
             gameView.setMapRenderer(map);
@@ -104,7 +104,7 @@ public class WorldController {
         Vector3 mousePosition = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
         gameView.updatePlayerWeaponRotation(mousePosition, getWeaponPosition(playerPosition.x, playerPosition.y, WeaponType.AK47));
         gameView.setPlayerCurHealth(worldModel.getPlayerData().getCurrentHealth());
-        gameView.setIsInDoor(isInDoor);
+        gameView.setIsInDoor(isInDoor > 0);
         for(Body i : toDelete){
             worldModel.getWorld().destroyBody(i);
         }
@@ -159,10 +159,10 @@ public class WorldController {
     }
 
     public void onDoorEntry(){
-        isInDoor = true;
+        isInDoor++;
     }
     public void onDoorExit(){
-        isInDoor = false;
+        isInDoor--;
     }
 
     public void explosion(Body body, float radius, float force) {
