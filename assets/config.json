@@ -14,7 +14,7 @@
     "baseHp": 60,
     "baseSpeed": 20,
     "baseDamage": 10,
-    "baseRegen": 5
+    "baseRegen": 0
   },
   "weapon": {
     "damage": 10,

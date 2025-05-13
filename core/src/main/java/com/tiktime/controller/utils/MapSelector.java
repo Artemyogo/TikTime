@@ -13,14 +13,8 @@ import java.util.Random;
 import java.util.stream.Collectors;
 
 public class MapSelector {
-    private List<TiledMap> maps;
+    private List<String> maps;
     public MapSelector(){
-//        Path mapsDir = Paths.get(Gdx.files.internal("maps").toString());
-//        if (!Files.exists(mapsDir)) {
-//            throw new RuntimeException("Папка 'maps' не существует!");
-//        }
-
-//        Gdx.app.log("MapSelector", Gdx.files.internal("maps/").toString());
         try {
             List<Path> paths = Files.walk(Paths.get("maps/")).filter(Files::isRegularFile).filter(path -> {
                 String fileName = path.getFileName().toString().toLowerCase();
@@ -28,14 +22,15 @@ public class MapSelector {
             }).collect(Collectors.toList());
             maps = new ArrayList<>();
             for (Path path : paths) {
-                maps.add(new TmxMapLoader().load(String.valueOf(path)));
+                maps.add(String.valueOf(path));
             }
         } catch (Exception e) {
-            throw new RuntimeException("MapSelector cannot load maps   " + e.getMessage());
+            throw new RuntimeException("MapSelector cannot load maps " + e.getMessage());
         }
     }
     public TiledMap getMap() {
         Random rand = new Random();
-        return maps.get(rand.nextInt(maps.size()));
+        String path = maps.get(rand.nextInt(maps.size()));
+        return new TmxMapLoader().load(path);
     }
 }

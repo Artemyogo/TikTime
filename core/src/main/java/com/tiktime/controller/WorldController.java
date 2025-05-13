@@ -65,13 +65,13 @@ public class WorldController {
         }
 
         if (isInDoor && Gdx.input.isKeyPressed(Input.Keys.E)) {
-            Gdx.app.log("WorldController", "Entered door");
+//            Gdx.app.log("WorldController", "Entered door");
             isInDoor = false;
             TiledMap map = mapSelector.getMap();
-            this.worldModel = new WorldModel(map, new CollisionController(this));
+            EntityData entityData = worldModel.getPlayerData();
+            this.worldModel = new WorldModel(map, new CollisionController(this), entityData);
             gameView.setMapRenderer(map);
         }
-
 
         Vector2 direction = new Vector2();
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
@@ -184,6 +184,4 @@ public class WorldController {
     public void goToMenu() {
         game.setScreen(new MenuScreen(game));
     }
-
-
 }

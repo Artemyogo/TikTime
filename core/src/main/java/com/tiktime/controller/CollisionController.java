@@ -37,8 +37,6 @@ public class CollisionController implements ContactListener {
         }
     }
 
-
-
     @Override
     public void beginContact(Contact contact) {
         Masks masks = new Masks(contact);

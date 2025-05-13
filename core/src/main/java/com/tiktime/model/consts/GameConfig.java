@@ -165,7 +165,6 @@ public final class GameConfig {
         }
     }
 
-
     public static final class FloorConfig extends PhysicsConfig {
         private FloorConfig(FloorData data) {
             super(data);
