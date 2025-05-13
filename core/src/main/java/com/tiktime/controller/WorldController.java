@@ -11,6 +11,7 @@ import com.tiktime.Main;
 import com.tiktime.controller.utils.MapSelector;
 import com.tiktime.model.WorldModel;
 import com.tiktime.model.consts.GameConfig;
+import com.tiktime.model.gameobjects.EnemyModel;
 import com.tiktime.model.gameobjects.EntityData;
 import com.tiktime.model.gameobjects.PlayerModel;
 import com.tiktime.screens.MenuScreen;
@@ -63,12 +64,13 @@ public class WorldController {
         if (paused) {
             return;
         }
-
         if (isInDoor == 1 && Gdx.input.isKeyPressed(Input.Keys.E)) {
             Gdx.app.log("WorldController", "Entered door");
             isInDoor = 0;
             TiledMap map = mapSelector.getMap();
-            this.worldModel = new WorldModel(map, new CollisionController(this));
+            EntityData entityData = worldModel.getPlayerData();
+            this.worldModel = new WorldModel(map, new CollisionController(this), entityData);
+
             gameView.setMapRenderer(map);
         }
 

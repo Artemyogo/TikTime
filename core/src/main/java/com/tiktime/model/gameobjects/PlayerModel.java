@@ -50,7 +50,7 @@ public class PlayerModel extends EntityModel{
     @Override
     public void takeDamage(int damage){
         super.takeDamage(damage);
-        getData().setCurrentHealth(getData().getCurrentHealth() - damage);
+//        getData().setCurrentHealth(getData().getCurrentHealth() - damage);
     }
 
 }

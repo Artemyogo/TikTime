@@ -6,6 +6,7 @@ import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.math.Vector;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
@@ -25,6 +26,10 @@ import com.tiktime.model.consts.GameConfig.EntityConfig;
 import com.tiktime.model.enums.Category;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.tiktime.model.raycasts.PlayerChaseRaycast;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.tiktime.model.consts.ScreenConstants.PPM;
 
@@ -36,11 +41,19 @@ public class WorldModel {
 
     private final TiledMap map;
     private PlayerModel player;
-    private Array<EnemyModel> enemies;
+    private List<EnemyModel> enemies = new ArrayList<>();
 
 
     public void update(float delta){
         world.step(delta, velocityIterations, positionIterations);
+        for(EnemyModel enemy : enemies){
+            PlayerChaseRaycast callback = new PlayerChaseRaycast();
+            world.rayCast(callback, enemy.getPosition(), player.getBody().getPosition());
+            if(callback.canSeePlayer()){
+                enemy.move(new Vector2(getPlayerPosition()).sub(enemy.getPosition()).nor());
+            }
+
+        }
     }
 
     public WorldModel(TiledMap map, CollisionController collisionController) {
