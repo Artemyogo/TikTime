@@ -11,7 +11,6 @@ public class PlayerModel extends EntityModel{
     public static class CurrentStats {
         private static final PlayerConfig playerConfig = GameConfig.getInstance().getPlayerConfig();
         private static final UpgradeModel upgradeModel = UpgradeModel.getInstance();
-        private static int currentHealth = getHealth();
         ///  TODO DODELAT BLIN BLINSKIY
         public static int getHealth() {
             return upgradeModel.getUpgrade(UpgradeType.HP).getLevel() * 10 + playerConfig.getBaseHp();
@@ -28,12 +27,6 @@ public class PlayerModel extends EntityModel{
         public static int getCoins() {
             return upgradeModel.getMoney();
         }
-        public static int getCurrentHealth(){
-            return currentHealth;
-        }
-        public static void setCurrrentHealth(int val){
-            currentHealth = val;
-        }
     }
 
     public PlayerModel(World world, float x, float y) {
@@ -42,15 +35,22 @@ public class PlayerModel extends EntityModel{
             new EntityData(GameConfig.getInstance().getPlayerConfig().getWidth(),
                 GameConfig.getInstance().getPlayerConfig().getHeight(),
                 CurrentStats.getSpeed(),
-                CurrentStats.getCurrentHealth(),
+                CurrentStats.getHealth(),
                 CurrentStats.getHealth(),
                 Category.PLAYER),
+            GameConfig.getInstance().getPlayerConfig());
+    }
+
+    public PlayerModel(World world, float x, float y, EntityData entityData) {
+        /// IDK seems toooo wierd, maybe we need to realize abstract method in EntityModel like getConfig()
+        super(world, x, y,
+            entityData,
             GameConfig.getInstance().getPlayerConfig());
     }
     @Override
     public void takeDamage(int damage){
         super.takeDamage(damage);
-        CurrentStats.setCurrrentHealth(CurrentStats.getCurrentHealth()-damage);
+        getData().setCurrentHealth(getData().getCurrentHealth() - damage);
     }
 
 }

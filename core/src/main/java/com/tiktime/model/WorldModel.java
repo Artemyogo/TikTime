@@ -63,11 +63,30 @@ public class WorldModel {
         TiledMapTileLayer dynamiteLayer = (TiledMapTileLayer) map.getLayers().get("dynamite");
         BodyFactory.createBodies(world, dynamiteLayer, FixtureFactory.getDynamiteFixture(), BodyDef.BodyType.StaticBody);
         world.setContactListener(collisionController);
-
-
     }
 
+    public WorldModel(TiledMap map, CollisionController collisionController, EntityData playerData) {
+        this.map = map;
+        this.world = new World(new Vector2(0, 0), true);
+        MapProperties properties = map.getLayers().get("objects").getObjects().get("playerSpawn").getProperties();
+        this.player = new PlayerModel(world, properties.get("x", Float.class) / PPM, properties.get("y", Float.class) / PPM,
+            playerData);
 
+        TiledMapTileLayer wallLayer = (TiledMapTileLayer) map.getLayers().get("walls");
+        BodyFactory.createBodies(world, wallLayer, FixtureFactory.getWallFixture(), BodyDef.BodyType.StaticBody);
+
+        int width = map.getProperties().get("width", Integer.class);
+        int height = map.getProperties().get("height", Integer.class);
+
+        Gdx.app.log("WorldModel", "width: " + width + ", height: " + height);
+
+        TiledMapTileLayer doorLayer = (TiledMapTileLayer) map.getLayers().get("doors");
+        BodyFactory.createBodies(world, doorLayer, FixtureFactory.getDoorFixture(), BodyDef.BodyType.StaticBody);
+
+        TiledMapTileLayer dynamiteLayer = (TiledMapTileLayer) map.getLayers().get("dynamite");
+        BodyFactory.createBodies(world, dynamiteLayer, FixtureFactory.getDynamiteFixture(), BodyDef.BodyType.StaticBody);
+        world.setContactListener(collisionController);
+    }
 
     public EntityData getPlayerData(){
         return player.getData();

@@ -14,7 +14,6 @@ public abstract class EntityModel {
     private final EntityData data;
     private final EntityConfig config;
 
-
     public EntityModel(World world, float x, float y,
                        EntityData data, EntityConfig config) {
         this.data = data;
