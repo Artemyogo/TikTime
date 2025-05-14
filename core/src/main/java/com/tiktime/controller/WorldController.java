@@ -113,6 +113,16 @@ public class WorldController {
             worldModel.getWorld().destroyBody(i);
         }
         toDelete.clear();
+
+        Array<EnemyModel> enemies = worldModel.getEnemies();
+        enemies.forEach(e -> {
+            gameView.setEnemyCoordinates(e.getBody().getPosition().x,
+                e.getBody().getPosition().y,
+                e.getId());
+            if (!e.getDirection().equals(Vector2.Zero)) {
+                gameView.setEnemyDirection(getDirection(e.getDirection()), e.getId());
+            }
+        });
     }
 
     public void changeMap(){
@@ -140,7 +150,7 @@ public class WorldController {
         if (dir == null) {
             throw new IllegalArgumentException("Direction argument was null");
         }
-
+        Gdx.app.log("WorldController", "Direction: " + dir);
         if (dir.equals(new Vector2(1f, 1f))) {
 //            this.angleDeg = 45;
             return Direction.NORTH_EAST;
@@ -173,6 +183,7 @@ public class WorldController {
     public void onDoorEntry(){
         isInDoor++;
     }
+
     public void onDoorExit(){
         isInDoor--;
     }
@@ -182,10 +193,10 @@ public class WorldController {
         cell.setTile(null);
         worldModel.explosion(body.getPosition().x, body.getPosition().y, radius, force);
     }
+
     void deleteBody(Body body){
         toDelete.add(body);
     }
-
 
     public void setPaused(boolean paused) {
         this.paused = paused;

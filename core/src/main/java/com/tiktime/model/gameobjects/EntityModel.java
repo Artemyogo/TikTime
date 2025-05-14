@@ -1,5 +1,6 @@
 package com.tiktime.model.gameobjects;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.tiktime.model.consts.FixtureFactory;
@@ -13,6 +14,7 @@ public abstract class EntityModel {
     protected final Body body;
     protected final EntityData data;
     protected final EntityConfig config;
+    protected Vector2 direction = Vector2.Zero;
 
     public EntityModel(EntityData data, EntityConfig config, Body body) {
         this.data = data;
@@ -48,12 +50,17 @@ public abstract class EntityModel {
     public void move(Vector2 direction) {
         if(getBody().getLinearVelocity().len() > data.getSpeed()) return;
 
-
+        this.direction = direction;
+        Gdx.app.log(this.getClass().getSimpleName(), "Moving direction: " + direction);
         Vector2 velocity = new Vector2(direction).nor();
         velocity.x *= data.getSpeed();
         velocity.y *= data.getSpeed();
 
         body.setLinearVelocity(velocity);
+    }
+
+    public Vector2 getDirection() {
+        return direction;
     }
 
     protected abstract void setBody();

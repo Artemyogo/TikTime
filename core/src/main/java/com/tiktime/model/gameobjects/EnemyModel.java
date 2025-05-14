@@ -6,9 +6,14 @@ import com.tiktime.model.consts.GameConfig;
 import com.tiktime.model.enums.Category;
 
 public abstract class EnemyModel extends EntityModel {
+    public static int idNext = 0;
+    private final int id;
     public EnemyModel(EntityData data, GameConfig.EntityConfig config, Body body)  {
         super(data, config, body);
+        id = idNext++;
     }
 
-
+    public int getId() {
+        return id;
+    }
 }

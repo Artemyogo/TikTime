@@ -40,7 +40,7 @@ public class BodyFactory {
         for (int x = 0; x < layer.getWidth(); x++) {
             for (int y = 0; y < layer.getHeight(); y++) {
                 if (layer.getCell(x, y) == null) continue;
-                /// TODO 0.5f IS BAD
+                /// TODO 1f IS BAD
                 Body body = createBody(world, BodyDefFactory.getBodyDef(x, y, bodyType, 1f, 1f), fixtureDef);
                 body.setUserData(layer.getCell(x, y));
                 res.add(body);

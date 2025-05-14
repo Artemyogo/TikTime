@@ -14,9 +14,7 @@ import com.badlogic.gdx.utils.Array;
 import com.tiktime.controller.CollisionController;
 import com.tiktime.model.consts.*;
 import com.tiktime.model.enums.Category;
-import com.tiktime.model.gameobjects.EnemyModel;
-import com.tiktime.model.gameobjects.EntityData;
-import com.tiktime.model.gameobjects.PlayerModel;
+import com.tiktime.model.gameobjects.*;
 
 import com.tiktime.model.consts.GameConfig.FloorConfig;
 import com.tiktime.model.consts.GameConfig.WallConfig;
@@ -24,7 +22,6 @@ import com.tiktime.model.consts.GameConfig.EntityConfig;
 import com.tiktime.model.enums.Category;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import com.tiktime.model.gameobjects.RusherEnemyModel;
 import com.tiktime.model.raycasts.PlayerChaseRaycast;
 
 import static com.tiktime.model.consts.ScreenConstants.PPM;
@@ -42,13 +39,14 @@ public class WorldModel {
 
     public void update(float delta){
         world.step(delta, velocityIterations, positionIterations);
-        for(EnemyModel enemy : enemies){
-            PlayerChaseRaycast callback = new PlayerChaseRaycast();
-            world.rayCast(callback, enemy.getPosition(), player.getBody().getPosition());
-            if(callback.canSeePlayer()){
-                enemy.move(new Vector2(getPlayerPosition()).sub(enemy.getPosition()).nor());
-            }
-        }
+        /// TODO FIX IT
+//        for(EnemyModel enemy : enemies){
+//            PlayerChaseRaycast callback = new PlayerChaseRaycast();
+//            world.rayCast(callback, enemy.getPosition(), player.getBody().getPosition());
+//            if(callback.canSeePlayer()){
+//                enemy.move(new Vector2(getPlayerPosition()).sub(enemy.getPosition()).nor());
+//            }
+//        }
     }
 
     public WorldModel(TiledMap map, CollisionController collisionController) {
@@ -143,6 +141,9 @@ public class WorldModel {
     }
 
     public void explosion(float x, float y, float radius, float force){
-        player.applyExplosion(x, y, radius, force);
+        Array<EntityModel> entities = new Array<>(enemies);
+        entities.add(player);
+//        player.applyExplosion(x, y, radius, force);
+        entities.forEach(entity -> {entity.applyExplosion(x, y, radius, force);});
     }
 }
