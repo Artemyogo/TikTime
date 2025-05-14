@@ -45,7 +45,7 @@ public class WorldModel {
 //            world.rayCast(callback, enemy.getPosition(), player.getBody().getPosition());
 //            if(callback.canSeePlayer()){
 //                enemy.move(new Vector2(getPlayerPosition()).sub(enemy.getPosition()).nor());
-//            }
+//            }d
 //        }
     }
 
@@ -130,6 +130,10 @@ public class WorldModel {
 
     public Array<EnemyModel> getEnemies(){
         return new Array<>(enemies);
+    }
+
+    public void clearEnemies(){
+        enemies.clear();
     }
 
     public void updateMovementDirection(Vector2 movementDirection){

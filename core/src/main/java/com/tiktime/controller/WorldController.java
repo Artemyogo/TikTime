@@ -53,10 +53,9 @@ public class WorldController {
         );
         gameView.setHud(entityData.getCurrentHealth(), entityData.getMaxHealth(), PlayerModel.CurrentStats.getCoins());
         Array<EnemyModel> enemies = worldModel.getEnemies();
-        int id = 0;
         for (EnemyModel e: enemies) {
             gameView.addEnemy(e.getBody().getPosition().x, e.getBody().getPosition().y,
-                e.getData().getWidth(), e.getData().getHeight(), id++,
+                e.getData().getWidth(), e.getData().getHeight(), e.getId(),
                 (Math.random() < 0.5 ? Direction.EAST : Direction.WEST),
                 LivingEntityState.IDLE, EnemyType.RUSHER);
         }
@@ -131,6 +130,14 @@ public class WorldController {
         this.worldModel = new WorldModel(map, new CollisionController(this), playerData);
         gameView.setWorld(worldModel.getWorld());
         gameView.setMapRenderer(map);
+        gameView.clear();
+        Array<EnemyModel> enemies = worldModel.getEnemies();
+        for (EnemyModel e: enemies) {
+            gameView.addEnemy(e.getBody().getPosition().x, e.getBody().getPosition().y,
+                e.getData().getWidth(), e.getData().getHeight(), e.getId(),
+                (Math.random() < 0.5 ? Direction.EAST : Direction.WEST),
+                LivingEntityState.IDLE, EnemyType.RUSHER);
+        }
     }
 
     Vector3 getWeaponPosition(float x, float y, WeaponType weapon) {

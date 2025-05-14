@@ -249,6 +249,10 @@ public class GameView {
         }
     }
 
+    public void clear() {
+        enemies.clear();
+    }
+
     public void setEnemyCoordinates(float x, float y, int id) {
         EnemyView enemyView = enemies.get(id);
         enemyView.setPosition(x, y);
