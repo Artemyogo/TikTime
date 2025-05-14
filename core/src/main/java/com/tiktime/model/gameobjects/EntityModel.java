@@ -10,33 +10,24 @@ import com.tiktime.model.consts.GameConfig.EntityConfig;
 import static com.badlogic.gdx.math.MathUtils.ceil;
 
 public abstract class EntityModel {
-    private final Body body;
-    private final EntityData data;
-    private final EntityConfig config;
+    protected final Body body;
+    protected final EntityData data;
+    protected final EntityConfig config;
 
-    public EntityModel(World world, float x, float y,
-                       EntityData data, EntityConfig config) {
+    public EntityModel(EntityData data, EntityConfig config, Body body) {
         this.data = data;
         this.config = config;
-        BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.fixedRotation = true;
-        bodyDef.position.set(x - data.getWidth() / 2, y - data.getHeight() / 2);
-        this.body = world.createBody(bodyDef);
-        body.setUserData(this);
-        body.setLinearDamping(3.0f);
-
-        this.body.createFixture(FixtureFactory.getEntityFixtureDef(data.category));
+        this.body = body;
     }
 
     public void takeDamage(int damage){
         if(data.getCurrentHealth() <= 0) return;
         data.setCurrentHealth(data.getCurrentHealth() - damage);
-        if(data.getCurrentHealth() <= 0) {
+//        if(data.getCurrentHealth() <= 0) {
             //body.setTransform(body.getPosition().x, body.getPosition().y, 0);
             //body.setLinearVelocity(Vector2.Zero);
             //body.setAngularVelocity(0);
-        }
+//        }
     }
 
     public EntityData getData(){
@@ -59,20 +50,13 @@ public abstract class EntityModel {
 
 
         Vector2 velocity = new Vector2(direction).nor();
-//        velocity.x *= 10000;
         velocity.x *= data.getSpeed();
-//        velocity.y *= 10000;
         velocity.y *= data.getSpeed();
-//        if (!direction.equals(Vector2.Zero)) {
-//            Gdx.app.log(this.getClass().getSimpleName(), "Moving " + velocity);
-//        }
-//        velocity.scl(1f / PPM);
 
         body.setLinearVelocity(velocity);
-//        body.setTransform(32, 32, 0);
-        ///  TODO MAY BE NOT GOOD
-//        body.setBullet(true);
     }
+
+    protected abstract void setBody();
 
     public Body getBody() {
         return body;
@@ -90,6 +74,5 @@ public abstract class EntityModel {
 
         getBody().applyLinearImpulse(impulseVec, getBody().getWorldCenter(), true);
         takeDamage(ceil(force/10));
-
     }
 }

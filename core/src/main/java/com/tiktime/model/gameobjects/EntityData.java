@@ -11,7 +11,7 @@ public class EntityData {
     private float width;
     private float speed;
 
-    EntityData(float width, float height, float speed, int currentHealth, int maxHealth, Category category){
+    public EntityData(float width, float height, float speed, int currentHealth, int maxHealth, Category category){
         this.width = width;
         this.height = height;
         this.healthComponent = new HealthComponent(maxHealth, currentHealth);

@@ -2,6 +2,7 @@ package com.tiktime.model;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.maps.MapLayer;
+import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
@@ -11,25 +12,20 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.tiktime.controller.CollisionController;
-import com.tiktime.model.consts.BodyDefFactory;
-import com.tiktime.model.consts.BodyFactory;
-import com.tiktime.model.consts.FixtureFactory;
+import com.tiktime.model.consts.*;
 import com.tiktime.model.enums.Category;
 import com.tiktime.model.gameobjects.EnemyModel;
 import com.tiktime.model.gameobjects.EntityData;
 import com.tiktime.model.gameobjects.PlayerModel;
 
-import com.tiktime.model.consts.GameConfig;
 import com.tiktime.model.consts.GameConfig.FloorConfig;
 import com.tiktime.model.consts.GameConfig.WallConfig;
 import com.tiktime.model.consts.GameConfig.EntityConfig;
 import com.tiktime.model.enums.Category;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.tiktime.model.gameobjects.RusherEnemyModel;
 import com.tiktime.model.raycasts.PlayerChaseRaycast;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static com.tiktime.model.consts.ScreenConstants.PPM;
 
@@ -41,7 +37,7 @@ public class WorldModel {
 
     private final TiledMap map;
     private PlayerModel player;
-    private List<EnemyModel> enemies = new ArrayList<>();
+    private Array<EnemyModel> enemies = new Array<>();
 
 
     public void update(float delta){
@@ -52,7 +48,6 @@ public class WorldModel {
             if(callback.canSeePlayer()){
                 enemy.move(new Vector2(getPlayerPosition()).sub(enemy.getPosition()).nor());
             }
-
         }
     }
 
@@ -62,13 +57,25 @@ public class WorldModel {
         MapProperties properties = map.getLayers().get("objects").getObjects().get("playerSpawn").getProperties();
         this.player = new PlayerModel(world, properties.get("x", Float.class) / PPM, properties.get("y", Float.class) / PPM);
 
+//        Gdx.app.log("WorldModel", (map.getLayers().get("enemies") == null ? "null" : map.getLayers().get("enemies").toString()));
+        if (map.getLayers().get("enemies") != null) {
+//            Gdx.app.log("WorldModel",
+//                String.valueOf(map.getLayers().get("enemies").getObjects().get(35).getProperties().get("x", Float.class)));
+            for (MapObject object : map.getLayers().get("enemies").getObjects()) {
+//                Gdx.app.log("WorldModel", object.getProperties().get("x", Float.class) + " " +
+//                    object.getProperties().get("y", Float.class));
+                enemies.add(new RusherEnemyModel(world, object.getProperties().get("x", Float.class) / PPM,
+                    object.getProperties().get("y", Float.class) / PPM));
+            }
+        }
+
         TiledMapTileLayer wallLayer = (TiledMapTileLayer) map.getLayers().get("walls");
         BodyFactory.createBodies(world, wallLayer, FixtureFactory.getWallFixture(), BodyDef.BodyType.StaticBody);
 
-        int width = map.getProperties().get("width", Integer.class);
-        int height = map.getProperties().get("height", Integer.class);
-
-        Gdx.app.log("WorldModel", "width: " + width + ", height: " + height);
+//        int width = map.getProperties().get("width", Integer.class);
+//        int height = map.getProperties().get("height", Integer.class);
+//
+//        Gdx.app.log("WorldModel", "width: " + width + ", height: " + height);
 
         TiledMapTileLayer doorLayer = (TiledMapTileLayer) map.getLayers().get("doors");
         BodyFactory.createBodies(world, doorLayer, FixtureFactory.getDoorFixture(), BodyDef.BodyType.StaticBody);
@@ -85,13 +92,25 @@ public class WorldModel {
         this.player = new PlayerModel(world, properties.get("x", Float.class) / PPM, properties.get("y", Float.class) / PPM,
             playerData);
 
+//        Gdx.app.log("WorldModel", (map.getLayers().get("enemies") == null ? "null" : map.getLayers().get("enemies").toString()));
+        if (map.getLayers().get("enemies") != null) {
+//            Gdx.app.log("WorldModel",
+//                String.valueOf(map.getLayers().get("enemies").getObjects().get(35).getProperties().get("x", Float.class)));
+            for (MapObject object : map.getLayers().get("enemies").getObjects()) {
+//                Gdx.app.log("WorldModel", object.getProperties().get("x", Float.class) + " " +
+//                    object.getProperties().get("y", Float.class));
+                enemies.add(new RusherEnemyModel(world, object.getProperties().get("x", Float.class) / PPM,
+                    object.getProperties().get("y", Float.class) / PPM));
+            }
+        }
+
         TiledMapTileLayer wallLayer = (TiledMapTileLayer) map.getLayers().get("walls");
         BodyFactory.createBodies(world, wallLayer, FixtureFactory.getWallFixture(), BodyDef.BodyType.StaticBody);
 
         int width = map.getProperties().get("width", Integer.class);
         int height = map.getProperties().get("height", Integer.class);
 
-        Gdx.app.log("WorldModel", "width: " + width + ", height: " + height);
+//        Gdx.app.log("WorldModel", "width: " + width + ", height: " + height);
 
         TiledMapTileLayer doorLayer = (TiledMapTileLayer) map.getLayers().get("doors");
         BodyFactory.createBodies(world, doorLayer, FixtureFactory.getDoorFixture(), BodyDef.BodyType.StaticBody);
@@ -109,6 +128,10 @@ public class WorldModel {
     public Vector2 getPlayerPosition(){
         return player.getPosition();
 //        return new Vector2(1, 1);
+    }
+
+    public Array<EnemyModel> getEnemies(){
+        return new Array<>(enemies);
     }
 
     public void updateMovementDirection(Vector2 movementDirection){

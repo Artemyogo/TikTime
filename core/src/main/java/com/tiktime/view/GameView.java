@@ -33,8 +33,8 @@ import static com.tiktime.model.consts.ScreenConstants.PPM;
 
 public class GameView {
     private boolean paused = false;
-//    private boolean debug = true;
-    private final boolean debug = false;
+    private boolean debug = true;
+//    private final boolean debug = false;
     private boolean isInDoor = false;
     /// TODO DELETE THIS
     private World world;
@@ -161,6 +161,8 @@ public class GameView {
         worldBatch.begin();
         ArrayList<LivingEntityView> allLivingEntities = new ArrayList<>(enemies.values());
         allLivingEntities.add(player);
+//        Gdx.app.log("GameView", );
+        allLivingEntities.forEach(e -> {Gdx.app.log("Render Live Entity", e.getX() + " " + e.getY());});
         allLivingEntities.forEach(e -> {e.render(delta,  worldBatch);});
         worldBatch.end();
 
@@ -236,7 +238,15 @@ public class GameView {
 
     public void addEnemy(float x, float y, float width, float height, int id, Direction direction,
                          LivingEntityState state, EnemyType enemyType) {
-        enemies.put(id, new EnemyView(x, y, width, height, id, direction, state, enemyType));
+        switch (enemyType) {
+            case RUSHER:
+                enemies.put(id, new RusherEnemyView(x, y, width, height, id, direction, state));
+                break;
+            case ANIMAN:
+            case MARKSMAN:
+            default:
+                throw new RuntimeException("SJOHAGFJIGHSDGJIKHLBSD");
+        }
     }
 
     public void setEnemyCoordinates(float x, float y, int id) {

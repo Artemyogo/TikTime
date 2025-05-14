@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.tiktime.model.consts.GameConfig;
 
 public class PlayerView extends LivingEntityView {
-    public static String atlasPath = "animations/player_1.atlas";
+    public static final String atlasPath = "animations/player_1.atlas";
     private WeaponView weapon;
 
     public PlayerView(float x, float y, float width, float height, Direction direction, LivingEntityState state, WeaponType weapon) {

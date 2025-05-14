@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.utils.Array;
 import com.tiktime.Main;
 import com.tiktime.controller.utils.MapSelector;
 import com.tiktime.model.WorldModel;
@@ -15,10 +16,7 @@ import com.tiktime.model.gameobjects.EnemyModel;
 import com.tiktime.model.gameobjects.EntityData;
 import com.tiktime.model.gameobjects.PlayerModel;
 import com.tiktime.screens.MenuScreen;
-import com.tiktime.view.Direction;
-import com.tiktime.view.LivingEntityState;
-import com.tiktime.view.GameView;
-import com.tiktime.view.WeaponType;
+import com.tiktime.view.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,6 +52,14 @@ public class WorldController {
             WeaponType.AK47
         );
         gameView.setHud(entityData.getCurrentHealth(), entityData.getMaxHealth(), PlayerModel.CurrentStats.getCoins());
+        Array<EnemyModel> enemies = worldModel.getEnemies();
+        int id = 0;
+        for (EnemyModel e: enemies) {
+            gameView.addEnemy(e.getBody().getPosition().x, e.getBody().getPosition().y,
+                e.getData().getWidth(), e.getData().getHeight(), id++,
+                (Math.random() < 0.5 ? Direction.EAST : Direction.WEST),
+                LivingEntityState.IDLE, EnemyType.RUSHER);
+        }
     }
 
     public void update(float delta) {
@@ -64,16 +70,12 @@ public class WorldController {
         if (paused) {
             return;
         }
+
         if (isInDoor == 1 && Gdx.input.isKeyPressed(Input.Keys.E)) {
             Gdx.app.log("WorldController", "Entered door");
             isInDoor = 0;
-            TiledMap map = mapSelector.getMap();
-            EntityData entityData = worldModel.getPlayerData();
-            this.worldModel = new WorldModel(map, new CollisionController(this), entityData);
-
-            gameView.setMapRenderer(map);
+            changeMap();
         }
-
 
         Vector2 direction = new Vector2();
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
@@ -111,6 +113,14 @@ public class WorldController {
             worldModel.getWorld().destroyBody(i);
         }
         toDelete.clear();
+    }
+
+    public void changeMap(){
+        TiledMap map = mapSelector.getMap();
+        EntityData playerData = worldModel.getPlayerData();
+        this.worldModel = new WorldModel(map, new CollisionController(this), playerData);
+        gameView.setWorld(worldModel.getWorld());
+        gameView.setMapRenderer(map);
     }
 
     Vector3 getWeaponPosition(float x, float y, WeaponType weapon) {

@@ -12,7 +12,6 @@ public class FixtureFactory {
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
 
-
         fixtureDef.density = config.getDensity();
         fixtureDef.restitution = config.getRestitution();
         fixtureDef.friction = config.getFriction();
@@ -32,11 +31,26 @@ public class FixtureFactory {
             Category.combine(Category.PLAYER, Category.BULLET, Category.ENEMY), false);
     }
     public static FixtureDef getDynamiteFixture(){
-        return getFixture(GameConfig.getInstance().getDynamiteConfig(), Category.DYNAMITE.getBit(), Category.PLAYER.getBit(), false);
+        return getFixture(GameConfig.getInstance().getDynamiteConfig(), Category.DYNAMITE.getBit(),
+            Category.combine(Category.PLAYER, Category.ENEMY), false);
     }
-    public static FixtureDef getEntityFixtureDef(Category category){
-        return getFixture(GameConfig.getInstance().getEntityConfig(), category.getBit(),
-            Category.combine(Category.PLAYER, Category.BULLET, Category.DOOR, Category.DYNAMITE, Category.ENEMY, Category.WALL),
+
+    public static FixtureDef getRusherFixture(){
+        return getFixture(GameConfig.getInstance().getRusherEnemyConfig(),
+            Category.ENEMY_RUSHER.getBit(),
+            Category.combine(Category.PLAYER, Category.BULLET, Category.WALL, Category.DYNAMITE),
             false);
     }
+
+    public static FixtureDef getPlayerFixtureDef(){
+        return getFixture(GameConfig.getInstance().getPlayerConfig(), Category.PLAYER.getBit(),
+            Category.combine(Category.BULLET, Category.DOOR, Category.DYNAMITE, Category.ENEMY, Category.WALL),
+            false);
+    }
+
+//    public static FixtureDef getEntityFixtureDef(Category category){
+//        return getFixture(GameConfig.getInstance().getEntityConfig(), category.getBit(),
+//            Category.combine(Category.PLAYER, Category.BULLET, Category.DOOR, Category.DYNAMITE, Category.ENEMY, Category.WALL),
+//            false);
+//    }
 }

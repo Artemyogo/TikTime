@@ -6,6 +6,7 @@ public enum LivingEntityState {
     IDLE(Animation.PlayMode.LOOP),
     WALKING(Animation.PlayMode.LOOP),
     RUNNING(Animation.PlayMode.LOOP),
+    ATTACKING(Animation.PlayMode.LOOP),
     DYING(Animation.PlayMode.NORMAL);
 
     final Animation.PlayMode playMode;
