@@ -9,25 +9,30 @@ public enum Category {
     ENEMY_RUSHER(0x0040),
     ENEMY_ANIMAN(0x0080),
     ENEMY_MARKSMAN(0x0100),
-    ENEMY(combine(ENEMY_MARKSMAN, ENEMY_RUSHER, ENEMY_ANIMAN));
+    ENEMY(combine(ENEMY_MARKSMAN, ENEMY_RUSHER, ENEMY_ANIMAN)),
+    LIVING_ENTITY(combine(ENEMY, PLAYER)),
+    OBSTACLE(combine(WALL, DOOR));
 
-    private final short bit;
+    private final short bits;
 
-    Category(int bit) {
-        this.bit = (short) bit;
+    Category(int bits) {
+        this.bits = (short) bits;
     }
 
-    public short getBit() {
-        return bit;
+    public short getBits() {
+        return bits;
     }
     public boolean is(short mask) {
-        return mask == (mask | bit);
+        return (mask == (mask | bits));
+    }
+    public boolean intercept(short mask) {
+        return (mask & bits) != 0;
     }
 
     public static short combine(Category... categories) {
         short mask = 0;
         for (Category c : categories) {
-            mask |= c.getBit();
+            mask |= c.getBits();
         }
         return mask;
     }

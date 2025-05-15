@@ -48,7 +48,7 @@ public abstract class EntityModel {
 //    }
 
     public void move(Vector2 direction, float delta) {
-//        if(getBody().getLinearVelocity().len() > data.getSpeed()) return;
+        if(getBody().getLinearVelocity().len() > data.getSpeed()) return;
 
         this.direction = direction;
 //        Gdx.app.log(this.getClass().getSimpleName(), "Moving direction: " + direction);

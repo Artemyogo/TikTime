@@ -10,7 +10,7 @@
     "width": 1,
     "height": 1.5,
     "baseHp": 10,
-    "baseSpeed": 1,
+    "baseSpeed": 3,
     "baseDamage": 10
   },
   "ak47": {},
@@ -22,7 +22,7 @@
     "width": 1,
     "height": 1.5,
     "baseHp": 10,
-    "baseSpeed": 20,
+    "baseSpeed": 10,
     "baseDamage": 10,
     "baseRegen": 0
   },

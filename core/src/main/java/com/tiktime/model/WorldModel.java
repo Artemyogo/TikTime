@@ -22,7 +22,7 @@ import com.tiktime.model.consts.GameConfig.EntityConfig;
 import com.tiktime.model.enums.Category;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import com.tiktime.model.raycasts.PlayerChaseRaycast;
+import com.tiktime.model.raycasts.InPathRaycast;
 
 import static com.tiktime.model.consts.ScreenConstants.PPM;
 
@@ -40,9 +40,9 @@ public class WorldModel {
         world.step(delta, velocityIterations, positionIterations);
         /// TODO FIX IT
         for(EnemyModel enemy : enemies){
-            PlayerChaseRaycast callback = new PlayerChaseRaycast();
+            InPathRaycast callback = new InPathRaycast(Category.PLAYER);
             world.rayCast(callback, enemy.getBody().getPosition(), player.getBody().getPosition());
-            if(callback.canSeePlayer()){
+            if(callback.isInPath()){
                 Vector2 vec = new Vector2(getPlayerPosition()).sub(enemy.getPosition()).nor();
                 vec.x *= delta;
                 vec.y *= delta;
@@ -108,6 +108,20 @@ public class WorldModel {
     public void explosion(float x, float y, float radius, float force){
         Array<EntityModel> entities = new Array<>(enemies);
         entities.add(player);
-        entities.forEach(entity -> {entity.applyExplosion(x, y, radius, force);});
+        Vector2 position = new Vector2(x, y);
+        Array<InPathRaycast> array = new Array<>();
+        entities.forEach(entity -> {
+            InPathRaycast callback = new InPathRaycast(entity.getData().category);
+            callback.setEntity(entity);
+            world.rayCast(callback, position, entity.getBody().getPosition());
+            if (callback.isInPath()) {
+                entity.applyExplosion(x, y, radius, force);
+            }
+            array.add(callback);
+        });
+    }
+
+    public float distance(Vector2 start, Vector2 end){
+        return (float) Math.hypot(start.x - end.x, start.y - end.y);
     }
 }

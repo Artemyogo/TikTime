@@ -42,7 +42,7 @@ public class CollisionController implements ContactListener {
         if(masks.check(Category.PLAYER, Category.DOOR)) {
             worldController.onDoorEntry();
         }
-        if(masks.check(Category.PLAYER, Category.DYNAMITE)) {
+        if(masks.check(Category.ENEMY_RUSHER, Category.DYNAMITE) || masks.check(Category.PLAYER, Category.DYNAMITE)) {
             Fixture dynamiteFixture = masks.getFixture(Category.DYNAMITE);
             worldController.explosion(dynamiteFixture.getBody(), 10, 100f);
             worldController.deleteBody(dynamiteFixture.getBody());
