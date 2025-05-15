@@ -93,7 +93,8 @@ public final class GameConfig {
 //        this.animanEnemyConfig = new AnimanEnemyConfig(configData.animan);
         this.marksmanEnemyConfig = new MarksmanEnemyConfig(configData.entity);
 //        this.marksmanEnemyConfig = new MarksmanEnemyConfig(configData.marksman);
-        this.rusherEnemyConfig = new RusherEnemyConfig(configData.entity);
+//        this.rusherEnemyConfig = new RusherEnemyConfig(configData.entity);
+        this.rusherEnemyConfig = new RusherEnemyConfig(configData.rusher);
 //        this.rusherEnemyConfig = new RusherEnemyConfig(configData.rusher);
         this.ak47WeaponConfig = new Ak47WeaponConfig(configData.weapon);
 
@@ -346,7 +347,7 @@ public final class GameConfig {
         private PlayerData player;
         //        private MarksmanEnemyData marksman;
 //        private AnimanEnemyData animan;
-//        private RusherEnemyData rusher;
+        private RusherEnemyData rusher;
         private WallData wall;
         private FloorData floor;
         //        private Ak47WeaponData ak47;

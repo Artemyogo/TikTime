@@ -31,10 +31,11 @@ public class BodyFactory {
     }
 
     public static Body createRusherEnemyBody(World world, float x, float y) {
-        return createBody(world, BodyDefFactory.getRusherEnemyBodyDef(x, y), FixtureFactory.getRusherFixture());
+        return createBody(world, BodyDefFactory.getRusherEnemyBodyDef(x, y), FixtureFactory.getRusherEnemyFixture());
     }
 
     public static List<Body> createBodies(World world, TiledMapTileLayer layer, FixtureDef fixtureDef, BodyDef.BodyType bodyType) {
+        /// TODO PEREDELAT ETY HU..
         if(layer == null) return null;
         List<Body> res = new ArrayList<>();
         for (int x = 0; x < layer.getWidth(); x++) {

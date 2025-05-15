@@ -19,7 +19,7 @@ public class EntityDataFactory {
     }
 
     public static EntityData createRusherEnemyData(){
-        GameConfig.PlayerConfig config = GameConfig.getInstance().getPlayerConfig();
+        GameConfig.RusherEnemyConfig config = GameConfig.getInstance().getRusherEnemyConfig();
         return new EntityData(
             config.getWidth(),
             config.getHeight(),

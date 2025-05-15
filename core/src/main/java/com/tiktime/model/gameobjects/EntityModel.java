@@ -47,11 +47,11 @@ public abstract class EntityModel {
 ////        body.applyForceToCenter(force, true);
 //    }
 
-    public void move(Vector2 direction) {
-        if(getBody().getLinearVelocity().len() > data.getSpeed()) return;
+    public void move(Vector2 direction, float delta) {
+//        if(getBody().getLinearVelocity().len() > data.getSpeed()) return;
 
         this.direction = direction;
-        Gdx.app.log(this.getClass().getSimpleName(), "Moving direction: " + direction);
+//        Gdx.app.log(this.getClass().getSimpleName(), "Moving direction: " + direction);
         Vector2 velocity = new Vector2(direction).nor();
         velocity.x *= data.getSpeed();
         velocity.y *= data.getSpeed();
@@ -71,7 +71,7 @@ public abstract class EntityModel {
 
     public void applyExplosion(float x, float y, float radius, float force){
         float dist = getPosition().dst(x, y);
-        if(dist >= radius || dist == 0) return; // Avoid division by zero if at exact center
+//        if(dist >= radius || dist == 0) return; // Avoid division by zero if at exact center
 
         float effect = (radius - dist) / radius;
         float impulseMagnitude = force * effect;

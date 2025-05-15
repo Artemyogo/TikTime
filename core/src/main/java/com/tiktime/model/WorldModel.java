@@ -36,67 +36,39 @@ public class WorldModel {
     private PlayerModel player;
     private Array<EnemyModel> enemies = new Array<>();
 
-
     public void update(float delta){
         world.step(delta, velocityIterations, positionIterations);
         /// TODO FIX IT
-//        for(EnemyModel enemy : enemies){
-//            PlayerChaseRaycast callback = new PlayerChaseRaycast();
-//            world.rayCast(callback, enemy.getPosition(), player.getBody().getPosition());
-//            if(callback.canSeePlayer()){
-//                enemy.move(new Vector2(getPlayerPosition()).sub(enemy.getPosition()).nor());
-//            }d
-//        }
+        for(EnemyModel enemy : enemies){
+            PlayerChaseRaycast callback = new PlayerChaseRaycast();
+            world.rayCast(callback, enemy.getBody().getPosition(), player.getBody().getPosition());
+            if(callback.canSeePlayer()){
+                Vector2 vec = new Vector2(getPlayerPosition()).sub(enemy.getPosition()).nor();
+                vec.x *= delta;
+                vec.y *= delta;
+                enemy.move(vec, delta);
+            }
+        }
     }
 
     public WorldModel(TiledMap map, CollisionController collisionController) {
-        this.map = map;
-        this.world = new World(new Vector2(0, 0), true);
-        MapProperties properties = map.getLayers().get("objects").getObjects().get("playerSpawn").getProperties();
-        this.player = new PlayerModel(world, properties.get("x", Float.class) / PPM, properties.get("y", Float.class) / PPM);
-
-//        Gdx.app.log("WorldModel", (map.getLayers().get("enemies") == null ? "null" : map.getLayers().get("enemies").toString()));
-        if (map.getLayers().get("enemies") != null) {
-//            Gdx.app.log("WorldModel",
-//                String.valueOf(map.getLayers().get("enemies").getObjects().get(35).getProperties().get("x", Float.class)));
-            for (MapObject object : map.getLayers().get("enemies").getObjects()) {
-//                Gdx.app.log("WorldModel", object.getProperties().get("x", Float.class) + " " +
-//                    object.getProperties().get("y", Float.class));
-                enemies.add(new RusherEnemyModel(world, object.getProperties().get("x", Float.class) / PPM,
-                    object.getProperties().get("y", Float.class) / PPM));
-            }
-        }
-
-        TiledMapTileLayer wallLayer = (TiledMapTileLayer) map.getLayers().get("walls");
-        BodyFactory.createBodies(world, wallLayer, FixtureFactory.getWallFixture(), BodyDef.BodyType.StaticBody);
-
-//        int width = map.getProperties().get("width", Integer.class);
-//        int height = map.getProperties().get("height", Integer.class);
-//
-//        Gdx.app.log("WorldModel", "width: " + width + ", height: " + height);
-
-        TiledMapTileLayer doorLayer = (TiledMapTileLayer) map.getLayers().get("doors");
-        BodyFactory.createBodies(world, doorLayer, FixtureFactory.getDoorFixture(), BodyDef.BodyType.StaticBody);
-
-        TiledMapTileLayer dynamiteLayer = (TiledMapTileLayer) map.getLayers().get("dynamite");
-        BodyFactory.createBodies(world, dynamiteLayer, FixtureFactory.getDynamiteFixture(), BodyDef.BodyType.StaticBody);
-        world.setContactListener(collisionController);
+        this(map, collisionController, null);
     }
 
     public WorldModel(TiledMap map, CollisionController collisionController, EntityData playerData) {
         this.map = map;
         this.world = new World(new Vector2(0, 0), true);
         MapProperties properties = map.getLayers().get("objects").getObjects().get("playerSpawn").getProperties();
-        this.player = new PlayerModel(world, properties.get("x", Float.class) / PPM, properties.get("y", Float.class) / PPM,
-            playerData);
+        if (playerData == null) {
+            this.player = new PlayerModel(world, properties.get("x", Float.class) / PPM,
+                properties.get("y", Float.class) / PPM);
+        } else {
+            this.player = new PlayerModel(world, properties.get("x", Float.class) / PPM,
+                properties.get("y", Float.class) / PPM, playerData);
+        }
 
-//        Gdx.app.log("WorldModel", (map.getLayers().get("enemies") == null ? "null" : map.getLayers().get("enemies").toString()));
         if (map.getLayers().get("enemies") != null) {
-//            Gdx.app.log("WorldModel",
-//                String.valueOf(map.getLayers().get("enemies").getObjects().get(35).getProperties().get("x", Float.class)));
             for (MapObject object : map.getLayers().get("enemies").getObjects()) {
-//                Gdx.app.log("WorldModel", object.getProperties().get("x", Float.class) + " " +
-//                    object.getProperties().get("y", Float.class));
                 enemies.add(new RusherEnemyModel(world, object.getProperties().get("x", Float.class) / PPM,
                     object.getProperties().get("y", Float.class) / PPM));
             }
@@ -104,11 +76,6 @@ public class WorldModel {
 
         TiledMapTileLayer wallLayer = (TiledMapTileLayer) map.getLayers().get("walls");
         BodyFactory.createBodies(world, wallLayer, FixtureFactory.getWallFixture(), BodyDef.BodyType.StaticBody);
-
-        int width = map.getProperties().get("width", Integer.class);
-        int height = map.getProperties().get("height", Integer.class);
-
-//        Gdx.app.log("WorldModel", "width: " + width + ", height: " + height);
 
         TiledMapTileLayer doorLayer = (TiledMapTileLayer) map.getLayers().get("doors");
         BodyFactory.createBodies(world, doorLayer, FixtureFactory.getDoorFixture(), BodyDef.BodyType.StaticBody);
@@ -120,24 +87,18 @@ public class WorldModel {
 
     public EntityData getPlayerData(){
         return player.getData();
-//        return new EntityData();
     }
 
     public Vector2 getPlayerPosition(){
         return player.getPosition();
-//        return new Vector2(1, 1);
     }
 
     public Array<EnemyModel> getEnemies(){
         return new Array<>(enemies);
     }
 
-    public void clearEnemies(){
-        enemies.clear();
-    }
-
-    public void updateMovementDirection(Vector2 movementDirection){
-        player.move(movementDirection);
+    public void updateMovementDirection(Vector2 movementDirection, float delta){
+        player.move(movementDirection, delta);
     }
 
     public World getWorld() {
@@ -147,7 +108,6 @@ public class WorldModel {
     public void explosion(float x, float y, float radius, float force){
         Array<EntityModel> entities = new Array<>(enemies);
         entities.add(player);
-//        player.applyExplosion(x, y, radius, force);
         entities.forEach(entity -> {entity.applyExplosion(x, y, radius, force);});
     }
 }

@@ -71,7 +71,7 @@ public class WorldController {
         }
 
         if (isInDoor == 1 && Gdx.input.isKeyPressed(Input.Keys.E)) {
-            Gdx.app.log("WorldController", "Entered door");
+//            Gdx.app.log("WorldController", "Entered door");
             isInDoor = 0;
             changeMap();
         }
@@ -90,7 +90,7 @@ public class WorldController {
             direction.y -= 1;
         }
 
-        worldModel.updateMovementDirection(direction);
+        worldModel.updateMovementDirection(direction, delta);
         worldModel.update(delta);
 
         Vector2 playerPosition = worldModel.getPlayerPosition();
@@ -157,34 +157,47 @@ public class WorldController {
         if (dir == null) {
             throw new IllegalArgumentException("Direction argument was null");
         }
-        Gdx.app.log("WorldController", "Direction: " + dir);
-        if (dir.equals(new Vector2(1f, 1f))) {
-//            this.angleDeg = 45;
-            return Direction.NORTH_EAST;
-        } else if (dir.equals(new Vector2(-1f, 1f))) {
-//            this.angleDeg = 135;
-            return Direction.NORTH_WEST;
-        } else if (dir.equals(new Vector2(1f, -1f))) {
-//            this.angleDeg = 315;
-            return Direction.SOUTH_EAST;
-        } else if (dir.equals(new Vector2(-1f, -1f))) {
-//            this.angleDeg = 225;
-            return Direction.SOUTH_WEST;
-        } else if (dir.equals(new Vector2(0, 1f))) {
-//            this.angleDeg = 90;
-            return Direction.NORTH;
-        } else if (dir.equals(new Vector2(0, -1f))) {
-//            this.angleDeg = 270;
-            return Direction.SOUTH;
-        } else if (dir.equals(new Vector2(1f, 0))) {
-//            this.angleDeg = 0;
-            return Direction.EAST;
-        } else if (dir.equals(new Vector2(-1f, 0))) {
-//            this.angleDeg = 180;
-            return Direction.WEST;
-        } else {
-            throw new IllegalArgumentException("Direction argument was incorrect");
+
+        if (Math.abs(dir.x) > 1 || Math.abs(dir.y) > 1) {
+            throw new RuntimeException("Invalid direction");
         }
+
+//        Gdx.app.log("WorldController", "Direction: " + dir);
+        if (dir.x == 0)
+            throw new IllegalArgumentException("Invalid direction, shouldnt change direction");
+
+        if (dir.x > 0) {
+            return Direction.EAST;
+        }
+
+        return Direction.WEST;
+//        if (dir.equals(new Vector2(1f, 1f))) {
+////            this.angleDeg = 45;
+//            return Direction.NORTH_EAST;
+//        } else if (dir.equals(new Vector2(-1f, 1f))) {
+////            this.angleDeg = 135;
+//            return Direction.NORTH_WEST;
+//        } else if (dir.equals(new Vector2(1f, -1f))) {
+////            this.angleDeg = 315;
+//            return Direction.SOUTH_EAST;
+//        } else if (dir.equals(new Vector2(-1f, -1f))) {
+////            this.angleDeg = 225;
+//            return Direction.SOUTH_WEST;
+//        } else if (dir.equals(new Vector2(0, 1f))) {
+////            this.angleDeg = 90;
+//            return Direction.NORTH;
+//        } else if (dir.equals(new Vector2(0, -1f))) {
+////            this.angleDeg = 270;
+//            return Direction.SOUTH;
+//        } else if (dir.equals(new Vector2(1f, 0))) {
+////            this.angleDeg = 0;
+//            return Direction.EAST;
+//        } else if (dir.equals(new Vector2(-1f, 0))) {
+////            this.angleDeg = 180;
+//            return Direction.WEST;
+//        } else {
+//            throw new IllegalArgumentException("Direction argument was incorrect");
+//        }
     }
 
     public void onDoorEntry(){

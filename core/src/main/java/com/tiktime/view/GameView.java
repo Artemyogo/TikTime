@@ -162,7 +162,8 @@ public class GameView {
         ArrayList<LivingEntityView> allLivingEntities = new ArrayList<>(enemies.values());
         allLivingEntities.add(player);
 //        Gdx.app.log("GameView", );
-        allLivingEntities.forEach(e -> {Gdx.app.log("Render Live Entity", e.getX() + " " + e.getY());});
+        allLivingEntities.sort((e1, e2) -> e1.getY() > e2.getY() ? -1 : 1);
+//        allLivingEntities.forEach(e -> {Gdx.app.log("Render Live Entity", e.getX() + " " + e.getY());});
         allLivingEntities.forEach(e -> {e.render(delta,  worldBatch);});
         worldBatch.end();
 

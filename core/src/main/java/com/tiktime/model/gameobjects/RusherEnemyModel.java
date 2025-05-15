@@ -9,7 +9,7 @@ import com.tiktime.model.consts.GameConfig;
 public class RusherEnemyModel extends EnemyModel {
     public RusherEnemyModel(World world, float x, float y) {
         super(EntityDataFactory.createRusherEnemyData(), GameConfig.getInstance().getRusherEnemyConfig(),
-            BodyFactory.createPlayerBody(world, x, y));
+            BodyFactory.createRusherEnemyBody(world, x, y));
         setBody();
     }
 
