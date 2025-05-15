@@ -1,17 +1,12 @@
 package com.tiktime.model;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.math.Vector;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import com.badlogic.gdx.utils.Array;
 import com.tiktime.controller.CollisionController;
-import com.tiktime.model.consts.BodyDefFactory;
 import com.tiktime.model.consts.BodyFactory;
 import com.tiktime.model.consts.FixtureFactory;
 import com.tiktime.model.enums.Category;
@@ -19,14 +14,7 @@ import com.tiktime.model.gameobjects.EnemyModel;
 import com.tiktime.model.gameobjects.EntityData;
 import com.tiktime.model.gameobjects.PlayerModel;
 
-import com.tiktime.model.consts.GameConfig;
-import com.tiktime.model.consts.GameConfig.FloorConfig;
-import com.tiktime.model.consts.GameConfig.WallConfig;
-import com.tiktime.model.consts.GameConfig.EntityConfig;
-import com.tiktime.model.enums.Category;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.*;
-import com.tiktime.model.raycasts.PlayerChaseRaycast;
+import com.tiktime.model.raycasts.ClosestObjectRayCast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,12 +35,11 @@ public class WorldModel {
     public void update(float delta){
         world.step(delta, velocityIterations, positionIterations);
         for(EnemyModel enemy : enemies){
-            PlayerChaseRaycast callback = new PlayerChaseRaycast();
-            world.rayCast(callback, enemy.getPosition(), player.getBody().getPosition());
-            if(callback.canSeePlayer()){
+            ClosestObjectRayCast callback = new ClosestObjectRayCast(Category.ENEMY, Category.PLAYER);
+            world.rayCast(callback, enemy.getPosition(), player.getPosition());
+            if(callback.isCanSeeTarget()){
                 enemy.move(new Vector2(getPlayerPosition()).sub(enemy.getPosition()).nor());
             }
-
         }
     }
 
@@ -120,6 +107,9 @@ public class WorldModel {
     }
 
     public void explosion(float x, float y, float radius, float force){
-        player.applyExplosion(x, y, radius, force);
+        ClosestObjectRayCast rayCast = new ClosestObjectRayCast(Category.DYNAMITE, Category.PLAYER);
+        world.rayCast(rayCast, new Vector2(x, y), player.getPosition());
+        if(rayCast.isCanSeeTarget())
+            player.applyExplosion(x, y, radius, force);
     }
 }
