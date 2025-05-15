@@ -40,7 +40,7 @@ public class WorldModel {
         world.step(delta, velocityIterations, positionIterations);
         /// TODO FIX IT
         for(EnemyModel enemy : enemies){
-            InPathRaycast callback = new InPathRaycast(Category.PLAYER);
+            InPathRaycast callback = new InPathRaycast(player.getBody().getUserData());
             world.rayCast(callback, enemy.getBody().getPosition(), player.getBody().getPosition());
             if(callback.isInPath()){
                 Vector2 vec = new Vector2(getPlayerPosition()).sub(enemy.getPosition()).nor();
@@ -109,15 +109,12 @@ public class WorldModel {
         Array<EntityModel> entities = new Array<>(enemies);
         entities.add(player);
         Vector2 position = new Vector2(x, y);
-        Array<InPathRaycast> array = new Array<>();
         entities.forEach(entity -> {
-            InPathRaycast callback = new InPathRaycast(entity.getData().category);
-            callback.setEntity(entity);
-            world.rayCast(callback, position, entity.getBody().getPosition());
+            InPathRaycast callback = new InPathRaycast(entity.getBody().getUserData());
+            world.rayCast(callback, new Vector2(position), entity.getBody().getPosition());
             if (callback.isInPath()) {
                 entity.applyExplosion(x, y, radius, force);
             }
-            array.add(callback);
         });
     }
 

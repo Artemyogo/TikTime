@@ -9,19 +9,9 @@ import com.tiktime.model.gameobjects.EntityModel;
 public class InPathRaycast implements RayCastCallback {
     private boolean inPath = false;
     private float closestFraction = 1.0f;
-    private Category category;
-    private EntityModel entity;
-
-    public InPathRaycast(Category category) {
-        this.category = category;
-    }
-
-    public void setEntity(EntityModel entity) {
-        this.entity = entity;
-    }
-
-    public EntityModel getEntity() {
-        return entity;
+    private Object userData;
+    public InPathRaycast(Object userData) {
+        this.userData = userData;
     }
 
     public boolean isInPath() {
@@ -45,9 +35,12 @@ public class InPathRaycast implements RayCastCallback {
         }
 
         Object data = fixture.getBody().getUserData();
+        if (data == null || userData == null) {
+            throw new RuntimeException("data is null or userData is null");
+        }
         if (data instanceof EntityModel) {
             EntityModel entity = (EntityModel) data;
-            if (entity.getData().category == category) {
+            if (entity.getBody().getUserData() == userData) {
                 if (fraction < closestFraction) {
                     inPath = true;
                     closestFraction = fraction;
