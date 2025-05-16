@@ -38,7 +38,7 @@ public class FixtureFactory {
     public static FixtureDef getRusherEnemyFixture(){
         return getFixture(GameConfig.getInstance().getRusherEnemyConfig(),
             Category.ENEMY_RUSHER.getBits(),
-            Category.combine(Category.PLAYER, Category.BULLET, Category.WALL, Category.DYNAMITE),
+            Category.combine(Category.BULLET, Category.WALL, Category.DYNAMITE, Category.LIVING_ENTITY),
             false);
     }
 
