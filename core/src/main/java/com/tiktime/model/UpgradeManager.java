@@ -3,12 +3,15 @@ package com.tiktime.model;
 import com.tiktime.model.enums.UpgradeType;
 
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class UpgradeManager {
-    private ArrayList<Upgrade> upgrades;
+    private final Set<Upgrade> upgrades;
 
     public UpgradeManager() {
-        upgrades = new ArrayList<>();
+        upgrades = new TreeSet<>(Comparator.comparing(Upgrade::getType));
     }
 
     public int size() {
@@ -16,21 +19,13 @@ public class UpgradeManager {
     }
 
     public void addUpgrade(Upgrade upgrade) {
-        for (Upgrade upg : upgrades) {
-            if (upg.getType() == upgrade.getType()) {
-                throw new RuntimeException("Trying to add existing upgrade");
-            }
-        }
+        if (upgrade == null) throw new IllegalArgumentException("Upgrade cannot be null");
+
         upgrades.add(upgrade);
     }
 
     public Upgrade getUpgrade(UpgradeType type) {
-        for (Upgrade upg : upgrades) {
-            if (upg.getType() == type) {
-                return upg;
-            }
-        }
-        return null;
+        return upgrades.stream().filter(upg -> upg.getType() == type).findAny().orElse(null);
     }
 
     public ArrayList<Upgrade> getUpgrades() {
