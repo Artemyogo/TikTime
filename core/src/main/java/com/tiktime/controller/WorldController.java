@@ -98,8 +98,11 @@ public class WorldController {
         TiledMap map = mapSelector.getMap();
         EntityData playerData = worldModel.getPlayerData();
         this.worldModel = new WorldModel(map, new CollisionController(this), playerData);
+
         gameView.setWorld(worldModel.getWorld());
         gameView.setMapRenderer(map);
+        playerController.setPlayer(worldModel.getPlayer());
+
         gameView.clear();
         Array<EnemyModel> enemies = worldModel.getEnemies();
         for (EnemyModel e: enemies) {

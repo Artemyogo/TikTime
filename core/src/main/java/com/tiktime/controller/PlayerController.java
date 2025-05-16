@@ -24,6 +24,11 @@ public class PlayerController {
             WeaponType.AK47
         );
     }
+
+    public void setPlayer(PlayerModel player) {
+        this.player = player;
+    }
+
     void update(float delta, Vector2 direction) {
         player.move(direction, delta);
         Vector2 playerPosition = player.getPosition();
