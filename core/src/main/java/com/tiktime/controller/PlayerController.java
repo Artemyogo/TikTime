@@ -6,6 +6,10 @@ import com.tiktime.model.WorldModel;
 import com.tiktime.model.gameobjects.EntityData;
 import com.tiktime.model.gameobjects.PlayerModel;
 import com.tiktime.view.*;
+import com.tiktime.view.enteties.Direction;
+import com.tiktime.view.enteties.livingenteties.LivingEntityState;
+import com.tiktime.view.enteties.weapons.WeaponType;
+import com.tiktime.view.world.GameView;
 
 public class PlayerController {
     PlayerModel player;

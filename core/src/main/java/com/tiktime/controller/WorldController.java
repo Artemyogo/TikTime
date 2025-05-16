@@ -17,6 +17,11 @@ import com.tiktime.model.gameobjects.EntityData;
 import com.tiktime.model.gameobjects.PlayerModel;
 import com.tiktime.screens.MenuScreen;
 import com.tiktime.view.*;
+import com.tiktime.view.enteties.Direction;
+import com.tiktime.view.enteties.livingenteties.LivingEntityState;
+import com.tiktime.view.enteties.livingenteties.enemies.EnemyType;
+import com.tiktime.view.enteties.weapons.WeaponType;
+import com.tiktime.view.world.GameView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -103,7 +108,7 @@ public class WorldController {
         gameView.setMapRenderer(map);
         playerController.setPlayer(worldModel.getPlayer());
 
-        gameView.clear();
+        gameView.clearEnemies();
         Array<EnemyModel> enemies = worldModel.getEnemies();
         for (EnemyModel e: enemies) {
             gameView.addEnemy(e.getBody().getPosition().x, e.getBody().getPosition().y,

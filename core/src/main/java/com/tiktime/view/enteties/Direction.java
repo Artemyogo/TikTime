@@ -1,5 +1,7 @@
 package com.tiktime.view.enteties;
 
+import com.badlogic.gdx.math.Vector2;
+
 public enum Direction {
     EAST(0),      // →
     NORTH_EAST(45),  // ↗
