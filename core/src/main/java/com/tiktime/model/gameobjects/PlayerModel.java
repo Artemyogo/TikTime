@@ -1,9 +1,10 @@
 package com.tiktime.model.gameobjects;
 
+import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.tiktime.model.UpgradeModel;
+import com.tiktime.model.consts.*;
 import com.tiktime.model.enums.UpgradeType;
-import com.tiktime.model.consts.GameConfig;
 import com.tiktime.model.enums.Category;
 import com.tiktime.model.consts.GameConfig.PlayerConfig;
 
@@ -30,29 +31,28 @@ public class PlayerModel extends EntityModel{
     }
 
     public PlayerModel(World world, float x, float y) {
-        /// IDK seems toooo wierd, maybe we need to realize abstract method in EntityModel like getConfig()
-        super(world, x, y,
-            new EntityData(GameConfig.getInstance().getPlayerConfig().getWidth(),
-                GameConfig.getInstance().getPlayerConfig().getHeight(),
-                CurrentStats.getSpeed(),
-                CurrentStats.getHealth(),
-                CurrentStats.getHealth(),
-                Category.PLAYER),
-            GameConfig.getInstance().getPlayerConfig());
+        super(EntityDataFactory.createPlayerData(),
+            GameConfig.getInstance().getPlayerConfig(),
+            BodyFactory.createPlayerBody(world,x,y));
+        setBody();
     }
 
     public PlayerModel(World world, float x, float y, EntityData entityData) {
-        /// IDK seems toooo wierd, maybe we need to realize abstract method in EntityModel like getConfig()
-        super(world, x, y,
-            entityData,
-            GameConfig.getInstance().getPlayerConfig());
+        super(entityData,
+            GameConfig.getInstance().getPlayerConfig(),
+            BodyFactory.createPlayerBody(world, x, y));
+        setBody();
     }
-    /*
+
+    @Override
+    protected void setBody() {
+        body.setUserData(this);
+        body.setLinearDamping(3.0f);
+    }
+
     @Override
     public void takeDamage(int damage){
         super.takeDamage(damage);
 //        getData().setCurrentHealth(getData().getCurrentHealth() - damage);
     }
-    */
-
 }

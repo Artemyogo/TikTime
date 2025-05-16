@@ -2,7 +2,17 @@
   "player": {},
   "marksman": {},
   "animan": {},
-  "rusher": {},
+  "rusher": {
+    "density": 1,
+    "restitution": 0.01,
+    "friction": 0.2,
+    "acceleration": 5.0,
+    "width": 1,
+    "height": 1.5,
+    "baseHp": 10,
+    "baseSpeed": 3,
+    "baseDamage": 10
+  },
   "ak47": {},
   "entity": {
     "density": 1,
@@ -11,8 +21,8 @@
     "acceleration": 50.0,
     "width": 1,
     "height": 1.5,
-    "baseHp": 60,
-    "baseSpeed": 20,
+    "baseHp": 10,
+    "baseSpeed": 10,
     "baseDamage": 10,
     "baseRegen": 0
   },

@@ -1,23 +1,28 @@
 package com.tiktime.model;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.maps.MapLayer;
+import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.math.Vector;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.utils.Array;
 import com.tiktime.controller.CollisionController;
-import com.tiktime.model.consts.BodyFactory;
-import com.tiktime.model.consts.FixtureFactory;
+import com.tiktime.model.consts.*;
 import com.tiktime.model.enums.Category;
-import com.tiktime.model.gameobjects.EnemyModel;
-import com.tiktime.model.gameobjects.EntityData;
-import com.tiktime.model.gameobjects.PlayerModel;
+import com.tiktime.model.gameobjects.*;
 
-import com.tiktime.model.raycasts.ClosestObjectRayCast;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.tiktime.model.consts.GameConfig.FloorConfig;
+import com.tiktime.model.consts.GameConfig.WallConfig;
+import com.tiktime.model.consts.GameConfig.EntityConfig;
+import com.tiktime.model.enums.Category;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.*;
+import com.tiktime.model.raycasts.InPathRaycast;
 
 import static com.tiktime.model.consts.ScreenConstants.PPM;
 
@@ -29,56 +34,48 @@ public class WorldModel {
 
     private final TiledMap map;
     private PlayerModel player;
-    private List<EnemyModel> enemies = new ArrayList<>();
-
+    private Array<EnemyModel> enemies = new Array<>();
 
     public void update(float delta){
         world.step(delta, velocityIterations, positionIterations);
+        /// TODO FIX IT
         for(EnemyModel enemy : enemies){
-            ClosestObjectRayCast callback = new ClosestObjectRayCast(Category.ENEMY, Category.PLAYER);
-            world.rayCast(callback, enemy.getPosition(), player.getPosition());
-            if(callback.isCanSeeTarget()){
-                enemy.move(new Vector2(getPlayerPosition()).sub(enemy.getPosition()).nor());
+            InPathRaycast callback = new InPathRaycast(player.getBody().getUserData());
+            world.rayCast(callback, enemy.getBody().getPosition(), player.getBody().getPosition());
+            if(callback.isInPath()){
+                Vector2 vec = new Vector2(getPlayerPosition()).sub(enemy.getPosition()).nor();
+                vec.x *= delta;
+                vec.y *= delta;
+                enemy.move(vec, delta);
             }
         }
     }
 
     public WorldModel(TiledMap map, CollisionController collisionController) {
-        this.map = map;
-        this.world = new World(new Vector2(0, 0), true);
-        MapProperties properties = map.getLayers().get("objects").getObjects().get("playerSpawn").getProperties();
-        this.player = new PlayerModel(world, properties.get("x", Float.class) / PPM, properties.get("y", Float.class) / PPM);
-
-        TiledMapTileLayer wallLayer = (TiledMapTileLayer) map.getLayers().get("walls");
-        BodyFactory.createBodies(world, wallLayer, FixtureFactory.getWallFixture(), BodyDef.BodyType.StaticBody);
-
-        int width = map.getProperties().get("width", Integer.class);
-        int height = map.getProperties().get("height", Integer.class);
-
-        Gdx.app.log("WorldModel", "width: " + width + ", height: " + height);
-
-        TiledMapTileLayer doorLayer = (TiledMapTileLayer) map.getLayers().get("doors");
-        BodyFactory.createBodies(world, doorLayer, FixtureFactory.getDoorFixture(), BodyDef.BodyType.StaticBody);
-
-        TiledMapTileLayer dynamiteLayer = (TiledMapTileLayer) map.getLayers().get("dynamite");
-        BodyFactory.createBodies(world, dynamiteLayer, FixtureFactory.getDynamiteFixture(), BodyDef.BodyType.StaticBody);
-        world.setContactListener(collisionController);
+        this(map, collisionController, null);
     }
 
     public WorldModel(TiledMap map, CollisionController collisionController, EntityData playerData) {
         this.map = map;
         this.world = new World(new Vector2(0, 0), true);
         MapProperties properties = map.getLayers().get("objects").getObjects().get("playerSpawn").getProperties();
-        this.player = new PlayerModel(world, properties.get("x", Float.class) / PPM, properties.get("y", Float.class) / PPM,
-            playerData);
+        if (playerData == null) {
+            this.player = new PlayerModel(world, properties.get("x", Float.class) / PPM,
+                properties.get("y", Float.class) / PPM);
+        } else {
+            this.player = new PlayerModel(world, properties.get("x", Float.class) / PPM,
+                properties.get("y", Float.class) / PPM, playerData);
+        }
+
+        if (map.getLayers().get("enemies") != null) {
+            for (MapObject object : map.getLayers().get("enemies").getObjects()) {
+                enemies.add(new RusherEnemyModel(world, object.getProperties().get("x", Float.class) / PPM,
+                    object.getProperties().get("y", Float.class) / PPM));
+            }
+        }
 
         TiledMapTileLayer wallLayer = (TiledMapTileLayer) map.getLayers().get("walls");
         BodyFactory.createBodies(world, wallLayer, FixtureFactory.getWallFixture(), BodyDef.BodyType.StaticBody);
-
-        int width = map.getProperties().get("width", Integer.class);
-        int height = map.getProperties().get("height", Integer.class);
-
-        Gdx.app.log("WorldModel", "width: " + width + ", height: " + height);
 
         TiledMapTileLayer doorLayer = (TiledMapTileLayer) map.getLayers().get("doors");
         BodyFactory.createBodies(world, doorLayer, FixtureFactory.getDoorFixture(), BodyDef.BodyType.StaticBody);
@@ -90,16 +87,18 @@ public class WorldModel {
 
     public EntityData getPlayerData(){
         return player.getData();
-//        return new EntityData();
     }
 
     public Vector2 getPlayerPosition(){
         return player.getPosition();
-//        return new Vector2(1, 1);
     }
 
-    public void updateMovementDirection(Vector2 movementDirection){
-        player.move(movementDirection);
+    public Array<EnemyModel> getEnemies(){
+        return new Array<>(enemies);
+    }
+
+    public void updateMovementDirection(Vector2 movementDirection, float delta){
+        player.move(movementDirection, delta);
     }
 
     public World getWorld() {
@@ -107,9 +106,19 @@ public class WorldModel {
     }
 
     public void explosion(float x, float y, float radius, float force){
-        ClosestObjectRayCast rayCast = new ClosestObjectRayCast(Category.DYNAMITE, Category.PLAYER);
-        world.rayCast(rayCast, new Vector2(x, y), player.getPosition());
-        if(rayCast.isCanSeeTarget())
-            player.applyExplosion(x, y, radius, force);
+        Array<EntityModel> entities = new Array<>(enemies);
+        entities.add(player);
+        Vector2 position = new Vector2(x, y);
+        entities.forEach(entity -> {
+            InPathRaycast callback = new InPathRaycast(entity.getBody().getUserData());
+            world.rayCast(callback, new Vector2(position), entity.getBody().getPosition());
+            if (callback.isInPath()) {
+                entity.applyExplosion(x, y, radius, force);
+            }
+        });
+    }
+
+    public float distance(Vector2 start, Vector2 end){
+        return (float) Math.hypot(start.x - end.x, start.y - end.y);
     }
 }

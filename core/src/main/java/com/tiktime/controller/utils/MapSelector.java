@@ -17,17 +17,6 @@ public class MapSelector {
     private List<String> maps;
     public MapSelector(){
         try {
-            /*
-            List<Path> paths = Files.walk(Paths.get("maps/")).filter(Files::isRegularFile).filter(path -> {
-                String fileName = path.getFileName().toString().toLowerCase();
-                return fileName.endsWith(".tmx");
-            }).collect(Collectors.toList());
-            maps = new ArrayList<>();
-            for (Path path : paths) {
-                maps.add(String.valueOf(path));
-            }
-            */
-
             FileHandle dirHandle = Gdx.files.internal("maps/");
             maps = new ArrayList<>();
             for (FileHandle file : dirHandle.list()) {
@@ -40,8 +29,8 @@ public class MapSelector {
         }
     }
     public TiledMap getMap() {
-        Random rand = new Random();
-        String path = maps.get(rand.nextInt(maps.size()));
+//        Random rand = new Random();
+        String path = maps.get(0);
         return new TmxMapLoader().load(path);
     }
 }

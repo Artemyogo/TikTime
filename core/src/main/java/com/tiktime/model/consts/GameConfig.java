@@ -93,7 +93,8 @@ public final class GameConfig {
 //        this.animanEnemyConfig = new AnimanEnemyConfig(configData.animan);
         this.marksmanEnemyConfig = new MarksmanEnemyConfig(configData.entity);
 //        this.marksmanEnemyConfig = new MarksmanEnemyConfig(configData.marksman);
-        this.rusherEnemyConfig = new RusherEnemyConfig(configData.entity);
+//        this.rusherEnemyConfig = new RusherEnemyConfig(configData.entity);
+        this.rusherEnemyConfig = new RusherEnemyConfig(configData.rusher);
 //        this.rusherEnemyConfig = new RusherEnemyConfig(configData.rusher);
         this.ak47WeaponConfig = new Ak47WeaponConfig(configData.weapon);
 
@@ -175,13 +176,11 @@ public final class GameConfig {
         protected int baseHp;
         protected float baseSpeed;
         protected float baseDamage;
-        protected int baseRegen;
         private EntityConfig(EntityData data) {
             super(data);
             this.baseHp = data.baseHp;
             this.baseSpeed = data.baseSpeed;
             this.baseDamage = data.baseDamage;
-            this.baseRegen = data.baseRegen;
         }
 
         public int getBaseHp() {
@@ -195,18 +194,20 @@ public final class GameConfig {
         public float getBaseDamage() {
             return baseDamage;
         }
-
-        public int getBaseRegen() {
-            return baseRegen;
-        }
     }
 
     public static final class PlayerConfig extends EntityConfig {
+        private int baseRegen;
         private PlayerConfig(PlayerData data) {
             super(data);
         }
         private PlayerConfig(EntityData data) {
             super(data);
+            this.baseRegen = 5;
+        }
+
+        public int getBaseRegen() {
+            return baseRegen;
         }
     }
 
@@ -305,13 +306,13 @@ public final class GameConfig {
 
     private static class EntityData extends PhysicsData {
         protected int baseHp;
-        protected int baseRegen;
         protected float baseSpeed;
         protected float baseDamage;
     }
 
-
-    private static final class PlayerData extends EntityData { }
+    private static final class PlayerData extends EntityData {
+        private int baseRegen;
+    }
 
     /**
      * MARKSMAN(0),
@@ -346,7 +347,7 @@ public final class GameConfig {
         private PlayerData player;
         //        private MarksmanEnemyData marksman;
 //        private AnimanEnemyData animan;
-//        private RusherEnemyData rusher;
+        private RusherEnemyData rusher;
         private WallData wall;
         private FloorData floor;
         //        private Ak47WeaponData ak47;

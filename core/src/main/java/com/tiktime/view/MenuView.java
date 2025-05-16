@@ -42,7 +42,7 @@ public class MenuView {
 
     public void render(float delta) {
         Gdx.gl.glClear(Gdx.gl.GL_COLOR_BUFFER_BIT);
-        Gdx.app.log("SCREEN", "Show: " + this.getClass().getSimpleName());
+//        Gdx.app.log("SCREEN", "Show: " + this.getClass().getSimpleName());
         stage.act(delta);
         stage.draw();
     }
