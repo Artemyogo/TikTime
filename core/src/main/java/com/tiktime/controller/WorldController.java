@@ -29,6 +29,7 @@ public class WorldController {
     private boolean paused = false;
     private int isInDoor = 0;
     private List<Body> toDelete = new ArrayList<>();
+    private WorldInputProcessor inputProcessor = new WorldInputProcessor(this);
 
     public WorldController(Main game, GameView gameView) {
         this.game = game;
@@ -70,12 +71,10 @@ public class WorldController {
             return;
         }
 
-        if (isInDoor > 1 && Gdx.input.isKeyPressed(Input.Keys.E)) {
+        if (isInDoor >= 1 && Gdx.input.isKeyPressed(Input.Keys.E)) {
 //            Gdx.app.log("WorldController", "Entered door");
-            isInDoor = 0;
             changeMap();
         }
-
         Vector2 direction = new Vector2();
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             direction.x -= 1;
@@ -125,6 +124,7 @@ public class WorldController {
     }
 
     public void changeMap(){
+        isInDoor = 0;
         TiledMap map = mapSelector.getMap();
         EntityData playerData = worldModel.getPlayerData();
         this.worldModel = new WorldModel(map, new CollisionController(this), playerData);
