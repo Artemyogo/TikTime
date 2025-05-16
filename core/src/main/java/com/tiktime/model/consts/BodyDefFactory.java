@@ -13,15 +13,15 @@ public class BodyDefFactory {
 
     public static BodyDef getWallBodyDef(float x, float y){
         return getBodyDef(x, y, BodyDef.BodyType.StaticBody,
-            GameConfig.getInstance().getWallConfig().getWidth(),
-            GameConfig.getInstance().getWallConfig().getHeight()
+            GameConfig.getInstance().getStaticObjectConfig(GameConfig.StaticObjectType.WALL).getWidth(),
+            GameConfig.getInstance().getStaticObjectConfig(GameConfig.StaticObjectType.WALL).getHeight()
             );
     }
 
     public static BodyDef getDoorBodyDef(float x, float y) {
         return getBodyDef(x, y, BodyDef.BodyType.StaticBody,
-            GameConfig.getInstance().getFloorConfig().getWidth(),
-            GameConfig.getInstance().getFloorConfig().getHeight()
+            GameConfig.getInstance().getStaticObjectConfig(GameConfig.StaticObjectType.FLOOR).getWidth(),
+            GameConfig.getInstance().getStaticObjectConfig(GameConfig.StaticObjectType.FLOOR).getHeight()
             );
     }
 

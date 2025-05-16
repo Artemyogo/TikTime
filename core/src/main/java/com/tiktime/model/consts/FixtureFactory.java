@@ -23,15 +23,15 @@ public class FixtureFactory {
         return fixtureDef;
     }
     public static FixtureDef getDoorFixture() {
-        return getFixture(GameConfig.getInstance().getFloorConfig(), Category.DOOR.getBits(), Category.PLAYER.getBits(), true);
+        return getFixture(GameConfig.getInstance().getStaticObjectConfig(GameConfig.StaticObjectType.FLOOR), Category.DOOR.getBits(), Category.PLAYER.getBits(), true);
     }
     public static FixtureDef getWallFixture(){
-        return getFixture(GameConfig.getInstance().getWallConfig(),
+        return getFixture(GameConfig.getInstance().getStaticObjectConfig(GameConfig.StaticObjectType.WALL),
             Category.WALL.getBits(),
             Category.combine(Category.PLAYER, Category.BULLET, Category.ENEMY), false);
     }
     public static FixtureDef getDynamiteFixture(){
-        return getFixture(GameConfig.getInstance().getDynamiteConfig(), Category.DYNAMITE.getBits(),
+        return getFixture(GameConfig.getInstance().getStaticObjectConfig(GameConfig.StaticObjectType.DYNAMITE), Category.DYNAMITE.getBits(),
             Category.combine(Category.PLAYER, Category.ENEMY), false);
     }
 

@@ -1,6 +1,5 @@
 package com.tiktime.model.gameobjects;
 
-import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
 import com.tiktime.model.consts.BodyFactory;
 import com.tiktime.model.consts.EntityDataFactory;
