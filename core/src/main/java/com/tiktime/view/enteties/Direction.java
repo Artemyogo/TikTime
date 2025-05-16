@@ -1,6 +1,4 @@
-package com.tiktime.view;
-
-import com.badlogic.gdx.math.Vector2;
+package com.tiktime.view.enteties;
 
 public enum Direction {
     EAST(0),      // →

@@ -5,7 +5,7 @@ import com.tiktime.model.Upgrade;
 import com.tiktime.model.UpgradeModel;
 import com.tiktime.model.enums.UpgradeType;
 import com.tiktime.screens.MenuScreen;
-import com.tiktime.view.UpgradeView;
+import com.tiktime.view.world.UpgradeView;
 
 public class UpgradeController {
     private final Main game;

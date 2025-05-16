@@ -1,4 +1,4 @@
-package com.tiktime.view;
+package com.tiktime.view.enteties.weapons;
 
 public enum WeaponType {
     AK47,

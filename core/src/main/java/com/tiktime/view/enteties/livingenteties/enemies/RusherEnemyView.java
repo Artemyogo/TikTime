@@ -1,9 +1,14 @@
-package com.tiktime.view;
+package com.tiktime.view.enteties.livingenteties.enemies;
+
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.tiktime.view.enteties.Direction;
+import com.tiktime.view.enteties.livingenteties.LivingEntityState;
 
 public class RusherEnemyView extends EnemyView {
     public static final String atlasPath = "animations/rusher.atlas";
-    public RusherEnemyView(float x, float y, float width, float height, int id, Direction direction, LivingEntityState livingEntityState) {
-        super(x, y, width, height, id, direction, livingEntityState, EnemyType.RUSHER, atlasPath);
+    public RusherEnemyView(float x, float y, float width, float height, int id, Direction direction, LivingEntityState livingEntityState,
+                           SpriteBatch batch) {
+        super(x, y, width, height, id, direction, livingEntityState, EnemyType.RUSHER, atlasPath, batch);
         loadAnimations();
         updateAnimation();
     }

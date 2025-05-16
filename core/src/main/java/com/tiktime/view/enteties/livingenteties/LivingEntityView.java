@@ -1,15 +1,9 @@
-package com.tiktime.view;
+package com.tiktime.view.enteties.livingenteties;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.utils.Array;
-
-import java.util.Comparator;
-import java.util.Map;
+import com.tiktime.view.enteties.Direction;
 
 public abstract class LivingEntityView extends AnimatedEntityView {
     protected Direction direction;
@@ -18,8 +12,9 @@ public abstract class LivingEntityView extends AnimatedEntityView {
     protected float curAttackedTicks = 0;
     boolean isAttacked = false;
 
-    protected LivingEntityView(float x, float y, float width, float height, Direction direction, LivingEntityState state, String atlasPath) {
-        super(x, y, width, height, atlasPath);
+    protected LivingEntityView(float x, float y, float width, float height, Direction direction, LivingEntityState state, String atlasPath,
+                               SpriteBatch batch) {
+        super(x, y, width, height, atlasPath, batch);
         this.direction = direction;
         this.state = state;
     }
@@ -60,7 +55,7 @@ public abstract class LivingEntityView extends AnimatedEntityView {
     }
 
     @Override
-    public void render(float delta, SpriteBatch batch) {
+    public void render(float delta) {
         update(delta);
 
         TextureRegion frame = animManager.getCurrentFrame();

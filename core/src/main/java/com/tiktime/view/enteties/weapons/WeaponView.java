@@ -1,10 +1,8 @@
-package com.tiktime.view;
+package com.tiktime.view.enteties.weapons;
 
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.utils.Disposable;
+import com.tiktime.view.enteties.livingenteties.AnimatedEntityView;
 
 public abstract class WeaponView extends AnimatedEntityView {
     protected float rotationDeg;
@@ -14,13 +12,14 @@ public abstract class WeaponView extends AnimatedEntityView {
     protected final float weaponOffsetX; // Смещение вправо
     protected final float weaponOffsetY; // Смещение вверх
 
-    protected WeaponView(float width, float height, float x, float y, float weaponOffsetX, float weaponOffsetY, String atlasPath) {
-        super(x, y, width, height, atlasPath);
+    protected WeaponView(float width, float height, float x, float y, float weaponOffsetX, float weaponOffsetY, String atlasPath,
+                         SpriteBatch batch) {
+        super(x, y, width, height, atlasPath, batch);
         this.weaponOffsetX = weaponOffsetX;
         this.weaponOffsetY = weaponOffsetY;
     }
 
-    public void render(float delta, SpriteBatch batch) {
+    public void render(float delta) {
         update(delta);
 
         TextureRegion frame = animManager.getCurrentFrame();

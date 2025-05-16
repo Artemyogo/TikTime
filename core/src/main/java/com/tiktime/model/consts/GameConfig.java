@@ -3,7 +3,7 @@ package com.tiktime.model.consts;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Json;
-import com.tiktime.view.WeaponType;
+import com.tiktime.view.enteties.weapons.WeaponType;
 
 public final class GameConfig {
     private static final String CONFIG_FILE_PATH = "config.json";

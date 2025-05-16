@@ -1,4 +1,4 @@
-package com.tiktime.model.consts;
+package com.tiktime.view.consts;
 
 public final class ScreenConstants {
     public static final float VIRTUAL_WIDTH = 1280;

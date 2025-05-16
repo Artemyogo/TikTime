@@ -3,7 +3,6 @@ package com.tiktime.controller;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -16,7 +15,11 @@ import com.tiktime.model.gameobjects.EnemyModel;
 import com.tiktime.model.gameobjects.EntityData;
 import com.tiktime.model.gameobjects.PlayerModel;
 import com.tiktime.screens.MenuScreen;
-import com.tiktime.view.*;
+import com.tiktime.view.enteties.Direction;
+import com.tiktime.view.enteties.livingenteties.enemies.EnemyType;
+import com.tiktime.view.enteties.livingenteties.LivingEntityState;
+import com.tiktime.view.enteties.weapons.WeaponType;
+import com.tiktime.view.world.GameView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -130,7 +133,7 @@ public class WorldController {
         this.worldModel = new WorldModel(map, new CollisionController(this), playerData);
         gameView.setWorld(worldModel.getWorld());
         gameView.setMapRenderer(map);
-        gameView.clear();
+        gameView.clearEnemies();
         Array<EnemyModel> enemies = worldModel.getEnemies();
         for (EnemyModel e: enemies) {
             gameView.addEnemy(e.getBody().getPosition().x, e.getBody().getPosition().y,

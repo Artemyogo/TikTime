@@ -1,27 +1,27 @@
-package com.tiktime.view;
+package com.tiktime.view.enteties.livingenteties;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.tiktime.model.consts.GameConfig;
+import com.tiktime.view.enteties.Direction;
+import com.tiktime.view.enteties.weapons.WeaponFactory;
+import com.tiktime.view.enteties.weapons.WeaponType;
+import com.tiktime.view.enteties.weapons.WeaponView;
 
 public class PlayerView extends LivingEntityView {
     public static final String atlasPath = "animations/player_1.atlas";
     private WeaponView weapon;
 
-    public PlayerView(float x, float y, float width, float height, Direction direction, LivingEntityState state, WeaponType weapon) {
-        super(x, y, width, height, direction, state, atlasPath);
-        this.weapon = WeaponFactory.createWeapon(weapon, x, y);
+    public PlayerView(float x, float y, float width, float height, Direction direction, LivingEntityState state, WeaponType weapon,
+                      SpriteBatch batch) {
+        super(x, y, width, height, direction, state, atlasPath, batch);
+        this.weapon = WeaponFactory.createWeapon(weapon, x, y, batch);
         loadAnimations();
         updateAnimation();
     }
 
     @Override
-    public void render(float delta, SpriteBatch batch) {
-        super.render(delta, batch);
-        weapon.render(delta, batch);
+    public void render(float delta) {
+        super.render(delta);
+        weapon.render(delta);
     }
 
     @Override

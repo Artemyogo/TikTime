@@ -1,30 +1,19 @@
 package com.tiktime.model;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.math.Vector;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.tiktime.controller.CollisionController;
 import com.tiktime.model.consts.*;
-import com.tiktime.model.enums.Category;
 import com.tiktime.model.gameobjects.*;
 
-import com.tiktime.model.consts.GameConfig.FloorConfig;
-import com.tiktime.model.consts.GameConfig.WallConfig;
-import com.tiktime.model.consts.GameConfig.EntityConfig;
-import com.tiktime.model.enums.Category;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.*;
 import com.tiktime.model.raycasts.InPathRaycast;
 
-import static com.tiktime.model.consts.ScreenConstants.PPM;
+import static com.tiktime.view.consts.ScreenConstants.PPM;
 
 public class WorldModel {
     private final World world;

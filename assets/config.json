@@ -22,7 +22,7 @@
     "width": 1,
     "height": 1.5,
     "baseHp": 10,
-    "baseSpeed": 10,
+    "baseSpeed": 15 ,
     "baseDamage": 10,
     "baseRegen": 0
   },

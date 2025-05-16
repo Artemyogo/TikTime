@@ -1,4 +1,4 @@
-package com.tiktime.view;
+package com.tiktime.view.enteties.livingenteties;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
 
@@ -9,7 +9,7 @@ public enum LivingEntityState {
     ATTACKING(Animation.PlayMode.LOOP),
     DYING(Animation.PlayMode.NORMAL);
 
-    final Animation.PlayMode playMode;
+    public final Animation.PlayMode playMode;
 
     LivingEntityState(Animation.PlayMode playMode) {
         this.playMode = playMode;

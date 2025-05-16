@@ -1,8 +1,10 @@
-package com.tiktime.view;
+package com.tiktime.view.enteties.livingenteties;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.tiktime.view.world.Pausable;
+import com.tiktime.view.world.Renderable;
 
-public abstract class EntityView {
+public abstract class EntityView implements Pausable, Renderable {
     protected float x, y, width, height;
     protected boolean pause = false;
 
@@ -35,5 +37,6 @@ public abstract class EntityView {
         return y;
     }
 
-    public abstract void render(float delta, SpriteBatch batch);
+    @Override
+    public abstract void render(float delta);
 }

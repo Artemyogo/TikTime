@@ -1,19 +1,23 @@
-package com.tiktime.view;
+package com.tiktime.view.enteties.livingenteties;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
+import com.tiktime.view.enteties.AnimationManager;
 
 import java.util.Comparator;
 
 public abstract class AnimatedEntityView extends EntityView {
     protected final TextureAtlas atlas;
     protected final AnimationManager animManager;
+    protected final SpriteBatch batch;
 
-    public AnimatedEntityView(float x, float y, float width, float height, String atlasPath) {
+    public AnimatedEntityView(float x, float y, float width, float height, String atlasPath, SpriteBatch batch) {
         super(x, y, width, height);
+        this.batch = batch;
         this.atlas = new TextureAtlas(Gdx.files.internal(atlasPath));
         if (atlas.getRegions().size == 0) {
             throw new RuntimeException("Unable to load atlas");

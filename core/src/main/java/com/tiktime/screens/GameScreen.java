@@ -1,10 +1,9 @@
 package com.tiktime.screens;
 
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.ScreenAdapter;
 import com.tiktime.Main;
 import com.tiktime.controller.WorldController;
-import com.tiktime.view.GameView;
+import com.tiktime.view.world.GameView;
 
 public class GameScreen extends ScreenAdapter {
     private final WorldController worldController;
