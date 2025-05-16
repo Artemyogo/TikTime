@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.tiktime.controller.UpgradeController;
 import com.tiktime.model.Upgrade;
 import com.tiktime.model.UpgradeManager;
@@ -26,9 +27,12 @@ public class UpgradeView implements Disposable {
     private final TextButton backButton;
     private final Map<UpgradeType, TextButton> upgradeButtons;
     private final Table upgrades;
+    private final ScreenViewport screenViewport;
 
     public UpgradeView(UpgradeManager upgradeManager) {
-        stage = new Stage(new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
+        screenViewport = new ScreenViewport();
+        screenViewport.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
+        stage = new Stage(screenViewport);
         upgrades = new Table();
         upgrades.setFillParent(true);
         stage.addActor(upgrades);
@@ -137,9 +141,7 @@ public class UpgradeView implements Disposable {
     }
 
     public void resize(int width, int height) {
-        stage.getViewport().update(width, height, true);
-        //upgrades.clear();
-        //drawUpgradeButtons();
+        screenViewport.update(width, height, true);
     }
 
     @Override

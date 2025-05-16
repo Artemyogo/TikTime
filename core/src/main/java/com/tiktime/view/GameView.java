@@ -36,7 +36,6 @@ public class GameView {
     private boolean debug = true;
 //    private final boolean debug = false;
     private boolean isInDoor = false;
-    /// TODO DELETE THIS
     private World world;
 
     private OrthogonalTiledMapRenderer mapRenderer;
