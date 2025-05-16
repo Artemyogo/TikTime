@@ -171,33 +171,6 @@ public class WorldController {
         }
 
         return Direction.WEST;
-//        if (dir.equals(new Vector2(1f, 1f))) {
-////            this.angleDeg = 45;
-//            return Direction.NORTH_EAST;
-//        } else if (dir.equals(new Vector2(-1f, 1f))) {
-////            this.angleDeg = 135;
-//            return Direction.NORTH_WEST;
-//        } else if (dir.equals(new Vector2(1f, -1f))) {
-////            this.angleDeg = 315;
-//            return Direction.SOUTH_EAST;
-//        } else if (dir.equals(new Vector2(-1f, -1f))) {
-////            this.angleDeg = 225;
-//            return Direction.SOUTH_WEST;
-//        } else if (dir.equals(new Vector2(0, 1f))) {
-////            this.angleDeg = 90;
-//            return Direction.NORTH;
-//        } else if (dir.equals(new Vector2(0, -1f))) {
-////            this.angleDeg = 270;
-//            return Direction.SOUTH;
-//        } else if (dir.equals(new Vector2(1f, 0))) {
-////            this.angleDeg = 0;
-//            return Direction.EAST;
-//        } else if (dir.equals(new Vector2(-1f, 0))) {
-////            this.angleDeg = 180;
-//            return Direction.WEST;
-//        } else {
-//            throw new IllegalArgumentException("Direction argument was incorrect");
-//        }
     }
 
     public void onDoorEntry(){
