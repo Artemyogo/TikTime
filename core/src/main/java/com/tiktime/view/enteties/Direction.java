@@ -19,5 +19,25 @@ public enum Direction {
     public boolean isRight() {
         return angleDeg < 90 || angleDeg > 270; // Все что не влево
     }
+
+    public static Direction getDirection(Vector2 dir) {
+        if (dir == null) {
+            throw new IllegalArgumentException("Direction argument was null");
+        }
+
+        if (Math.abs(dir.x) > 1 || Math.abs(dir.y) > 1) {
+            throw new RuntimeException("Invalid direction");
+        }
+
+//        Gdx.app.log("WorldController", "Direction: " + dir);
+        if (dir.x == 0)
+            throw new IllegalArgumentException("Invalid direction, shouldnt change direction");
+
+        if (dir.x > 0) {
+            return Direction.EAST;
+        }
+
+        return Direction.WEST;
+    }
 }
 

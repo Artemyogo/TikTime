@@ -3,6 +3,7 @@ package com.tiktime.controller;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -15,11 +16,7 @@ import com.tiktime.model.gameobjects.EnemyModel;
 import com.tiktime.model.gameobjects.EntityData;
 import com.tiktime.model.gameobjects.PlayerModel;
 import com.tiktime.screens.MenuScreen;
-import com.tiktime.view.enteties.Direction;
-import com.tiktime.view.enteties.livingenteties.enemies.EnemyType;
-import com.tiktime.view.enteties.livingenteties.LivingEntityState;
-import com.tiktime.view.enteties.weapons.WeaponType;
-import com.tiktime.view.world.GameView;
+import com.tiktime.view.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +30,7 @@ public class WorldController {
     private int isInDoor = 0;
     private List<Body> toDelete = new ArrayList<>();
     private WorldInputProcessor inputProcessor = new WorldInputProcessor(this);
+    private PlayerController playerController;
 
     public WorldController(Main game, GameView gameView) {
         this.game = game;
@@ -46,15 +44,9 @@ public class WorldController {
         gameView.setMapRenderer(map);
 
         EntityData entityData = worldModel.getPlayerData();
-        gameView.setPlayer(
-            worldModel.getPlayerPosition().x,
-            worldModel.getPlayerPosition().y,
-            entityData.getWidth(),
-            entityData.getHeight(),
-            Direction.EAST,
-            LivingEntityState.IDLE,
-            WeaponType.AK47
-        );
+
+        playerController = new PlayerController(worldModel.getPlayer(), gameView);
+
         gameView.setHud(entityData.getCurrentHealth(), entityData.getMaxHealth(), PlayerModel.CurrentStats.getCoins());
         Array<EnemyModel> enemies = worldModel.getEnemies();
         for (EnemyModel e: enemies) {
@@ -65,51 +57,26 @@ public class WorldController {
         }
     }
 
-    public void update(float delta) {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
-            setPaused(!paused);
-        }
+    public void activateInputProcessor() {
+        Gdx.input.setInputProcessor(inputProcessor);
+    }
 
+    public void updateMousePosition(int x, int y) {
+        Vector3 mousePosition = new Vector3(x, y, 0);
+        gameView.updatePlayerWeaponRotation(mousePosition, getWeaponPosition(worldModel.getPlayerPosition().x, worldModel.getPlayerPosition().y, WeaponType.AK47));
+    }
+
+    public void update(float delta) {
         if (paused) {
             return;
         }
+        inputProcessor.setInDoor(isInDoor > 0);
+        gameView.setIsInDoor(isInDoor > 0);
+        Vector2 direction = inputProcessor.getDirection();
 
-        if (isInDoor >= 1 && Gdx.input.isKeyPressed(Input.Keys.E)) {
-//            Gdx.app.log("WorldController", "Entered door");
-            changeMap();
-        }
-        Vector2 direction = new Vector2();
-        if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-            direction.x -= 1;
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-            direction.x += 1;
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-            direction.y += 1;
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-            direction.y -= 1;
-        }
-
-        worldModel.updateMovementDirection(direction, delta);
+        playerController.update(delta, direction);
         worldModel.update(delta);
 
-        Vector2 playerPosition = worldModel.getPlayerPosition();
-        gameView.setPlayerCoordinates(playerPosition.x, playerPosition.y);
-        if (direction.equals(Vector2.Zero)) {
-            gameView.setPlayerState(LivingEntityState.IDLE);
-        } else {
-            if (!direction.equals(new Vector2(0, 1)) && !direction.equals(new Vector2(0, -1))) {
-                gameView.setPlayerDirection(getDirection(direction));
-            }
-            gameView.setPlayerState(LivingEntityState.RUNNING);
-        }
-
-        Vector3 mousePosition = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
-        gameView.updatePlayerWeaponRotation(mousePosition, getWeaponPosition(playerPosition.x, playerPosition.y, WeaponType.AK47));
-        gameView.setPlayerCurHealth(worldModel.getPlayerData().getCurrentHealth());
-        gameView.setIsInDoor(isInDoor > 0);
         for(Body i : toDelete){
             worldModel.getWorld().destroyBody(i);
         }
@@ -121,7 +88,7 @@ public class WorldController {
                 e.getBody().getPosition().y,
                 e.getId());
             if (!e.getDirection().equals(Vector2.Zero)) {
-                gameView.setEnemyDirection(getDirection(e.getDirection()), e.getId());
+                gameView.setEnemyDirection(Direction.getDirection(e.getDirection()), e.getId());
             }
         });
     }
@@ -131,9 +98,12 @@ public class WorldController {
         TiledMap map = mapSelector.getMap();
         EntityData playerData = worldModel.getPlayerData();
         this.worldModel = new WorldModel(map, new CollisionController(this), playerData);
+
         gameView.setWorld(worldModel.getWorld());
         gameView.setMapRenderer(map);
-        gameView.clearEnemies();
+        playerController.setPlayer(worldModel.getPlayer());
+
+        gameView.clear();
         Array<EnemyModel> enemies = worldModel.getEnemies();
         for (EnemyModel e: enemies) {
             gameView.addEnemy(e.getBody().getPosition().x, e.getBody().getPosition().y,
@@ -154,26 +124,6 @@ public class WorldController {
         float width = weaponConfig.getWidth();
         float height = weaponConfig.getHeight();
         return new Vector3(xn - width / 2f, yn - height / 2f, 0);
-    }
-
-    Direction getDirection(Vector2 dir) {
-        if (dir == null) {
-            throw new IllegalArgumentException("Direction argument was null");
-        }
-
-        if (Math.abs(dir.x) > 1 || Math.abs(dir.y) > 1) {
-            throw new RuntimeException("Invalid direction");
-        }
-
-//        Gdx.app.log("WorldController", "Direction: " + dir);
-        if (dir.x == 0)
-            throw new IllegalArgumentException("Invalid direction, shouldnt change direction");
-
-        if (dir.x > 0) {
-            return Direction.EAST;
-        }
-
-        return Direction.WEST;
     }
 
     public void onDoorEntry(){
@@ -197,6 +147,9 @@ public class WorldController {
     public void setPaused(boolean paused) {
         this.paused = paused;
         gameView.setPause(paused);
+        if(!paused){
+            activateInputProcessor();
+        }
     }
 
 
