@@ -30,6 +30,7 @@ public class WorldController {
     private int isInDoor = 0;
     private List<Body> toDelete = new ArrayList<>();
     private WorldInputProcessor inputProcessor = new WorldInputProcessor(this);
+    private PlayerController playerController;
 
     public WorldController(Main game, GameView gameView) {
         this.game = game;
@@ -43,15 +44,9 @@ public class WorldController {
         gameView.setMapRenderer(map);
 
         EntityData entityData = worldModel.getPlayerData();
-        gameView.setPlayer(
-            worldModel.getPlayerPosition().x,
-            worldModel.getPlayerPosition().y,
-            entityData.getWidth(),
-            entityData.getHeight(),
-            Direction.EAST,
-            LivingEntityState.IDLE,
-            WeaponType.AK47
-        );
+
+        playerController = new PlayerController(worldModel.getPlayer(), gameView);
+
         gameView.setHud(entityData.getCurrentHealth(), entityData.getMaxHealth(), PlayerModel.CurrentStats.getCoins());
         Array<EnemyModel> enemies = worldModel.getEnemies();
         for (EnemyModel e: enemies) {
@@ -62,51 +57,26 @@ public class WorldController {
         }
     }
 
-    public void update(float delta) {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
-            setPaused(!paused);
-        }
+    public void activateInputProcessor() {
+        Gdx.input.setInputProcessor(inputProcessor);
+    }
 
+    public void updateMousePosition(int x, int y) {
+        Vector3 mousePosition = new Vector3(x, y, 0);
+        gameView.updatePlayerWeaponRotation(mousePosition, getWeaponPosition(worldModel.getPlayerPosition().x, worldModel.getPlayerPosition().y, WeaponType.AK47));
+    }
+
+    public void update(float delta) {
         if (paused) {
             return;
         }
+        inputProcessor.setInDoor(isInDoor > 0);
+        gameView.setIsInDoor(isInDoor > 0);
+        Vector2 direction = inputProcessor.getDirection();
 
-        if (isInDoor >= 1 && Gdx.input.isKeyPressed(Input.Keys.E)) {
-//            Gdx.app.log("WorldController", "Entered door");
-            changeMap();
-        }
-        Vector2 direction = new Vector2();
-        if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-            direction.x -= 1;
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-            direction.x += 1;
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-            direction.y += 1;
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-            direction.y -= 1;
-        }
-
-        worldModel.updateMovementDirection(direction, delta);
+        playerController.update(delta, direction);
         worldModel.update(delta);
 
-        Vector2 playerPosition = worldModel.getPlayerPosition();
-        gameView.setPlayerCoordinates(playerPosition.x, playerPosition.y);
-        if (direction.equals(Vector2.Zero)) {
-            gameView.setPlayerState(LivingEntityState.IDLE);
-        } else {
-            if (!direction.equals(new Vector2(0, 1)) && !direction.equals(new Vector2(0, -1))) {
-                gameView.setPlayerDirection(getDirection(direction));
-            }
-            gameView.setPlayerState(LivingEntityState.RUNNING);
-        }
-
-        Vector3 mousePosition = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
-        gameView.updatePlayerWeaponRotation(mousePosition, getWeaponPosition(playerPosition.x, playerPosition.y, WeaponType.AK47));
-        gameView.setPlayerCurHealth(worldModel.getPlayerData().getCurrentHealth());
-        gameView.setIsInDoor(isInDoor > 0);
         for(Body i : toDelete){
             worldModel.getWorld().destroyBody(i);
         }
@@ -118,7 +88,7 @@ public class WorldController {
                 e.getBody().getPosition().y,
                 e.getId());
             if (!e.getDirection().equals(Vector2.Zero)) {
-                gameView.setEnemyDirection(getDirection(e.getDirection()), e.getId());
+                gameView.setEnemyDirection(Direction.getDirection(e.getDirection()), e.getId());
             }
         });
     }
@@ -153,53 +123,6 @@ public class WorldController {
         return new Vector3(xn - width / 2f, yn - height / 2f, 0);
     }
 
-    Direction getDirection(Vector2 dir) {
-        if (dir == null) {
-            throw new IllegalArgumentException("Direction argument was null");
-        }
-
-        if (Math.abs(dir.x) > 1 || Math.abs(dir.y) > 1) {
-            throw new RuntimeException("Invalid direction");
-        }
-
-//        Gdx.app.log("WorldController", "Direction: " + dir);
-        if (dir.x == 0)
-            throw new IllegalArgumentException("Invalid direction, shouldnt change direction");
-
-        if (dir.x > 0) {
-            return Direction.EAST;
-        }
-
-        return Direction.WEST;
-//        if (dir.equals(new Vector2(1f, 1f))) {
-////            this.angleDeg = 45;
-//            return Direction.NORTH_EAST;
-//        } else if (dir.equals(new Vector2(-1f, 1f))) {
-////            this.angleDeg = 135;
-//            return Direction.NORTH_WEST;
-//        } else if (dir.equals(new Vector2(1f, -1f))) {
-////            this.angleDeg = 315;
-//            return Direction.SOUTH_EAST;
-//        } else if (dir.equals(new Vector2(-1f, -1f))) {
-////            this.angleDeg = 225;
-//            return Direction.SOUTH_WEST;
-//        } else if (dir.equals(new Vector2(0, 1f))) {
-////            this.angleDeg = 90;
-//            return Direction.NORTH;
-//        } else if (dir.equals(new Vector2(0, -1f))) {
-////            this.angleDeg = 270;
-//            return Direction.SOUTH;
-//        } else if (dir.equals(new Vector2(1f, 0))) {
-////            this.angleDeg = 0;
-//            return Direction.EAST;
-//        } else if (dir.equals(new Vector2(-1f, 0))) {
-////            this.angleDeg = 180;
-//            return Direction.WEST;
-//        } else {
-//            throw new IllegalArgumentException("Direction argument was incorrect");
-//        }
-    }
-
     public void onDoorEntry(){
         isInDoor++;
     }
@@ -221,6 +144,9 @@ public class WorldController {
     public void setPaused(boolean paused) {
         this.paused = paused;
         gameView.setPause(paused);
+        if(!paused){
+            activateInputProcessor();
+        }
     }
 
 

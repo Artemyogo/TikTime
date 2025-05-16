@@ -17,6 +17,7 @@ public class GameScreen extends ScreenAdapter {
 
     @Override
     public void show() {
+        worldController.activateInputProcessor();
         gameView.show();
     }
 

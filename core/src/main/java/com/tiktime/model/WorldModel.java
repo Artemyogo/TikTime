@@ -97,10 +97,6 @@ public class WorldModel {
         return new Array<>(enemies);
     }
 
-    public void updateMovementDirection(Vector2 movementDirection, float delta){
-        player.move(movementDirection, delta);
-    }
-
     public World getWorld() {
         return world;
     }
@@ -120,5 +116,9 @@ public class WorldModel {
 
     public float distance(Vector2 start, Vector2 end){
         return (float) Math.hypot(start.x - end.x, start.y - end.y);
+    }
+
+    public PlayerModel getPlayer(){
+        return player;
     }
 }

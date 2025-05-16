@@ -327,4 +327,8 @@ public class GameView {
         hudShape.dispose();
         hud.dispose();
     }
+
+    public PlayerView getPlayerView() {
+        return player;
+    }
 }
