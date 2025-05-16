@@ -1,5 +1,6 @@
 package com.tiktime.controller;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.physics.box2d.*;
 import com.tiktime.model.enums.Category;
 
@@ -60,6 +61,11 @@ public class CollisionController implements ContactListener {
 
     @Override
     public void preSolve(Contact contact, Manifold manifold) {
+        Masks masks = new Masks(contact);
+        if(masks.check(Category.ENEMY_RUSHER, Category.PLAYER) || masks.check(Category.ENEMY_RUSHER, Category.ENEMY_RUSHER)){
+            contact.setEnabled(false);
+            worldController.pushApart(contact.getFixtureA().getBody(), contact.getFixtureB().getBody());
+        }
 
     }
 

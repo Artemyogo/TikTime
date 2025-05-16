@@ -70,7 +70,7 @@ public class WorldController {
             return;
         }
 
-        if (isInDoor == 1 && Gdx.input.isKeyPressed(Input.Keys.E)) {
+        if (isInDoor > 1 && Gdx.input.isKeyPressed(Input.Keys.E)) {
 //            Gdx.app.log("WorldController", "Entered door");
             isInDoor = 0;
             changeMap();
@@ -226,6 +226,15 @@ public class WorldController {
 
     public void goToMenu() {
         game.setScreen(new MenuScreen(game));
+    }
+
+    public void pushApart(Body A, Body B) {
+        float pushMagnitude = 0.3f;
+        Vector2 directionAtoB = B.getPosition().cpy().sub(A.getPosition()).nor();
+        Vector2 impulseForA = directionAtoB.cpy().scl(-pushMagnitude);
+        A.applyLinearImpulse(impulseForA, A.getWorldCenter(), true);
+        Vector2 impulseForB = directionAtoB.cpy().scl(pushMagnitude);
+        B.applyLinearImpulse(impulseForB, B.getWorldCenter(), true);
     }
 
 
