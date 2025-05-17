@@ -25,11 +25,9 @@ public abstract class WeaponView extends AnimatedEntityView {
 
         TextureRegion frame = animManager.getCurrentFrame();
         boolean flip = needFlipTexture();
-        float xn = x;
-        float yn = y;
         batch.draw(frame,
-            xn - width / 2f,
-            yn - height / 2f,
+            x - width / 2f,
+            y - height / 2f,
             width / 2f + offsetX,
             height / 2f + offsetY,
             width,
@@ -39,7 +37,7 @@ public abstract class WeaponView extends AnimatedEntityView {
             rotationDeg
         );
 
-        Gdx.app.log("WeapobView", String.valueOf(rotationDeg));
+//        Gdx.app.log("WeaponView", String.valueOf(rotationDeg));
     }
 
     @Override

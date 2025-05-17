@@ -10,9 +10,9 @@ public class PlayerView extends LivingEntityView {
     public static final String atlasPath = "animations/player_1.atlas";
     private WeaponView weapon;
 
-    public PlayerView(float x, float y, float width, float height, Direction direction, LivingEntityState state, WeaponType weapon,
+    public PlayerView(float x, float y, float width, float height, int curHealth, int maxHealth, Direction direction, LivingEntityState state, WeaponType weapon,
                       SpriteBatch batch) {
-        super(x, y, width, height, direction, state, atlasPath, batch);
+        super(x, y, width, height, curHealth, maxHealth, direction, state, atlasPath, batch);
         this.weapon = WeaponFactory.createWeapon(weapon, x, y, batch);
         loadAnimations();
         updateAnimation();

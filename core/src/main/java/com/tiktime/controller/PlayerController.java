@@ -23,6 +23,8 @@ public class PlayerController {
             player.getPosition().y,
             entityData.getWidth(),
             entityData.getHeight(),
+            entityData.getCurrentHealth(),
+            entityData.getMaxHealth(),
             Direction.EAST,
             LivingEntityState.IDLE,
             WeaponType.AK47
@@ -45,7 +47,6 @@ public class PlayerController {
             }
             gameView.setPlayerState(LivingEntityState.RUNNING);
         }
-        gameView.setPlayerCurHealth(player.getData().getCurrentHealth());
     }
 
 }
