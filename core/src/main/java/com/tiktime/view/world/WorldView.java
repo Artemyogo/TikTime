@@ -30,8 +30,8 @@ import java.util.Map;
 import static com.tiktime.view.consts.ScreenConstants.PPM;
 
 public class WorldView implements Pausable, Renderable, Disposable {
-//    private boolean debug = true;
-        private final boolean debug = false;
+//    private final boolean debug = true;
+    private final boolean debug = false;
     private boolean paused = true;
     private final OrthographicCamera worldCamera;
     private final SpriteBatch worldBatch;
@@ -168,8 +168,7 @@ public class WorldView implements Pausable, Renderable, Disposable {
     @Override
     public void setPause(boolean paused) {
         this.paused = paused;
-        ArrayList<Pausable> allPausables = new ArrayList<>(enemyViews.values());
-        allPausables.add(playerView);
+        ArrayList<? extends Pausable> allPausables = getLivingEntities();
         allPausables.forEach(p -> p.setPause(paused));
     }
 

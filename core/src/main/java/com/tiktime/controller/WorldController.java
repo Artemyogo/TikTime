@@ -68,7 +68,11 @@ public class WorldController {
 
     public void updateMousePosition(int x, int y) {
         Vector3 mousePosition = new Vector3(x, y, 0);
-        gameView.updatePlayerWeaponRotation(mousePosition, getWeaponPosition(worldModel.getPlayerPosition().x, worldModel.getPlayerPosition().y, WeaponType.AK47));
+
+        gameView.updatePlayerWeaponRotation(mousePosition,
+            getWeaponPosition(
+                worldModel.getPlayer().getBody().getPosition(),
+                WeaponType.AK47));
     }
 
     public void update(float delta) {
@@ -118,17 +122,19 @@ public class WorldController {
         }
     }
 
-    Vector3 getWeaponPosition(float x, float y, WeaponType weapon) {
+    Vector3 getWeaponPosition(Vector2 playerPosition, WeaponType weapon) {
         GameConfig.WeaponConfig weaponConfig = GameConfig.getInstance().getWeaponConfig(weapon);
         if (weaponConfig == null) {
             throw new RuntimeException("WeaponConfig is null");
         }
 
-        float xn = x + weaponConfig.getOffsetX();
-        float yn = y + weaponConfig.getOffsetY();
-        float width = weaponConfig.getWidth();
-        float height = weaponConfig.getHeight();
-        return new Vector3(xn - width / 2f, yn - height / 2f, 0);
+        return new Vector3(playerPosition.x, playerPosition.y + 0.2f, 0f);
+//        float xn = playerPosition.x + weaponConfig.getOffsetX();
+//        float yn = playerPosition.y + weaponConfig.getOffsetY();
+//        return new Vector3(xn, yn, 0f);
+//        float width = weaponConfig.getWidth();
+//        float height = weaponConfig.getHeight();
+//        return new Vector3(xn - width / 2f, yn - height / 2f, 0);
     }
 
     public void onDoorEntry(){

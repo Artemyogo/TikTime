@@ -1,5 +1,6 @@
 package com.tiktime.view.enteties.weapons;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.tiktime.view.enteties.livingenteties.AnimatedEntityView;
@@ -9,14 +10,14 @@ public abstract class WeaponView extends AnimatedEntityView {
     protected final float baseAttackTicks = 100;
     protected float curAttackTicks = 0;
     protected boolean isAttack = false;
-    protected final float weaponOffsetX; // Смещение вправо
-    protected final float weaponOffsetY; // Смещение вверх
+    protected float offsetX;
+    protected float offsetY;
 
-    protected WeaponView(float width, float height, float x, float y, float weaponOffsetX, float weaponOffsetY, String atlasPath,
+    protected WeaponView(float width, float height, float x, float y, float offsetX, float offsetY, String atlasPath,
                          SpriteBatch batch) {
         super(x, y, width, height, atlasPath, batch);
-        this.weaponOffsetX = weaponOffsetX;
-        this.weaponOffsetY = weaponOffsetY;
+        this.offsetX = offsetX;
+        this.offsetY = offsetY;
     }
 
     public void render(float delta) {
@@ -24,29 +25,21 @@ public abstract class WeaponView extends AnimatedEntityView {
 
         TextureRegion frame = animManager.getCurrentFrame();
         boolean flip = needFlipTexture();
-        float xn = x + weaponOffsetX;
-        float yn = y + weaponOffsetY;
+        float xn = x;
+        float yn = y;
         batch.draw(frame,
             xn - width / 2f,
             yn - height / 2f,
-            getOriginX(xn),
-            getOriginY(yn),
+            width / 2f + offsetX,
+            height / 2f + offsetY,
             width,
             height,
             1,
             flip ? -1 : 1,
             rotationDeg
         );
-    }
 
-    public float getOriginX(float x) {
-//        return x - width / 2f;
-        return width / 2f;
-    }
-
-    public float getOriginY(float y) {
-//        return y - height / 2f;
-        return height / 2f;
+        Gdx.app.log("WeapobView", String.valueOf(rotationDeg));
     }
 
     @Override
@@ -78,7 +71,6 @@ public abstract class WeaponView extends AnimatedEntityView {
     }
 
     private boolean needFlipTexture() {
-//        return false;
         return rotationDeg > 90 || rotationDeg < -90;
     }
 }
