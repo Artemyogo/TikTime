@@ -48,15 +48,15 @@ public class WorldController {
         gameView.setWorld(worldModel.getWorld());
         gameView.setMapRenderer(map);
 
-        EntityData entityData = worldModel.getPlayerData();
-
         playerController = new PlayerController(worldModel.getPlayer(), gameView);
 
-        gameView.setHud(entityData.getCurrentHealth(), entityData.getMaxHealth(), PlayerModel.CurrentStats.getCoins());
+        gameView.setHud(PlayerModel.CurrentStats.getCoins());
         Array<EnemyModel> enemies = worldModel.getEnemies();
         for (EnemyModel e: enemies) {
             gameView.addEnemy(e.getBody().getPosition().x, e.getBody().getPosition().y,
-                e.getData().getWidth(), e.getData().getHeight(), e.getId(),
+                e.getData().getWidth(), e.getData().getHeight(),
+                e.getData().getCurrentHealth(), e.getData().getMaxHealth(),
+                e.getId(),
                 (Math.random() < 0.5 ? Direction.EAST : Direction.WEST),
                 LivingEntityState.IDLE, EnemyType.RUSHER);
         }
@@ -96,7 +96,7 @@ public class WorldController {
             gameView.setEnemyCoordinates(e.getBody().getPosition().x,
                 e.getBody().getPosition().y,
                 e.getId());
-            if (!e.getDirection().equals(Vector2.Zero)) {
+            if (e.getDirection().x != 0) {
                 gameView.setEnemyDirection(Direction.getDirection(e.getDirection()), e.getId());
             }
         });
@@ -116,7 +116,9 @@ public class WorldController {
         Array<EnemyModel> enemies = worldModel.getEnemies();
         for (EnemyModel e: enemies) {
             gameView.addEnemy(e.getBody().getPosition().x, e.getBody().getPosition().y,
-                e.getData().getWidth(), e.getData().getHeight(), e.getId(),
+                e.getData().getWidth(), e.getData().getHeight(),
+                e.getData().getCurrentHealth(), e.getData().getMaxHealth(),
+                e.getId(),
                 (Math.random() < 0.5 ? Direction.EAST : Direction.WEST),
                 LivingEntityState.IDLE, EnemyType.RUSHER);
         }

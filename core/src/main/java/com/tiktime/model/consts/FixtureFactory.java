@@ -48,6 +48,10 @@ public class FixtureFactory {
             false);
     }
 
+//    public static FixtureDef getBulletFixtureDef(){
+//        return getFixture(GameConfig.getInstance().getBulletConfig(), )
+//    }
+
 //    public static FixtureDef getEntityFixtureDef(Category category){
 //        return getFixture(GameConfig.getInstance().getEntityConfig(), category.getBits(),
 //            Category.combine(Category.PLAYER, Category.BULLET, Category.DOOR, Category.DYNAMITE, Category.ENEMY, Category.WALL),

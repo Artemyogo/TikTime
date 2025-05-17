@@ -8,9 +8,10 @@ import com.tiktime.view.enteties.livingenteties.LivingEntityView;
 public abstract class EnemyView extends LivingEntityView {
     private final int id;
     private final EnemyType enemyType;
-    public EnemyView(float x, float y, float width, float height, int id, Direction direction, LivingEntityState livingEntityState,
+    public EnemyView(float x, float y, float width, float height, int curHealth, int maxHealth,
+                     int id, Direction direction, LivingEntityState livingEntityState,
                      EnemyType enemyType, String atlasPath, SpriteBatch batch) {
-        super(x, y, width, height, direction, livingEntityState, atlasPath, batch);
+        super(x, y, width, height, curHealth, maxHealth, direction, livingEntityState, atlasPath, batch);
         this.enemyType = enemyType;
         this.id = id;
     }
