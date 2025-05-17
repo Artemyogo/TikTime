@@ -154,6 +154,7 @@ public class GameView implements Pausable, Renderable, Disposable {
         dispose();
     }
 
+    @Override
     public void dispose() {
         worldView.dispose();
         hudView.dispose();

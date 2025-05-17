@@ -5,19 +5,20 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Json;
 import com.tiktime.view.enteties.weapons.WeaponType;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public final class GameConfig {
     private static final String CONFIG_FILE_PATH = "config.json";
     private static GameConfig instance;
 
     private final PlayerConfig playerConfig;
-    private final WallConfig wallConfig;
-    private final FloorConfig floorConfig;
     private final MarksmanEnemyConfig marksmanEnemyConfig;
     private final AnimanEnemyConfig animanEnemyConfig;
     private final RusherEnemyConfig rusherEnemyConfig;
     private final Ak47WeaponConfig ak47WeaponConfig;
     private final EntityConfig entityConfig;
-    private final DynamiteConfig dynamiteConfig;
+    private final Map<StaticObjectType, StaticObjectConfig<?>> staticObjectConfigs;
 
     public static GameConfig getInstance() {
         if (instance == null) {
@@ -62,15 +63,21 @@ public final class GameConfig {
         return ak47WeaponConfig;
     }
 
-    public WallConfig getWallConfig() {
-        return wallConfig;
+    public enum StaticObjectType {
+        WALL,
+        FLOOR,
+        DYNAMITE
     }
 
-    public FloorConfig getFloorConfig() {
-        return floorConfig;
-    }
+    public StaticObjectConfig<?> getStaticObjectConfig(StaticObjectType type) {
+        if (type == null) throw new IllegalArgumentException("Type cannot be null");
 
-    public DynamiteConfig getDynamiteConfig() { return dynamiteConfig; }
+        StaticObjectConfig<?> config = staticObjectConfigs.get(type);
+        if (config == null) {
+            throw new RuntimeException("No config found");
+        }
+        return config;
+    }
 
     private GameConfig() {
         FileHandle configFile = Gdx.files.internal(CONFIG_FILE_PATH);
@@ -98,23 +105,25 @@ public final class GameConfig {
 //        this.rusherEnemyConfig = new RusherEnemyConfig(configData.rusher);
         this.ak47WeaponConfig = new Ak47WeaponConfig(configData.weapon);
 
-        // Initialize wall and floor configs - use default values if not present
+        this.staticObjectConfigs = new HashMap<>();
+
+        // Initialize wall, floor and dynamite configs - use default values if not present
         if (configData.wall != null) {
-            this.wallConfig = new WallConfig(configData.wall);
+            this.staticObjectConfigs.put(StaticObjectType.WALL, new StaticObjectConfig<>(configData.wall));
         } else {
-            this.wallConfig = new WallConfig(new WallData());
+            this.staticObjectConfigs.put(StaticObjectType.WALL, new StaticObjectConfig<>(new WallData()));
         }
 
         if (configData.floor != null) {
-            this.floorConfig = new FloorConfig(configData.floor);
+            this.staticObjectConfigs.put(StaticObjectType.FLOOR, new StaticObjectConfig<>(configData.floor));
         } else {
-            this.floorConfig = new FloorConfig(new FloorData());
+            this.staticObjectConfigs.put(StaticObjectType.FLOOR, new StaticObjectConfig<>(new FloorData()));
         }
 
         if (configData.dynamite != null) {
-            this.dynamiteConfig = new DynamiteConfig(configData.dynamite);
+            this.staticObjectConfigs.put(StaticObjectType.DYNAMITE, new StaticObjectConfig<>(configData.dynamite));
         } else {
-            this.dynamiteConfig = new DynamiteConfig(new DynamiteData());
+            this.staticObjectConfigs.put(StaticObjectType.DYNAMITE, new StaticObjectConfig<>(new DynamiteData()));
         }
 
     }
@@ -155,19 +164,8 @@ public final class GameConfig {
         }
     }
 
-    public static final class WallConfig extends PhysicsConfig {
-        private WallConfig(WallData data) {
-            super(data);
-        }
-    }
-    public static final class DynamiteConfig extends PhysicsConfig {
-        private DynamiteConfig(DynamiteData data) {
-            super(data);
-        }
-    }
-
-    public static final class FloorConfig extends PhysicsConfig {
-        private FloorConfig(FloorData data) {
+    public static final class StaticObjectConfig<D extends PhysicsData> extends PhysicsConfig {
+        private StaticObjectConfig(D data) {
             super(data);
         }
     }
@@ -335,11 +333,11 @@ public final class GameConfig {
         protected float offsetY;
     }
 
-    private static final class Ak47WeaponData extends WeaponData { }
+    private static final class Ak47WeaponData extends WeaponData {}
 
-    private static class WallData extends PhysicsData { }
+    private static class WallData extends PhysicsData {}
 
-    private static class FloorData extends PhysicsData { }
+    private static class FloorData extends PhysicsData {}
 
     private static class DynamiteData extends PhysicsData {}
 
