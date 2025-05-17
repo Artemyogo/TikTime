@@ -2,6 +2,7 @@ package com.tiktime.view.world;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -18,7 +19,7 @@ import com.tiktime.model.enums.UpgradeType;
 import java.util.EnumMap;
 import java.util.Map;
 
-public class UpgradeView implements Disposable {
+public class UpgradeView implements Disposable, Renderable {
     private final Stage stage;
     private final Skin skin;
     private final BitmapFont font;
@@ -133,8 +134,9 @@ public class UpgradeView implements Disposable {
         }
     }
 
+    @Override
     public void render(float delta) {
-        Gdx.gl.glClear(Gdx.gl.GL_COLOR_BUFFER_BIT);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.act(delta);
         stage.draw();
     }

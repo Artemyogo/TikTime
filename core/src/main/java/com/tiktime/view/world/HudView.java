@@ -45,6 +45,7 @@ public class HudView implements Renderable, Disposable {
         this.font = new BitmapFont();
     }
 
+    @Override
     public void dispose() {
         font.dispose();
         coinTexture.dispose();

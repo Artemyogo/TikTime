@@ -1,6 +1,6 @@
 package com.tiktime.view.consts;
 
-public final class ScreenConstants {
+public final class  ScreenConstants {
     public static final float VIRTUAL_WIDTH = 1280;
     public static final float VIRTUAL_HEIGHT = 720;
 
