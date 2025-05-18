@@ -27,16 +27,8 @@ public class WorldModel {
 
     public void update(float delta){
         world.step(delta, velocityIterations, positionIterations);
-        /// TODO FIX IT
         for(EnemyModel enemy : enemies){
-            InPathRaycast callback = new InPathRaycast(player.getBody().getUserData());
-            world.rayCast(callback, enemy.getBody().getPosition(), player.getBody().getPosition());
-            if(callback.isInPath()){
-                Vector2 vec = new Vector2(getPlayerPosition()).sub(enemy.getPosition()).nor();
-                vec.x *= delta;
-                vec.y *= delta;
-                enemy.move(vec, delta);
-            }
+            enemy.chasePlayer(delta, player, world);
         }
     }
 

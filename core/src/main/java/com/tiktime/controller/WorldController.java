@@ -10,6 +10,8 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.utils.Array;
 import com.tiktime.Main;
 import com.tiktime.controller.utils.MapSelector;
+import com.tiktime.controller.utils.MapSelectorStrategy;
+import com.tiktime.controller.utils.RandomSelectorStrategy;
 import com.tiktime.model.WorldModel;
 import com.tiktime.model.consts.GameConfig;
 import com.tiktime.model.gameobjects.EnemyModel;
@@ -28,20 +30,22 @@ import java.util.List;
 
 public class WorldController {
     private final Main game;
-    private GameView gameView;
+    private final GameView gameView;
     private WorldModel worldModel;
-    private MapSelector mapSelector;
+    private final MapSelector mapSelector;
+    private final MapSelectorStrategy selectorStrategy = new RandomSelectorStrategy();
     private boolean paused = false;
     private int isInDoor = 0;
-    private List<Body> toDelete = new ArrayList<>();
-    private WorldInputProcessor inputProcessor = new WorldInputProcessor(this);
-    private PlayerController playerController;
+    private final List<Body> toDelete = new ArrayList<>();
+    private final WorldInputProcessor inputProcessor = new WorldInputProcessor(this);
+    private final PlayerController playerController;
+    private final EnemyController enemyController;
 
     public WorldController(Main game, GameView gameView) {
         this.game = game;
         this.gameView = gameView;
         this.mapSelector = new MapSelector();
-        TiledMap map = mapSelector.getMap();
+        TiledMap map = mapSelector.getMap(selectorStrategy);
         this.worldModel = new WorldModel(map, new CollisionController(this));
         gameView.setController(this);
 
@@ -53,13 +57,7 @@ public class WorldController {
         playerController = new PlayerController(worldModel.getPlayer(), gameView);
 
         gameView.setHud(entityData.getCurrentHealth(), entityData.getMaxHealth(), PlayerModel.CurrentStats.getCoins());
-        Array<EnemyModel> enemies = worldModel.getEnemies();
-        for (EnemyModel e: enemies) {
-            gameView.addEnemy(e.getBody().getPosition().x, e.getBody().getPosition().y,
-                e.getData().getWidth(), e.getData().getHeight(), e.getId(),
-                (Math.random() < 0.5 ? Direction.EAST : Direction.WEST),
-                LivingEntityState.IDLE, EnemyType.RUSHER);
-        }
+        enemyController = new EnemyController(worldModel, gameView);
     }
 
     public void activateInputProcessor() {
@@ -85,41 +83,24 @@ public class WorldController {
 
         playerController.update(delta, direction);
         worldModel.update(delta);
+        enemyController.update(delta);
 
-        for(Body i : toDelete){
+        for(Body i : toDelete)
             worldModel.getWorld().destroyBody(i);
-        }
         toDelete.clear();
 
-        Array<EnemyModel> enemies = worldModel.getEnemies();
-        enemies.forEach(e -> {
-            gameView.setEnemyCoordinates(e.getBody().getPosition().x,
-                e.getBody().getPosition().y,
-                e.getId());
-            if (!e.getDirection().equals(Vector2.Zero)) {
-                gameView.setEnemyDirection(Direction.getDirection(e.getDirection()), e.getId());
-            }
-        });
     }
 
     public void changeMap(){
         isInDoor = 0;
-        TiledMap map = mapSelector.getMap();
+        TiledMap map = mapSelector.getMap(selectorStrategy);
         EntityData playerData = worldModel.getPlayerData();
         this.worldModel = new WorldModel(map, new CollisionController(this), playerData);
 
         gameView.setWorld(worldModel.getWorld());
         gameView.setMapRenderer(map);
         playerController.setPlayer(worldModel.getPlayer());
-
-        gameView.clearEnemies();
-        Array<EnemyModel> enemies = worldModel.getEnemies();
-        for (EnemyModel e: enemies) {
-            gameView.addEnemy(e.getBody().getPosition().x, e.getBody().getPosition().y,
-                e.getData().getWidth(), e.getData().getHeight(), e.getId(),
-                (Math.random() < 0.5 ? Direction.EAST : Direction.WEST),
-                LivingEntityState.IDLE, EnemyType.RUSHER);
-        }
+        enemyController.setEnemies(worldModel.getEnemies());
     }
 
     Vector3 getWeaponPosition(Vector2 playerPosition, WeaponType weapon) {
@@ -129,12 +110,6 @@ public class WorldController {
         }
 
         return new Vector3(playerPosition.x, playerPosition.y + 0.2f, 0f);
-//        float xn = playerPosition.x + weaponConfig.getOffsetX();
-//        float yn = playerPosition.y + weaponConfig.getOffsetY();
-//        return new Vector3(xn, yn, 0f);
-//        float width = weaponConfig.getWidth();
-//        float height = weaponConfig.getHeight();
-//        return new Vector3(xn - width / 2f, yn - height / 2f, 0);
     }
 
     public void onDoorEntry(){
@@ -151,7 +126,7 @@ public class WorldController {
         worldModel.explosion(body.getPosition().x, body.getPosition().y, radius, force);
     }
 
-    void deleteBody(Body body){
+    public void deleteBody(Body body){
         toDelete.add(body);
     }
 
