@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.tiktime.view.ProgressBarView;
+import com.tiktime.view.enteties.livingenteties.PlayerView;
 
 import javax.swing.text.View;
 
@@ -23,15 +24,14 @@ public class HudView implements Renderable, Disposable {
     private final ShapeRenderer hudShape;
     private final SpriteBatch hudBatch;
     private final Viewport viewport;
+    private PlayerView playerView;
     ProgressBarView health;
     Texture coinTexture;
     private boolean isInDoor;
     private int coins;
 
-    public HudView(Viewport viewport, OrthographicCamera camera, int curHealth, int maxHealth, int coins) {
-        if (curHealth > maxHealth) {
-            throw new IllegalArgumentException("curHealth > maxHealth");
-        }
+    public HudView(Viewport viewport, OrthographicCamera camera, PlayerView playerView, int coins) {
+        this.playerView = playerView;
 
         this.viewport = viewport;
         this.camera = camera;
@@ -41,7 +41,7 @@ public class HudView implements Renderable, Disposable {
 
         this.coinTexture = new Texture(coinPath);
         this.coins = coins;
-        this.health = new ProgressBarView(backgroundPath, fillPath, curHealth, maxHealth);
+        this.health = new ProgressBarView(backgroundPath, fillPath, playerView.getCurHealth(), playerView.getMaxHealth());
         this.font = new BitmapFont();
     }
 
@@ -56,12 +56,10 @@ public class HudView implements Renderable, Disposable {
         this.coins = coins;
     }
 
-    public void setCurHealth(int curHealth) {
-        health.setCurValue(curHealth);
-    }
-
     @Override
     public void render(float delta) {
+        update(delta);
+
         hudBatch.setProjectionMatrix(camera.combined);
         hudShape.setProjectionMatrix(camera.combined);
 
@@ -95,6 +93,11 @@ public class HudView implements Renderable, Disposable {
             printMessageNearDoor();
         }
         hudBatch.end();
+    }
+
+    public void update(float delta) {
+        health.setCurValue(playerView.getCurHealth());
+        health.setMaxValue(playerView.getMaxHealth());
     }
 
     public void setIsInDoor(boolean isInDoor) {

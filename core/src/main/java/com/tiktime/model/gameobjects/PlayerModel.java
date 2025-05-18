@@ -33,7 +33,7 @@ public class PlayerModel extends EntityModel{
     public PlayerModel(World world, float x, float y) {
         super(EntityDataFactory.createPlayerData(),
             GameConfig.getInstance().getPlayerConfig(),
-            BodyFactory.createPlayerBody(world,x,y));
+            BodyFactory.createPlayerBody(world, x, y));
         setBody();
     }
 

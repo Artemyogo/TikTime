@@ -9,6 +9,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Disposable;
+import com.badlogic.gdx.utils.Null;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.tiktime.controller.WorldController;
@@ -61,17 +62,20 @@ public class GameView implements Pausable, Renderable, Disposable {
         worldView.setMapRenderer(map);
     }
 
-    public void setPlayer(float x, float y, float width, float height,
+    public void setPlayer(float x, float y, float width, float height, int curHealth, int maxHealth,
                           Direction direction, LivingEntityState state, WeaponType weapon) {
-        worldView.setPlayer(x, y, width, height, direction, state, weapon);
+        worldView.setPlayer(x, y, width, height, curHealth, maxHealth, direction, state, weapon);
     }
 
-    public void setHud(int curHealth, int maxHealth, int coins) {
+    public void setHud(int coins) {
+        if (worldView.getPlayerView() == null) {
+            throw new NullPointerException();
+        }
+
         hudView = new HudView(
             screenViewport,
             screenCamera,
-            curHealth,
-            maxHealth,
+            worldView.getPlayerView(),
             coins);
     }
 
@@ -89,9 +93,9 @@ public class GameView implements Pausable, Renderable, Disposable {
         hudView.setIsInDoor(isInDoor);
     }
 
-    public void addEnemy(float x, float y, float width, float height, int id, Direction direction,
+    public void addEnemy(float x, float y, float width, float height, int curHealth, int maxHealth, int id, Direction direction,
                          LivingEntityState state, EnemyType enemyType) {
-        worldView.addEnemy(x, y, width, height, id, direction, state, enemyType);
+        worldView.addEnemy(x, y, width, height, curHealth, maxHealth, id, direction, state, enemyType);
     }
 
     public void clearEnemies() {
@@ -132,10 +136,6 @@ public class GameView implements Pausable, Renderable, Disposable {
 
     public void updatePlayerWeaponRotation(Vector3 screenCoords, Vector3 weaponCoords) {
         worldView.updatePlayerWeaponRotation(screenCoords, weaponCoords);
-    }
-
-    public void setPlayerCurHealth(int curHealth) {
-        hudView.setCurHealth(curHealth);
     }
 
     public void show() {

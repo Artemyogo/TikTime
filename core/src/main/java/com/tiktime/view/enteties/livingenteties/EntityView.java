@@ -1,6 +1,5 @@
 package com.tiktime.view.enteties.livingenteties;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.tiktime.view.world.Pausable;
 import com.tiktime.view.world.Renderable;
 
