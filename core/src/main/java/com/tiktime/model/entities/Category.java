@@ -1,4 +1,4 @@
-package com.tiktime.model.enums;
+package com.tiktime.model.entities;
 
 public enum Category {
     PLAYER(0x0001),

@@ -1,11 +1,8 @@
 package com.tiktime.controller;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.math.Vector2;
-import com.tiktime.model.WorldModel;
 import com.tiktime.model.gameobjects.EntityData;
-import com.tiktime.model.gameobjects.PlayerModel;
-import com.tiktime.view.*;
+import com.tiktime.model.entities.livingenteties.PlayerModel;
 import com.tiktime.view.enteties.Direction;
 import com.tiktime.view.enteties.livingenteties.LivingEntityState;
 import com.tiktime.view.enteties.weapons.WeaponType;
@@ -17,11 +14,10 @@ public class PlayerController {
     public PlayerController(PlayerModel playerModel, GameView gameView) {
         this.player = playerModel;
         this.gameView = gameView;
-        EntityData entityData = playerModel.getData();
         gameView.setPlayer(
             player.getPosition().x,
             player.getPosition().y,
-            entityData.getWidth(),
+            playerModel.getWidth(),
             entityData.getHeight(),
             entityData.getCurrentHealth(),
             entityData.getMaxHealth(),

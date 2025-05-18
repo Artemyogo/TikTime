@@ -2,7 +2,7 @@ package com.tiktime.view.enteties.weapons;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.tiktime.model.configs.GameConfig;
+import com.tiktime.model.GameConfig;
 
 public class Ak47WeaponView extends WeaponView {
     private static String atlasPath = "animations/ak47weapon.atlas";

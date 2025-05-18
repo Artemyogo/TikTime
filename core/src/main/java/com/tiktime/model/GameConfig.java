@@ -1,4 +1,4 @@
-package com.tiktime.model.configs;
+package com.tiktime.model;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
@@ -20,6 +20,7 @@ public final class GameConfig {
     private final PhysicsConfig<WallData> wallConfig;
     private final PhysicsConfig<FloorData> floorConfig;
     private final PhysicsConfig<DynamiteData> dynamiteConfig;
+    private final BulletConfig bulletConfig;
 
     public static GameConfig getInstance() {
         if (instance == null) {
@@ -38,6 +39,10 @@ public final class GameConfig {
             default:
                 throw new IllegalArgumentException("Unknown weapon type: " + weapon);
         }
+    }
+
+    public BulletConfig getBulletConfig() {
+        return bulletConfig;
     }
 
     public EntityConfig getEntityConfig() {
@@ -89,6 +94,7 @@ public final class GameConfig {
         this.rusherEnemyConfig = new EnemyConfig<>(configData.rusher);
 //        this.rusherEnemyConfig = new RusherEnemyConfig(configData.rusher);
         this.ak47WeaponConfig = new WeaponConfig<>(configData.weapon);
+        this.bulletConfig = new BulletConfig(configData.bullet);
 
         // Initialize wall, floor and dynamite configs - use default values if not present
         if (configData.wall != null) {
@@ -184,6 +190,12 @@ public final class GameConfig {
         }
     }
 
+    public static class BulletConfig extends EntityConfig {
+        private BulletConfig(BulletData data) {
+            super(data);
+        }
+    }
+
     public static final class PlayerConfig extends EntityConfig {
         private int baseRegen;
         private PlayerConfig(PlayerData data) {
@@ -207,8 +219,7 @@ public final class GameConfig {
 
     public static final class WeaponConfig<D extends WeaponData> {
         private final int damage;
-        private final int fireRate;
-        private final float reloadTime;
+        private final float attackCooldown;
         private final float width;
         private final float height;
         private final float offsetX;
@@ -216,8 +227,7 @@ public final class GameConfig {
 
         private WeaponConfig(D data) {
             this.damage = data.damage;
-            this.fireRate = data.fireRate;
-            this.reloadTime = data.reloadTime;
+            this.attackCooldown = data.attackCooldown;
             this.width = data.width;
             this.height = data.height;
             this.offsetX = data.offsetX;
@@ -228,12 +238,8 @@ public final class GameConfig {
             return damage;
         }
 
-        public int getFireRate() {
-            return fireRate;
-        }
-
-        public float getReloadTime() {
-            return reloadTime;
+        public float getAttackCooldown() {
+            return attackCooldown;
         }
 
         public float getWidth() {
@@ -284,8 +290,7 @@ public final class GameConfig {
 
     private static class WeaponData {
         protected int damage;
-        protected int fireRate;
-        protected float reloadTime;
+        protected float attackCooldown;
         protected float width;
         protected float height;
         protected float offsetX;
@@ -300,6 +305,8 @@ public final class GameConfig {
 
     private static class DynamiteData extends PhysicsData {}
 
+    private static class BulletData extends EntityData { }
+
     private static class ConfigData {
         private PlayerData player;
         //        private MarksmanEnemyData marksman;
@@ -311,5 +318,6 @@ public final class GameConfig {
         private EntityData entity;
         private WeaponData weapon;
         private DynamiteData dynamite;
+        private BulletData bullet;
     }
 }

@@ -1,4 +1,4 @@
-package com.tiktime.model.enums;
+package com.tiktime.model.entities;
 
 import com.badlogic.gdx.math.Vector2;
 

@@ -1,0 +1,68 @@
+package com.tiktime.model.entities.livingenteties;
+
+import com.badlogic.gdx.physics.box2d.Body;
+import com.tiktime.model.GameConfig;
+import com.tiktime.model.entities.Categoriable;
+import com.tiktime.model.entities.Category;
+import com.tiktime.model.entities.components.HealthComponent;
+import com.tiktime.model.entities.components.MovementComponent;
+import com.tiktime.model.entities.weapons.WeaponModel;
+import com.tiktime.model.upgrades.UpgradeModel;
+import com.tiktime.model.upgrades.UpgradeType;
+import com.tiktime.model.GameConfig.PlayerConfig;
+import com.tiktime.model.entityfactories.EntityDataFactory;
+import com.tiktime.view.enteties.weapons.WeaponType;
+
+public class PlayerModel extends LivingEntityModel implements Weaponable, Categoriable {
+    public static class CurrentStats {
+        private static final PlayerConfig playerConfig = GameConfig.getInstance().getPlayerConfig();
+        private static final UpgradeModel upgradeModel = UpgradeModel.getInstance();
+        public static int getHealth() {
+            return upgradeModel.getUpgrade(UpgradeType.HP).getLevel() * 10 + playerConfig.getBaseHp();
+        }
+
+        public static float getSpeed() {
+            return upgradeModel.getUpgrade(UpgradeType.SPEED).getLevel() * 3 + playerConfig.getBaseSpeed();
+        }
+
+        public static float getDamage() {
+            return upgradeModel.getUpgrade(UpgradeType.DAMAGE).getLevel() * 10 + playerConfig.getBaseDamage();
+        }
+
+        public static int getCoins() {
+            return upgradeModel.getMoney();
+        }
+    }
+
+    WeaponModel weaponModel;
+    Category category;
+
+    @Override
+    public Category getCategory() {
+        return category;
+    }
+
+    @Override
+    public WeaponType getWeaponType() {
+        return weaponModel.getWeaponType();
+    }
+
+    @Override
+    public WeaponModel getWeaponModel() {
+        return weaponModel;
+    }
+
+    @Override
+    public void setWeaponModel(WeaponModel weaponModel) {
+        this.weaponModel = weaponModel;
+    }
+
+    public PlayerModel(Category category, WeaponModel weaponModel, MovementComponent movementComponent, HealthComponent healthComponent, Body body, int id) {
+        super(movementComponent, healthComponent, body, id);
+        this.weaponModel = weaponModel;
+        if (!Category.PLAYER.intercept(category.getBits()))
+            throw new IllegalArgumentException("Category intercepted by PlayerModel");
+
+        this.category = category;
+    }
+}

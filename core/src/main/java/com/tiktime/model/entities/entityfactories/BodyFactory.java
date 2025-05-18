@@ -1,4 +1,4 @@
-package com.tiktime.model.gamefactories;
+package com.tiktime.model.entities.entityfactories;
 
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -30,6 +30,10 @@ public class BodyFactory {
 
     public static Body createRusherEnemyBody(World world, float x, float y) {
         return createBody(world, BodyDefFactory.getRusherEnemyBodyDef(x, y), FixtureFactory.getRusherEnemyFixture());
+    }
+
+    public static Body createBulletBody(World world, float x, float y) {
+        return createBody(world, BodyDefFactory.getBulletBodyDef(x, y), FixtureFactory.getBulletFixture());
     }
 
     public static List<Body> createBodies(World world, TiledMapTileLayer layer, FixtureDef fixtureDef, BodyDef.BodyType bodyType) {
