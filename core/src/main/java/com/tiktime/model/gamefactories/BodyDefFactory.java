@@ -1,6 +1,7 @@
-package com.tiktime.model.consts;
+package com.tiktime.model.gamefactories;
 
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.tiktime.model.configs.GameConfig;
 
 public class BodyDefFactory {
     public static BodyDef getBodyDef(float x, float y, BodyDef.BodyType bodyType, float width, float height){
@@ -13,15 +14,15 @@ public class BodyDefFactory {
 
     public static BodyDef getWallBodyDef(float x, float y){
         return getBodyDef(x, y, BodyDef.BodyType.StaticBody,
-            GameConfig.getInstance().getStaticObjectConfig(GameConfig.StaticObjectType.WALL).getWidth(),
-            GameConfig.getInstance().getStaticObjectConfig(GameConfig.StaticObjectType.WALL).getHeight()
+            GameConfig.getInstance().getWallConfig().getWidth(),
+            GameConfig.getInstance().getWallConfig().getHeight()
             );
     }
 
     public static BodyDef getDoorBodyDef(float x, float y) {
         return getBodyDef(x, y, BodyDef.BodyType.StaticBody,
-            GameConfig.getInstance().getStaticObjectConfig(GameConfig.StaticObjectType.FLOOR).getWidth(),
-            GameConfig.getInstance().getStaticObjectConfig(GameConfig.StaticObjectType.FLOOR).getHeight()
+            GameConfig.getInstance().getFloorConfig().getWidth(),
+            GameConfig.getInstance().getFloorConfig().getHeight()
             );
     }
 
