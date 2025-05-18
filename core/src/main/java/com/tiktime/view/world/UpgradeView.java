@@ -12,9 +12,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.tiktime.controller.UpgradeController;
-import com.tiktime.model.Upgrade;
-import com.tiktime.model.UpgradeManager;
-import com.tiktime.model.enums.UpgradeType;
+import com.tiktime.model.upgrades.Upgrade;
+import com.tiktime.model.upgrades.UpgradeManager;
+import com.tiktime.model.upgrades.UpgradeType;
 
 import java.util.EnumMap;
 import java.util.Map;

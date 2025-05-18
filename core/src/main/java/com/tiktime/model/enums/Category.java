@@ -2,6 +2,7 @@ package com.tiktime.model.enums;
 
 public enum Category {
     PLAYER(0x0001),
+    FLOOR(0x0002),
     WALL(0x0004),
     BULLET(0x0008),
     DYNAMITE(0x0010),

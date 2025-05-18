@@ -1,12 +1,10 @@
-package com.tiktime.model.consts;
+package com.tiktime.model.gamefactories;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
-import com.tiktime.model.enums.Category;
 
 import java.util.ArrayList;
 import java.util.List;

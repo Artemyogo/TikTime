@@ -1,9 +1,7 @@
 package com.tiktime.model.gameobjects;
 
 import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.World;
-import com.tiktime.model.consts.GameConfig;
-import com.tiktime.model.enums.Category;
+import com.tiktime.model.configs.GameConfig;
 
 public abstract class EnemyModel extends EntityModel {
     public static int idNext = 0;

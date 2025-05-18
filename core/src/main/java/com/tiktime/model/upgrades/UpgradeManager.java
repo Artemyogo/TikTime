@@ -1,6 +1,4 @@
-package com.tiktime.model;
-
-import com.tiktime.model.enums.UpgradeType;
+package com.tiktime.model.upgrades;
 
 import java.util.ArrayList;
 import java.util.Comparator;
