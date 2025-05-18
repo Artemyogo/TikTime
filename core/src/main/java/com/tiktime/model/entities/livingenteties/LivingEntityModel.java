@@ -12,8 +12,9 @@ public abstract class LivingEntityModel extends EntityModel implements Movable, 
     MovementComponent movementComponent;
     HealthComponent healthComponent;
 
-    public LivingEntityModel(MovementComponent movementComponent, HealthComponent healthComponent, Body body, int id) {
-        super(body, id);
+    public LivingEntityModel(MovementComponent movementComponent, HealthComponent healthComponent,
+                             Body body, float width, float height, int id) {
+        super(body, width, height, id);
         this.movementComponent = movementComponent;
         this.healthComponent = healthComponent;
     }

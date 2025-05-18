@@ -10,7 +10,6 @@ import com.tiktime.model.entities.weapons.WeaponModel;
 import com.tiktime.model.upgrades.UpgradeModel;
 import com.tiktime.model.upgrades.UpgradeType;
 import com.tiktime.model.GameConfig.PlayerConfig;
-import com.tiktime.model.entityfactories.EntityDataFactory;
 import com.tiktime.view.enteties.weapons.WeaponType;
 
 public class PlayerModel extends LivingEntityModel implements Weaponable, Categoriable {
@@ -57,8 +56,9 @@ public class PlayerModel extends LivingEntityModel implements Weaponable, Catego
         this.weaponModel = weaponModel;
     }
 
-    public PlayerModel(Category category, WeaponModel weaponModel, MovementComponent movementComponent, HealthComponent healthComponent, Body body, int id) {
-        super(movementComponent, healthComponent, body, id);
+    public PlayerModel(Category category, WeaponModel weaponModel, MovementComponent movementComponent,
+                       HealthComponent healthComponent, Body body, float width, float height, int id) {
+        super(movementComponent, healthComponent, body, width, height, id);
         this.weaponModel = weaponModel;
         if (!Category.PLAYER.intercept(category.getBits()))
             throw new IllegalArgumentException("Category intercepted by PlayerModel");

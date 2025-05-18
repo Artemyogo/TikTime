@@ -1,5 +1,6 @@
 package com.tiktime.model.entities.entityfactories;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.tiktime.model.GameConfig;
@@ -33,6 +34,8 @@ public class EntityFactory {
             movementComponent,
             healthComponent,
             BodyFactory.createPlayerBody(world, x, y),
+            playerConfig.getWidth(),
+            playerConfig.getHeight(),
             0
         );
     }
@@ -53,7 +56,9 @@ public class EntityFactory {
             Category.ENEMY_RUSHER,
             movementComponent,
             healthComponent,
-            BodyFactory.createRusherEnemyBody(world, x, y)
+            BodyFactory.createRusherEnemyBody(world, x, y),
+            rusherConfig.getWidth(),
+            rusherConfig.getHeight()
         );
     }
 

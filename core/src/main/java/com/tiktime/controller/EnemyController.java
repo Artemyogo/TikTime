@@ -3,7 +3,7 @@ package com.tiktime.controller;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.tiktime.model.WorldModel;
-import com.tiktime.model.gameobjects.EnemyModel;
+import com.tiktime.model.entities.livingenteties.EnemyModel;
 import com.tiktime.view.enteties.Direction;
 import com.tiktime.view.enteties.livingenteties.LivingEntityState;
 import com.tiktime.view.enteties.livingenteties.enemies.EnemyType;
@@ -31,7 +31,9 @@ public class EnemyController {
         this.enemies = enemies;
         for (EnemyModel e : enemies) {
             gameView.addEnemy(e.getBody().getPosition().x, e.getBody().getPosition().y,
-                e.getData().getWidth(), e.getData().getHeight(), e.getId(),
+                e.getWidth(), e.getHeight(),
+                e.getCurrentHealth(), e.getMaxHealth(),
+                e.getId(),
                 (Math.random() < 0.5 ? Direction.EAST : Direction.WEST),
                 LivingEntityState.IDLE, EnemyType.RUSHER);
         }

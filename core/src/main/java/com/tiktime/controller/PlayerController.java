@@ -1,7 +1,6 @@
 package com.tiktime.controller;
 
 import com.badlogic.gdx.math.Vector2;
-import com.tiktime.model.gameobjects.EntityData;
 import com.tiktime.model.entities.livingenteties.PlayerModel;
 import com.tiktime.view.enteties.Direction;
 import com.tiktime.view.enteties.livingenteties.LivingEntityState;
@@ -18,9 +17,9 @@ public class PlayerController {
             player.getPosition().x,
             player.getPosition().y,
             playerModel.getWidth(),
-            entityData.getHeight(),
-            entityData.getCurrentHealth(),
-            entityData.getMaxHealth(),
+            playerModel.getHeight(),
+            playerModel.getCurrentHealth(),
+            playerModel.getMaxHealth(),
             Direction.EAST,
             LivingEntityState.IDLE,
             WeaponType.AK47
@@ -32,7 +31,7 @@ public class PlayerController {
     }
 
     void update(float delta, Vector2 direction) {
-        player.move(direction, delta);
+        player.setDirectionAndMove(direction, delta);
         Vector2 playerPosition = player.getPosition();
         gameView.setPlayerCoordinates(playerPosition.x, playerPosition.y);
         if (direction.equals(Vector2.Zero)) {
