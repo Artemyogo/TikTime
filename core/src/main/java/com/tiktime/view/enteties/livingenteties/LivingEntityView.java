@@ -5,16 +5,17 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.tiktime.view.enteties.Direction;
 
-public abstract class LivingEntityView extends AnimatedEntityView {
+public abstract class LivingEntityView extends HealthEntityView {
     protected Direction direction;
     protected LivingEntityState state;
     protected final float baseAttackedTicks = 100;
     protected float curAttackedTicks = 0;
     boolean isAttacked = false;
 
-    protected LivingEntityView(float x, float y, float width, float height, Direction direction, LivingEntityState state, String atlasPath,
+    protected LivingEntityView(float x, float y, float width, float height, int curHealth, int maxHealth,
+                               Direction direction, LivingEntityState state, String atlasPath,
                                SpriteBatch batch) {
-        super(x, y, width, height, atlasPath, batch);
+        super(x, y, width, height, curHealth, maxHealth, atlasPath, batch);
         this.direction = direction;
         this.state = state;
     }

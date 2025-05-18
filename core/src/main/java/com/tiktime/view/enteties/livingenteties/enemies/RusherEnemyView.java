@@ -6,9 +6,10 @@ import com.tiktime.view.enteties.livingenteties.LivingEntityState;
 
 public class RusherEnemyView extends EnemyView {
     public static final String atlasPath = "animations/rusher.atlas";
-    public RusherEnemyView(float x, float y, float width, float height, int id, Direction direction, LivingEntityState livingEntityState,
+    public RusherEnemyView(float x, float y, float width, float height, int curHealth, int maxHealth,
+                           int id, Direction direction, LivingEntityState livingEntityState,
                            SpriteBatch batch) {
-        super(x, y, width, height, id, direction, livingEntityState, EnemyType.RUSHER, atlasPath, batch);
+        super(x, y, width, height, curHealth, maxHealth, id, direction, livingEntityState, EnemyType.RUSHER, atlasPath, batch);
         loadAnimations();
         updateAnimation();
     }

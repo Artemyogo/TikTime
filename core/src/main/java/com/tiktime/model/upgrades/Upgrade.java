@@ -1,6 +1,4 @@
-package com.tiktime.model;
-
-import com.tiktime.model.enums.UpgradeType;
+package com.tiktime.model.upgrades;
 
 public class Upgrade {
     private int level;

@@ -1,11 +1,12 @@
-package com.tiktime.model.consts;
+package com.tiktime.model.gamefactories;
 
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.tiktime.model.configs.GameConfig;
 import com.tiktime.model.enums.Category;
 
 public class FixtureFactory {
-    private static FixtureDef getFixture(GameConfig.PhysicsConfig config, short categoryBits, short maskBits, boolean isSensor){
+    private static FixtureDef getFixture(GameConfig.PhysicsConfig<?> config, short categoryBits, short maskBits, boolean isSensor){
         PolygonShape shape = new PolygonShape();
         shape.setAsBox(config.getWidth() / 2, config.getHeight() / 2);
 
@@ -23,15 +24,15 @@ public class FixtureFactory {
         return fixtureDef;
     }
     public static FixtureDef getDoorFixture() {
-        return getFixture(GameConfig.getInstance().getStaticObjectConfig(GameConfig.StaticObjectType.FLOOR), Category.DOOR.getBits(), Category.PLAYER.getBits(), true);
+        return getFixture(GameConfig.getInstance().getFloorConfig(), Category.DOOR.getBits(), Category.PLAYER.getBits(), true);
     }
     public static FixtureDef getWallFixture(){
-        return getFixture(GameConfig.getInstance().getStaticObjectConfig(GameConfig.StaticObjectType.WALL),
+        return getFixture(GameConfig.getInstance().getWallConfig(),
             Category.WALL.getBits(),
             Category.combine(Category.PLAYER, Category.BULLET, Category.ENEMY), false);
     }
     public static FixtureDef getDynamiteFixture(){
-        return getFixture(GameConfig.getInstance().getStaticObjectConfig(GameConfig.StaticObjectType.DYNAMITE), Category.DYNAMITE.getBits(),
+        return getFixture(GameConfig.getInstance().getDynamiteConfig(), Category.DYNAMITE.getBits(),
             Category.combine(Category.PLAYER, Category.ENEMY), false);
     }
 
@@ -47,6 +48,10 @@ public class FixtureFactory {
             Category.combine(Category.BULLET, Category.DOOR, Category.DYNAMITE, Category.ENEMY, Category.WALL),
             false);
     }
+
+//    public static FixtureDef getBulletFixtureDef(){
+//        return getFixture(GameConfig.getInstance().getBulletConfig(), )
+//    }
 
 //    public static FixtureDef getEntityFixtureDef(Category category){
 //        return getFixture(GameConfig.getInstance().getEntityConfig(), category.getBits(),

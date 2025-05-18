@@ -1,12 +1,9 @@
 package com.tiktime.model.gameobjects;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import com.tiktime.model.consts.FixtureFactory;
-import com.tiktime.model.enums.Category;
 
-import com.tiktime.model.consts.GameConfig.EntityConfig;
+import com.tiktime.model.configs.GameConfig.EntityConfig;
 
 import static com.badlogic.gdx.math.MathUtils.ceil;
 

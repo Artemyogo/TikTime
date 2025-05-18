@@ -8,7 +8,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.tiktime.controller.CollisionController;
-import com.tiktime.model.consts.*;
+import com.tiktime.model.gamefactories.BodyFactory;
+import com.tiktime.model.gamefactories.FixtureFactory;
 import com.tiktime.model.gameobjects.*;
 
 import com.tiktime.model.raycasts.InPathRaycast;

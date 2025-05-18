@@ -1,5 +1,6 @@
 package com.tiktime.view.world;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -91,22 +92,30 @@ public class WorldView implements Pausable, Renderable, Disposable {
         }
     }
 
-    public void setPlayer(float x, float y, float width, float height,
+    public void setPlayer(float x, float y, float width, float height, int curHealth, int maxHealth,
                           Direction direction, LivingEntityState state, WeaponType weapon) {
-        playerView = new PlayerView(x, y, width, height, direction, state, weapon, worldBatch);
+        playerView = new PlayerView(x, y, width, height, curHealth, maxHealth, direction, state, weapon, worldBatch);
     }
 
-    public void addEnemy(float x, float y, float width, float height, int id, Direction direction,
+    public void addEnemy(float x, float y, float width, float height, int curHealth, int maxHealth, int id, Direction direction,
                          LivingEntityState state, EnemyType enemyType) {
         switch (enemyType) {
             case RUSHER:
-                enemyViews.put(id, new RusherEnemyView(x, y, width, height, id, direction, state, worldBatch));
+                enemyViews.put(id, new RusherEnemyView(x, y, width, height, curHealth, maxHealth, id, direction, state, worldBatch));
                 break;
             case ANIMAN:
             case MARKSMAN:
             default:
                 throw new RuntimeException("SJOHAGFJIGHSDGJIKHLBSD");
         }
+    }
+
+    public PlayerView getPlayerView() {
+        return playerView;
+    }
+
+    public EnemyView getEnemyView(int id) {
+        return enemyViews.get(id);
     }
 
     public void setEnemyCoordinates(float x, float y, int id) {

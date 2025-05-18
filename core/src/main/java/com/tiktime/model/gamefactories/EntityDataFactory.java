@@ -1,6 +1,6 @@
-package com.tiktime.model.consts;
+package com.tiktime.model.gamefactories;
 
-import com.badlogic.gdx.physics.box2d.World;
+import com.tiktime.model.configs.GameConfig;
 import com.tiktime.model.enums.Category;
 import com.tiktime.model.gameobjects.EntityData;
 import com.tiktime.model.gameobjects.PlayerModel;
@@ -19,7 +19,7 @@ public class EntityDataFactory {
     }
 
     public static EntityData createRusherEnemyData(){
-        GameConfig.RusherEnemyConfig config = GameConfig.getInstance().getRusherEnemyConfig();
+        GameConfig.EnemyConfig<?> config = GameConfig.getInstance().getRusherEnemyConfig();
         return new EntityData(
             config.getWidth(),
             config.getHeight(),
