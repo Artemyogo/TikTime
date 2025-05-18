@@ -28,9 +28,7 @@ public class MapSelector {
             throw new RuntimeException("MapSelector cannot load maps " + e.getMessage());
         }
     }
-    public TiledMap getMap() {
-//        Random rand = new Random();
-        String path = maps.get(0);
-        return new TmxMapLoader().load(path);
+    public TiledMap getMap(MapSelectorStrategy strategy) {
+        return new TmxMapLoader().load(strategy.selectMapPath(maps));
     }
 }

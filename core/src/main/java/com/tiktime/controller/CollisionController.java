@@ -1,50 +1,36 @@
 package com.tiktime.controller;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.physics.box2d.*;
+import com.tiktime.controller.Interactions.Interaction;
 import com.tiktime.model.enums.Category;
 
-import static java.util.Collections.swap;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CollisionController implements ContactListener {
     private final WorldController worldController;
+    private final List<Interaction> interactions = new ArrayList<>();
+
+    
+
+    public void addInteraction(Interaction interaction) {
+        interactions.add(interaction);
+    }
 
     public CollisionController(WorldController worldController) {
         this.worldController = worldController;
     }
 
-    private class Masks{
-        private short A;
-        private short B;
-        private Fixture fixtureA;
-        private Fixture fixtureB;
-        public Masks(Contact contact){
-            fixtureA = contact.getFixtureA();
-            fixtureB = contact.getFixtureB();
-            A = fixtureA.getFilterData().categoryBits;
-            B = fixtureB.getFilterData().categoryBits;
-        }
-        public Fixture getFixture(Category cat){
-            if(cat.is(A))
-                return fixtureA;
-            else if(cat.is(B))
-                return fixtureB;
-            else
-                throw new IllegalArgumentException("Category " + cat + " is not in this mask");
-        }
-        public boolean check(Category catA, Category catB){
-            return (catA.is(A) && catB.is(B)) || (catA.is(B) && catB.is(A));
-        }
-    }
+
 
     @Override
     public void beginContact(Contact contact) {
-        Masks masks = new Masks(contact);
-        if(masks.check(Category.PLAYER, Category.DOOR)) {
+        ContactMasks contactMasks = new ContactMasks(contact);
+        if(contactMasks.check(Category.PLAYER, Category.DOOR)) {
             worldController.onDoorEntry();
         }
-        if(masks.check(Category.ENEMY_RUSHER, Category.DYNAMITE) || masks.check(Category.PLAYER, Category.DYNAMITE)) {
-            Fixture dynamiteFixture = masks.getFixture(Category.DYNAMITE);
+        if(contactMasks.check(Category.ENEMY_RUSHER, Category.DYNAMITE) || contactMasks.check(Category.PLAYER, Category.DYNAMITE)) {
+            Fixture dynamiteFixture = contactMasks.getFixture(Category.DYNAMITE);
             worldController.explosion(dynamiteFixture.getBody(), 10, 100f);
             worldController.deleteBody(dynamiteFixture.getBody());
         }
@@ -52,8 +38,8 @@ public class CollisionController implements ContactListener {
 
     @Override
     public void endContact(Contact contact) {
-        Masks masks = new Masks(contact);
-        if(masks.check(Category.PLAYER, Category.DOOR)) {
+        ContactMasks contactMasks = new ContactMasks(contact);
+        if(contactMasks.check(Category.PLAYER, Category.DOOR)) {
             worldController.onDoorExit();
         }
 
@@ -61,8 +47,8 @@ public class CollisionController implements ContactListener {
 
     @Override
     public void preSolve(Contact contact, Manifold manifold) {
-        Masks masks = new Masks(contact);
-        if(masks.check(Category.ENEMY_RUSHER, Category.PLAYER) || masks.check(Category.ENEMY_RUSHER, Category.ENEMY_RUSHER)){
+        ContactMasks contactMasks = new ContactMasks(contact);
+        if(contactMasks.check(Category.ENEMY_RUSHER, Category.PLAYER) || contactMasks.check(Category.ENEMY_RUSHER, Category.ENEMY_RUSHER)){
             contact.setEnabled(false);
             worldController.pushApart(contact.getFixtureA().getBody(), contact.getFixtureB().getBody());
         }
