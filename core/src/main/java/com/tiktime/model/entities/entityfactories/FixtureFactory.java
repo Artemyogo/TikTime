@@ -1,9 +1,9 @@
-package com.tiktime.model.gamefactories;
+package com.tiktime.model.entities.entityfactories;
 
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.tiktime.model.configs.GameConfig;
-import com.tiktime.model.enums.Category;
+import com.tiktime.model.GameConfig;
+import com.tiktime.model.entities.Category;
 
 public class FixtureFactory {
     private static FixtureDef getFixture(GameConfig.PhysicsConfig<?> config, short categoryBits, short maskBits, boolean isSensor){
@@ -22,6 +22,10 @@ public class FixtureFactory {
 
         fixtureDef.isSensor = isSensor;
         return fixtureDef;
+    }
+    public static FixtureDef getBulletFixture() {
+        return getFixture(GameConfig.getInstance().getBulletConfig(), Category.BULLET.getBits(),
+            Category.combine(Category.ENEMY, Category.PLAYER, Category.OBSTACLE), false);
     }
     public static FixtureDef getDoorFixture() {
         return getFixture(GameConfig.getInstance().getFloorConfig(), Category.DOOR.getBits(), Category.PLAYER.getBits(), true);

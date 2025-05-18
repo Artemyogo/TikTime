@@ -1,0 +1,86 @@
+package com.tiktime.model.entities.livingenteties;
+
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.tiktime.model.entities.EntityModel;
+import com.tiktime.model.entities.components.HealthComponent;
+import com.tiktime.model.entities.components.MovementComponent;
+
+import static com.badlogic.gdx.math.MathUtils.ceil;
+
+public abstract class LivingEntityModel extends EntityModel implements Movable, Healthable {
+    MovementComponent movementComponent;
+    HealthComponent healthComponent;
+
+    public LivingEntityModel(MovementComponent movementComponent, HealthComponent healthComponent, Body body, int id) {
+        super(body, id);
+        this.movementComponent = movementComponent;
+        this.healthComponent = healthComponent;
+    }
+
+    @Override
+    public int getCurrentHealth() {
+        return healthComponent.getCurrentHealth();
+    }
+
+    @Override
+    public int getMaxHealth() {
+        return healthComponent.getMaxHealth();
+    }
+
+    @Override
+    public void setCurrentHealth(int currentHealth) {
+        healthComponent.setCurrentHealth(currentHealth);
+    }
+
+    @Override
+    public void setMaxHealth(int maxHealth) {
+        healthComponent.setMaxHealth(maxHealth);
+    }
+
+    @Override
+    public float getSpeed() {
+        return movementComponent.getSpeed();
+    }
+
+    @Override
+    public void setSpeed(float speed) {
+        movementComponent.setSpeed(speed);
+    }
+
+    @Override
+    public Vector2 getDirection() {
+        return movementComponent.getDirection();
+    }
+
+    @Override
+    public void setDirection(Vector2 dir) {
+        movementComponent.setDirection(dir);
+    }
+
+    @Override
+    public void setDirectionAndMove(Vector2 direction, float delta) {
+        movementComponent.setDirection(direction);
+        movementComponent.move(body, delta);
+    }
+
+    @Override
+    public void applyDamage(int damage){
+        if(healthComponent.getCurrentHealth() <= 0) return;
+        healthComponent.setCurrentHealth(healthComponent.getCurrentHealth() - damage);
+    }
+
+    @Override
+    public void applyExplosion(float x, float y, float radius, float force){
+        float dist = getPosition().dst(x, y);
+
+        float effect = (radius - dist) / radius;
+        float impulseMagnitude = force * effect;
+
+        Vector2 directionAwayFromExplosion = getPosition().cpy().sub(x, y).nor();
+        Vector2 impulseVec = directionAwayFromExplosion.scl(impulseMagnitude);
+
+        getBody().applyLinearImpulse(impulseVec, getBody().getWorldCenter(), true);
+        applyDamage(ceil(force/10));
+    }
+}

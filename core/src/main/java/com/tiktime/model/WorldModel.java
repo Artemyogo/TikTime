@@ -8,11 +8,16 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.tiktime.controller.CollisionController;
-import com.tiktime.model.gamefactories.BodyFactory;
-import com.tiktime.model.gamefactories.FixtureFactory;
-import com.tiktime.model.gameobjects.*;
+import com.tiktime.model.entities.entityfactories.EntityFactory;
+import com.tiktime.model.entities.livingenteties.EnemyModel;
+import com.tiktime.model.entities.EntityModel;
+import com.tiktime.model.entities.livingenteties.LivingEntityModel;
+import com.tiktime.model.entities.livingenteties.PlayerModel;
+import com.tiktime.model.entities.livingenteties.RusherEnemyModel;
+import com.tiktime.model.entities.entityfactories.BodyFactory;
+import com.tiktime.model.entities.entityfactories.FixtureFactory;
 
-import com.tiktime.model.raycasts.InPathRaycast;
+import com.tiktime.model.entities.raycasts.InPathRaycast;
 
 import static com.tiktime.view.consts.ScreenConstants.PPM;
 
@@ -37,22 +42,23 @@ public class WorldModel {
         this(map, collisionController, null);
     }
 
-    public WorldModel(TiledMap map, CollisionController collisionController, EntityData playerData) {
+    public WorldModel(TiledMap map, CollisionController collisionController, PlayerModel player) {
         this.map = map;
         this.world = new World(new Vector2(0, 0), true);
         MapProperties properties = map.getLayers().get("objects").getObjects().get("playerSpawn").getProperties();
-        if (playerData == null) {
-            this.player = new PlayerModel(world, properties.get("x", Float.class) / PPM,
-                properties.get("y", Float.class) / PPM);
+        if (player== null) {
+            this.player = EntityFactory.createPlayerModel(world,
+                properties.get("x", Float.class) / PPM, properties.get("y", Float.class) / PPM);
         } else {
-            this.player = new PlayerModel(world, properties.get("x", Float.class) / PPM,
-                properties.get("y", Float.class) / PPM, playerData);
+            this.player = player;
         }
 
         if (map.getLayers().get("enemies") != null) {
             for (MapObject object : map.getLayers().get("enemies").getObjects()) {
-                enemies.add(new RusherEnemyModel(world, object.getProperties().get("x", Float.class) / PPM,
-                    object.getProperties().get("y", Float.class) / PPM));
+                RusherEnemyModel rusherEnemyModel = EntityFactory.createRusherEnemyModel(world,
+                    object.getProperties().get("x", Float.class) / PPM, object.getProperties().get("y", Float.class) / PPM);
+
+                enemies.add(rusherEnemyModel);
             }
         }
 
@@ -67,8 +73,8 @@ public class WorldModel {
         world.setContactListener(collisionController);
     }
 
-    public EntityData getPlayerData(){
-        return player.getData();
+    public PlayerModel getPlayerModel(){
+        return player;
     }
 
     public Vector2 getPlayerPosition(){
@@ -84,7 +90,7 @@ public class WorldModel {
     }
 
     public void explosion(float x, float y, float radius, float force){
-        Array<EntityModel> entities = new Array<>(enemies);
+        Array<LivingEntityModel> entities = new Array<>(enemies);
         entities.add(player);
         Vector2 position = new Vector2(x, y);
         entities.forEach(entity -> {
@@ -98,9 +104,5 @@ public class WorldModel {
 
     public float distance(Vector2 start, Vector2 end){
         return (float) Math.hypot(start.x - end.x, start.y - end.y);
-    }
-
-    public PlayerModel getPlayer(){
-        return player;
     }
 }

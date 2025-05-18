@@ -1,7 +1,7 @@
-package com.tiktime.model.gamefactories;
+package com.tiktime.model.entities.entityfactories;
 
 import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.tiktime.model.configs.GameConfig;
+import com.tiktime.model.GameConfig;
 
 public class BodyDefFactory {
     public static BodyDef getBodyDef(float x, float y, BodyDef.BodyType bodyType, float width, float height){
@@ -10,6 +10,13 @@ public class BodyDefFactory {
         bodyDef.fixedRotation = true;
         bodyDef.position.set(x + width / 2f, y + height / 2f);
         return bodyDef;
+    }
+
+    public static BodyDef getBulletBodyDef(float x, float y){
+        return getBodyDef(x,y,BodyDef.BodyType.StaticBody,
+            GameConfig.getInstance().getBulletConfig().getWidth(),
+            GameConfig.getInstance().getBulletConfig().getHeight()
+        );
     }
 
     public static BodyDef getWallBodyDef(float x, float y){

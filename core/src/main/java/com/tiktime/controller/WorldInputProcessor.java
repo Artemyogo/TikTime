@@ -4,8 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Vector2;
-import com.sun.org.apache.xpath.internal.operations.Mod;
-import com.tiktime.model.enums.MovingDirections;
+import com.tiktime.model.entities.MovingDirections;
 
 import java.util.ArrayList;
 import java.util.Collection;

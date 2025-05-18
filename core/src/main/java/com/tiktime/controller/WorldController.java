@@ -14,6 +14,7 @@ import com.tiktime.controller.utils.MapSelectorStrategy;
 import com.tiktime.controller.utils.RandomSelectorStrategy;
 import com.tiktime.model.WorldModel;
 import com.tiktime.model.consts.GameConfig;
+import com.tiktime.model.entities.livingenteties.PlayerModel;
 import com.tiktime.model.gameobjects.EnemyModel;
 import com.tiktime.model.gameobjects.EntityData;
 import com.tiktime.model.gameobjects.PlayerModel;
@@ -52,11 +53,11 @@ public class WorldController {
         gameView.setWorld(worldModel.getWorld());
         gameView.setMapRenderer(map);
 
-        EntityData entityData = worldModel.getPlayerData();
+        PlayerModel player = worldModel.getPlayerModel();
 
-        playerController = new PlayerController(worldModel.getPlayer(), gameView);
+        playerController = new PlayerController(player, gameView);
 
-        gameView.setHud(entityData.getCurrentHealth(), entityData.getMaxHealth(), PlayerModel.CurrentStats.getCoins());
+        gameView.setHud(PlayerModel.CurrentStats.getCoins());
         enemyController = new EnemyController(worldModel, gameView);
     }
 
@@ -69,7 +70,7 @@ public class WorldController {
 
         gameView.updatePlayerWeaponRotation(mousePosition,
             getWeaponPosition(
-                worldModel.getPlayer().getBody().getPosition(),
+                worldModel.getPlayerModel().getBody().getPosition(),
                 WeaponType.AK47));
     }
 

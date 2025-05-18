@@ -1,4 +1,4 @@
-package com.tiktime.model.components;
+package com.tiktime.model.entities.components;
 
 public class HealthComponent {
     private int currentHealth;
