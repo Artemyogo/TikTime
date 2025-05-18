@@ -2,7 +2,7 @@ package com.tiktime.controller;
 
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.Fixture;
-import com.tiktime.model.enums.Category;
+import com.tiktime.model.entities.Category;
 
 public class ContactMasks {
     private final short A;

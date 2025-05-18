@@ -3,26 +3,17 @@ package com.tiktime.controller;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.utils.Array;
 import com.tiktime.Main;
 import com.tiktime.controller.utils.MapSelector;
 import com.tiktime.controller.utils.MapSelectorStrategy;
 import com.tiktime.controller.utils.RandomSelectorStrategy;
+import com.tiktime.model.GameConfig;
 import com.tiktime.model.WorldModel;
-import com.tiktime.model.consts.GameConfig;
 import com.tiktime.model.entities.livingenteties.PlayerModel;
-import com.tiktime.model.gameobjects.EnemyModel;
-import com.tiktime.model.gameobjects.EntityData;
-import com.tiktime.model.gameobjects.PlayerModel;
 import com.tiktime.screens.MenuScreen;
-import com.tiktime.view.*;
-import com.tiktime.view.enteties.Direction;
-import com.tiktime.view.enteties.livingenteties.LivingEntityState;
-import com.tiktime.view.enteties.livingenteties.enemies.EnemyType;
 import com.tiktime.view.enteties.weapons.WeaponType;
 import com.tiktime.view.world.GameView;
 
@@ -95,17 +86,17 @@ public class WorldController {
     public void changeMap(){
         isInDoor = 0;
         TiledMap map = mapSelector.getMap(selectorStrategy);
-        EntityData playerData = worldModel.getPlayerData();
-        this.worldModel = new WorldModel(map, new CollisionController(this), playerData);
+        PlayerModel playerModel = worldModel.getPlayerModel();
+        this.worldModel = new WorldModel(map, new CollisionController(this), playerModel);
 
         gameView.setWorld(worldModel.getWorld());
         gameView.setMapRenderer(map);
-        playerController.setPlayer(worldModel.getPlayer());
+        playerController.setPlayer(worldModel.getPlayerModel());
         enemyController.setEnemies(worldModel.getEnemies());
     }
 
     Vector3 getWeaponPosition(Vector2 playerPosition, WeaponType weapon) {
-        GameConfig.WeaponConfig weaponConfig = GameConfig.getInstance().getWeaponConfig(weapon);
+        GameConfig.WeaponConfig<?> weaponConfig = GameConfig.getInstance().getWeaponConfig(weapon);
         if (weaponConfig == null) {
             throw new RuntimeException("WeaponConfig is null");
         }

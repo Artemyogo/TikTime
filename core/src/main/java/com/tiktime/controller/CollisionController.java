@@ -2,7 +2,7 @@ package com.tiktime.controller;
 
 import com.badlogic.gdx.physics.box2d.*;
 import com.tiktime.controller.Interactions.Interaction;
-import com.tiktime.model.enums.Category;
+import com.tiktime.model.entities.Category;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +11,7 @@ public class CollisionController implements ContactListener {
     private final WorldController worldController;
     private final List<Interaction> interactions = new ArrayList<>();
 
-    
+
 
     public void addInteraction(Interaction interaction) {
         interactions.add(interaction);

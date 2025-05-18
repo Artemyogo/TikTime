@@ -9,12 +9,16 @@ public class BulletModel extends EntityModel {
     private Body body;
     private float damage;
 
-    public BulletModel(WorldModel worldModel, Vector2 position, Vector2 direction){
-        super();
+    public BulletModel(Body body, float width, float height, int id) {
+        super(body, width, height, id);
     }
 
-    @Override
-    protected void setBody() {
-
-    }
+//    public BulletModel(WorldModel worldModel, Vector2 position, Vector2 direction){
+//        super();
+//    }
+//
+//    @Override
+//    protected void setBody() {
+//
+//    }
 }
