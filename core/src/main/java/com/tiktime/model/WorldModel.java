@@ -46,11 +46,12 @@ public class WorldModel {
         this.map = map;
         this.world = new World(new Vector2(0, 0), true);
         MapProperties properties = map.getLayers().get("objects").getObjects().get("playerSpawn").getProperties();
-        if (player== null) {
+        if (player == null) {
             this.player = EntityFactory.createPlayerModel(world,
                 properties.get("x", Float.class) / PPM, properties.get("y", Float.class) / PPM);
         } else {
-            this.player = player;
+            this.player = EntityFactory.createPlayerModelAtNextMap(world,
+                properties.get("x", Float.class) / PPM, properties.get("y", Float.class) / PPM, player);
         }
 
         if (map.getLayers().get("enemies") != null) {

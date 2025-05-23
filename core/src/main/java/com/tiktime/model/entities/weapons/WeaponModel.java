@@ -32,6 +32,11 @@ public abstract class WeaponModel implements Attackable {
         attackComponent.doAttack();
     }
 
+    @Override
+    public void tryAttack(float delta) {
+        attackComponent.tryAttack(delta);
+    }
+
     public WeaponType getWeaponType() {
         return weaponType;
     }

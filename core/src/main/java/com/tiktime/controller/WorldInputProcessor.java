@@ -61,7 +61,8 @@ public class WorldInputProcessor implements InputProcessor {
                 return true;
             }
             case Input.Keys.ESCAPE: {
-                worldController.setPaused(true);
+                worldController.changePausedStatus();
+                return true;
             }
             default: return false;
         }

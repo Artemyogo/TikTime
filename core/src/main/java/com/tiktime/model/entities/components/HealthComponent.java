@@ -39,6 +39,10 @@ public class HealthComponent {
         setCurrentHealth(Math.min(currentHealth, maxHealth));
     }
 
+    public void regenerateHealth(int amount) {
+        setCurrentHealth(currentHealth + amount);
+    }
+
     public int getCurrentHealth() {
         return currentHealth;
     }

@@ -16,7 +16,6 @@ import com.tiktime.view.enteties.weapons.WeaponType;
 
 public class EntityFactory {
     public static PlayerModel createPlayerModel(World world, float x, float y) {
-        GameConfig.PlayerConfig config = GameConfig.getInstance().getPlayerConfig();
         WeaponModel weaponModel = createAk47WeaponModel();
         GameConfig.PlayerConfig playerConfig = GameConfig.getInstance().getPlayerConfig();
         MovementComponent movementComponent = new MovementComponent(
@@ -27,6 +26,26 @@ public class EntityFactory {
             playerConfig.getBaseHp(),
             playerConfig.getBaseHp()
         );
+
+        return new PlayerModel(
+            Category.PLAYER,
+            weaponModel,
+            movementComponent,
+            healthComponent,
+            BodyFactory.createPlayerBody(world, x, y),
+            playerConfig.getWidth(),
+            playerConfig.getHeight(),
+            0
+        );
+    }
+
+    public static PlayerModel createPlayerModelAtNextMap(World world, float x, float y, PlayerModel playerModel) {
+        GameConfig.PlayerConfig playerConfig = GameConfig.getInstance().getPlayerConfig();
+
+        WeaponModel weaponModel = playerModel.getWeaponModel();
+        MovementComponent movementComponent = playerModel.getMovementComponent();
+        HealthComponent healthComponent = playerModel.getHealthComponent();
+        healthComponent.regenerateHealth(playerConfig.getBaseRegen());
 
         return new PlayerModel(
             Category.PLAYER,
@@ -61,7 +80,6 @@ public class EntityFactory {
             rusherConfig.getHeight()
         );
     }
-
 
     public static Ak47WeaponModel createAk47WeaponModel() {
         WeaponType weaponType = WeaponType.AK47;
