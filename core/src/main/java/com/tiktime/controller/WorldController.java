@@ -130,6 +130,10 @@ public class WorldController {
         }
     }
 
+    public void changePausedStatus() {
+        setPaused(!paused);
+    }
+
 
     public void goToMenu() {
         game.setScreen(new MenuScreen(game));

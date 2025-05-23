@@ -11,8 +11,6 @@ public class CollisionController implements ContactListener {
     private final WorldController worldController;
     private final List<Interaction> interactions = new ArrayList<>();
 
-
-
     public void addInteraction(Interaction interaction) {
         interactions.add(interaction);
     }
@@ -20,8 +18,6 @@ public class CollisionController implements ContactListener {
     public CollisionController(WorldController worldController) {
         this.worldController = worldController;
     }
-
-
 
     @Override
     public void beginContact(Contact contact) {

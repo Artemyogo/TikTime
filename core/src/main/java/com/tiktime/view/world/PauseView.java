@@ -60,9 +60,10 @@ public class PauseView implements Pausable, Renderable, Disposable {
         this.paused = paused;
         if (paused) {
             Gdx.input.setInputProcessor(stage);
-        } else {
-            Gdx.input.setInputProcessor(Gdx.input.getInputProcessor());
         }
+//        else {
+//            Gdx.input.setInputProcessor(Gdx.input.getInputProcessor());
+//        }
     }
 
     @Override

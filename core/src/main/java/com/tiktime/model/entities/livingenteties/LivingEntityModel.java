@@ -20,6 +20,16 @@ public abstract class LivingEntityModel extends EntityModel implements Movable, 
     }
 
     @Override
+    public HealthComponent getHealthComponent() {
+        return healthComponent;
+    }
+
+    @Override
+    public MovementComponent getMovementComponent() {
+        return movementComponent;
+    }
+
+    @Override
     public int getCurrentHealth() {
         return healthComponent.getCurrentHealth();
     }
