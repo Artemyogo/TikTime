@@ -1,7 +1,8 @@
 package com.tiktime.model.entities.livingenteties;
 
 import com.badlogic.gdx.physics.box2d.Body;
-import com.tiktime.model.GameConfig;
+import com.tiktime.model.configs.GameConfig;
+import com.tiktime.model.configs.configdata.PlayerData;
 import com.tiktime.model.entities.Categoriable;
 import com.tiktime.model.entities.Category;
 import com.tiktime.model.entities.components.HealthComponent;
@@ -9,12 +10,11 @@ import com.tiktime.model.entities.components.MovementComponent;
 import com.tiktime.model.entities.weapons.WeaponModel;
 import com.tiktime.model.upgrades.UpgradeModel;
 import com.tiktime.model.upgrades.UpgradeType;
-import com.tiktime.model.GameConfig.PlayerConfig;
-import com.tiktime.view.enteties.weapons.WeaponType;
+import com.tiktime.model.entities.weapons.WeaponType;
 
 public class PlayerModel extends LivingEntityModel implements Weaponable, Categoriable {
     public static class CurrentStats {
-        private static final PlayerConfig playerConfig = GameConfig.getInstance().getPlayerConfig();
+        private static final PlayerData playerConfig = GameConfig.getPlayerConfig();
         private static final UpgradeModel upgradeModel = UpgradeModel.getInstance();
         public static int getHealth() {
             return upgradeModel.getUpgrade(UpgradeType.HP).getLevel() * 10 + playerConfig.getBaseHp();

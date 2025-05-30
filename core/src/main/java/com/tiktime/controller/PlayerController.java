@@ -1,12 +1,10 @@
 package com.tiktime.controller;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.tiktime.model.entities.livingenteties.PlayerModel;
 import com.tiktime.view.enteties.Direction;
 import com.tiktime.view.enteties.livingenteties.LivingEntityState;
-import com.tiktime.view.enteties.weapons.WeaponType;
-import com.tiktime.view.world.GameView;
+import com.tiktime.model.entities.weapons.WeaponType;
 import com.tiktime.view.world.WorldView;
 
 public class PlayerController {

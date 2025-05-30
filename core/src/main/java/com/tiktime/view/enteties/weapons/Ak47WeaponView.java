@@ -2,16 +2,16 @@ package com.tiktime.view.enteties.weapons;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.tiktime.model.GameConfig;
+import com.tiktime.model.configs.GameConfig;
 
 public class Ak47WeaponView extends WeaponView {
     private static String atlasPath = "animations/ak47weapon.atlas";
     protected Ak47WeaponView(float x, float y, SpriteBatch batch) {
-        super(GameConfig.getInstance().getAk47WeaponConfig().getWidth(),
-            GameConfig.getInstance().getAk47WeaponConfig().getHeight(),
+        super(GameConfig.getAk47WeaponConfig().getWidth(),
+            GameConfig.getAk47WeaponConfig().getHeight(),
             x, y,
-            GameConfig.getInstance().getAk47WeaponConfig().getOffsetX(),
-            GameConfig.getInstance().getAk47WeaponConfig().getOffsetY(),
+            GameConfig.getAk47WeaponConfig().getOffsetX(),
+            GameConfig.getAk47WeaponConfig().getOffsetY(),
             atlasPath, batch);
         loadAnimations();
         updateAnimation();

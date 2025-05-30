@@ -2,27 +2,19 @@ package com.tiktime.view.world;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.*;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Disposable;
-import com.badlogic.gdx.utils.Null;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.tiktime.controller.WorldController;
 import com.tiktime.view.enteties.*;
 import com.tiktime.view.enteties.livingenteties.*;
 import com.tiktime.view.enteties.livingenteties.enemies.EnemyType;
-import com.tiktime.view.enteties.livingenteties.enemies.EnemyView;
-import com.tiktime.view.enteties.livingenteties.enemies.RusherEnemyView;
-import com.tiktime.view.enteties.weapons.WeaponType;
+import com.tiktime.model.entities.weapons.WeaponType;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class GameView implements Pausable, Renderable, Disposable {
     private boolean paused = false;
