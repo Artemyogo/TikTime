@@ -25,7 +25,7 @@ public abstract class AnimatedEntityView extends EntityView {
         this.animManager = new AnimationManager();
     }
 
-    protected Array<TextureAtlas.AtlasRegion> getRegions(String pathPrefix) {
+    public Array<TextureAtlas.AtlasRegion> getRegions(String pathPrefix) {
         Array<TextureAtlas.AtlasRegion> regions = new Array<>();
         for (TextureAtlas.AtlasRegion region : atlas.getRegions()) {
             if (region.name.startsWith(pathPrefix)) {

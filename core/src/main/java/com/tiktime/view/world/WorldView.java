@@ -1,5 +1,6 @@
 package com.tiktime.view.world;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -30,15 +31,15 @@ import java.util.Map;
 import static com.tiktime.view.consts.ScreenConstants.PPM;
 
 public class WorldView implements Pausable, Renderable, Disposable {
-    private final boolean debug = true;
-//    private final boolean debug = false;
+//    private final boolean debug = true;
+    private final boolean debug = false;
     private boolean paused = true;
     private final OrthographicCamera worldCamera;
     private final SpriteBatch worldBatch;
     private final Viewport worldViewport;
     private OrthogonalTiledMapRenderer mapRenderer;
     private final Box2DDebugRenderer debugRenderer;
-    private Map<Integer, EnemyView> enemyViews;
+    private final Map<Integer, EnemyView> enemyViews;
     private PlayerView playerView;
     private World world;
 
@@ -107,6 +108,19 @@ public class WorldView implements Pausable, Renderable, Disposable {
             default:
                 throw new RuntimeException("SJOHAGFJIGHSDGJIKHLBSD");
         }
+
+//        Gdx.app.log("ADDDED ID ENEM", String.valueOf(id));
+        Gdx.app.log("DIFF", "--------");
+        for (Map.Entry<Integer, EnemyView> i : enemyViews.entrySet())
+        {
+            Gdx.app.log("ADDDED ID ENEM", i.getKey().toString() + "/" + i.getValue().getId());
+
+        }
+    }
+
+    public void deleteEnemy(int id) {
+        Gdx.app.log("DELET ID ENEM", String.valueOf(id));
+        enemyViews.remove(id);
     }
 
     public PlayerView getPlayerView() {
@@ -128,8 +142,19 @@ public class WorldView implements Pausable, Renderable, Disposable {
     }
 
     public void setEnemyState(LivingEntityState state, int id) {
-        EnemyView enemyView = enemyViews.get(id);
-        enemyView.setState(state);
+        Gdx.app.log("SETENEMY STATE", String.valueOf(id));
+        EnemyView enemyView = enemyViews.get(Integer.valueOf(id));
+        if (enemyView == null) {
+            Gdx.app.log("CRYCRY", "1");
+
+            for (EnemyView e : enemyViews.values()) {
+                Gdx.app.log("SETENEMY STATE NULL EXC", String.valueOf(e.getId()));
+            }
+        }
+//        } else {
+            enemyView.setState(state);
+
+//        }
     }
 
     public void setEnemyDirection(Direction direction, int id) {
@@ -168,11 +193,18 @@ public class WorldView implements Pausable, Renderable, Disposable {
         float dx = worldCoords.x - weaponCoords.x;
         float dy = worldCoords.y - weaponCoords.y;
         float rotationDeg = (float) Math.toDegrees(Math.atan2(dy, dx));
-        playerView.setWeaponRotationDeg(rotationDeg);
+        playerView.updateWeaponRotationDeg(rotationDeg);
     }
 
     public void clearEnemies() {
+        Gdx.app.log("CLEAR ENEMIES", "0");
         enemyViews.clear();
+        Gdx.app.log("CLEAR ENEMIES SIZE AND ELSE", String.valueOf(enemyViews.size()));
+        for (Map.Entry<Integer, EnemyView> i : enemyViews.entrySet())
+        {
+            Gdx.app.log("CLEAR ENEMIES CNT", i.getKey().toString() + "/" + i.getValue().getId());
+        }
+
     }
 
     public ArrayList<LivingEntityView> getLivingEntities() {

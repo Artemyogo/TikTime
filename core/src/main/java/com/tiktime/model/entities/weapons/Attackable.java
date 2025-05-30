@@ -5,5 +5,5 @@ public interface Attackable {
     void setDamage(int damage);
     void updateAttackCooldownTimer(float delta);
     void doAttack();
-    void tryAttack(float delta);
+    boolean tryAttack(float delta);
 }

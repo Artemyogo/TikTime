@@ -8,8 +8,6 @@ import com.tiktime.view.enteties.Direction;
 public abstract class LivingEntityView extends HealthEntityView {
     protected Direction direction;
     protected LivingEntityState state;
-    protected final float baseAttackedTicks = 100;
-    protected float curAttackedTicks = 0;
     boolean isAttacked = false;
 
     protected LivingEntityView(float x, float y, float width, float height, int curHealth, int maxHealth,
@@ -34,11 +32,6 @@ public abstract class LivingEntityView extends HealthEntityView {
 
     public void setIsAttacked(boolean isAttacked) {
         this.isAttacked = isAttacked;
-        if (isAttacked) {
-            curAttackedTicks = baseAttackedTicks;
-        } else {
-            curAttackedTicks = 0;
-        }
     }
 
     @Override
@@ -47,12 +40,6 @@ public abstract class LivingEntityView extends HealthEntityView {
             return;
 
         animManager.update(delta);
-
-        curAttackedTicks -= delta;
-        if (curAttackedTicks <= 0) {
-            this.isAttacked = false;
-            curAttackedTicks = 0;
-        }
     }
 
     @Override

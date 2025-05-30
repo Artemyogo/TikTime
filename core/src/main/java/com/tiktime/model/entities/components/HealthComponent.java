@@ -17,12 +17,8 @@ public class HealthComponent {
         this(healthComponent.maxHealth, healthComponent.currentHealth);
     }
 
-    public void takeDamage(int amount) {
+    public void applyDamage(int amount) {
         setCurrentHealth(getCurrentHealth() - amount);
-    }
-
-    public void heal(int amount) {
-        setCurrentHealth(getCurrentHealth() + amount);
     }
 
     public boolean isDead() {

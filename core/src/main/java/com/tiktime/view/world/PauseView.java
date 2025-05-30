@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.tiktime.controller.WorldController;
+import com.tiktime.controller.inputprocessors.SeparatorFromWorldInputProcessor;
 
 public class PauseView implements Pausable, Renderable, Disposable {
     private final Stage stage;
@@ -53,17 +54,13 @@ public class PauseView implements Pausable, Renderable, Disposable {
                 worldController.goToMenu();
             }
         });
+        worldController.getInputMultiplexer().addProcessor(new SeparatorFromWorldInputProcessor(worldController));
+        worldController.getInputMultiplexer().addProcessor(stage);
     }
 
     @Override
     public void setPause(boolean paused) {
         this.paused = paused;
-        if (paused) {
-            Gdx.input.setInputProcessor(stage);
-        }
-//        else {
-//            Gdx.input.setInputProcessor(Gdx.input.getInputProcessor());
-//        }
     }
 
     @Override

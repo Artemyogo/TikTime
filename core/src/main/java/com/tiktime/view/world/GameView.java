@@ -1,6 +1,7 @@
 package com.tiktime.view.world;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Vector3;
@@ -50,6 +51,10 @@ public class GameView implements Pausable, Renderable, Disposable {
         allPausables.forEach(p -> p.setPause(paused));
     }
 
+    public void setCoins(int coins) {
+        hudView.setCoins(coins);
+    }
+
     public void setMapRenderer(TiledMap map) {
         worldView.setMapRenderer(map);
     }
@@ -88,6 +93,10 @@ public class GameView implements Pausable, Renderable, Disposable {
     public void addEnemy(float x, float y, float width, float height, int curHealth, int maxHealth, int id, Direction direction,
                          LivingEntityState state, EnemyType enemyType) {
         worldView.addEnemy(x, y, width, height, curHealth, maxHealth, id, direction, state, enemyType);
+    }
+
+    public void deleteEnemy(int id) {
+        worldView.deleteEnemy(id);
     }
 
     public void clearEnemies() {

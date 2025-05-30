@@ -6,6 +6,9 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.tiktime.model.entities.EntityModel;
 import com.tiktime.model.entities.components.HealthComponent;
 import com.tiktime.model.entities.components.MovementComponent;
+import com.tiktime.model.events.EventManager;
+import com.tiktime.model.events.GameEvent;
+import com.tiktime.model.events.GameEventType;
 
 import static com.badlogic.gdx.math.MathUtils.ceil;
 
@@ -85,10 +88,15 @@ public abstract class LivingEntityModel extends EntityModel implements Movable, 
 
     @Override
     public void applyDamage(int damage){
-//        if(healthComponent.getCurrentHealth() <= 0) return;
-        Gdx.app.log(this.getClass().getSimpleName(), "apply damage " + damage);
-        healthComponent.setCurrentHealth(healthComponent.getCurrentHealth() - damage);
+        if (healthComponent.isDead())
+            return;
+
+        healthComponent.applyDamage(damage);
+        if (healthComponent.isDead())
+            death();
     }
+
+    public abstract void death();
 
     @Override
     public void applyExplosion(float x, float y, float radius, float force){
