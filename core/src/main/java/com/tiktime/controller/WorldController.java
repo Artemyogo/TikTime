@@ -11,16 +11,15 @@ import com.tiktime.controller.Interactions.DoorInteraction;
 import com.tiktime.controller.Interactions.DynamiteInteraction;
 import com.tiktime.controller.Interactions.EntityInteraction;
 import com.tiktime.controller.utils.MapSelector;
-import com.tiktime.controller.utils.MapSelectorStrategy;
 import com.tiktime.controller.utils.RandomSelectorStrategy;
+import com.tiktime.model.configs.GameConfig;
 import com.tiktime.model.BodyManager;
 import com.tiktime.model.DoorSensorModel;
-import com.tiktime.model.GameConfig;
 import com.tiktime.model.WorldModel;
-import com.tiktime.model.entities.Category;
+import com.tiktime.model.configs.configdata.WeaponData;
 import com.tiktime.model.entities.livingenteties.PlayerModel;
 import com.tiktime.screens.MenuScreen;
-import com.tiktime.view.enteties.weapons.WeaponType;
+import com.tiktime.model.entities.weapons.WeaponType;
 import com.tiktime.view.world.GameView;
 
 import java.util.ArrayList;
@@ -111,7 +110,7 @@ public class WorldController implements IExplosive{
     }
 
     Vector3 getWeaponPosition(Vector2 playerPosition, WeaponType weapon) {
-        GameConfig.WeaponConfig<?> weaponConfig = GameConfig.getInstance().getWeaponConfig(weapon);
+        WeaponData weaponConfig = GameConfig.getWeaponConfig(weapon);
         if (weaponConfig == null) {
             throw new RuntimeException("WeaponConfig is null");
         }

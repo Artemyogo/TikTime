@@ -1,6 +1,7 @@
 package com.tiktime.view.enteties.weapons;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.tiktime.model.entities.weapons.WeaponType;
 
 public class WeaponFactory {
     public static WeaponView createWeapon(WeaponType weapon, float x, float y, SpriteBatch batch) {

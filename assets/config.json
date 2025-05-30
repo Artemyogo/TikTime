@@ -1,5 +1,16 @@
 {
-  "player": {},
+  "player": {
+    "density": 1,
+    "restitution": 0.01,
+    "friction": 0.2,
+    "acceleration": 50.0,
+    "width": 1,
+    "height": 1.5,
+    "baseHp": 10,
+    "baseSpeed": 15 ,
+    "baseDamage": 10,
+    "baseRegen": 0
+  },
   "marksman": {},
   "animan": {},
   "rusher": {

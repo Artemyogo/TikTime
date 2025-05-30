@@ -1,6 +1,5 @@
 package com.tiktime.view.world;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -22,7 +21,7 @@ import com.tiktime.view.enteties.livingenteties.PlayerView;
 import com.tiktime.view.enteties.livingenteties.enemies.EnemyType;
 import com.tiktime.view.enteties.livingenteties.enemies.EnemyView;
 import com.tiktime.view.enteties.livingenteties.enemies.RusherEnemyView;
-import com.tiktime.view.enteties.weapons.WeaponType;
+import com.tiktime.model.entities.weapons.WeaponType;
 
 import java.util.ArrayList;
 import java.util.HashMap;

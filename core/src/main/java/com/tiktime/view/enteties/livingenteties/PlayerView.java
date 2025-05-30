@@ -3,7 +3,7 @@ package com.tiktime.view.enteties.livingenteties;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.tiktime.view.enteties.Direction;
 import com.tiktime.view.enteties.weapons.WeaponFactory;
-import com.tiktime.view.enteties.weapons.WeaponType;
+import com.tiktime.model.entities.weapons.WeaponType;
 import com.tiktime.view.enteties.weapons.WeaponView;
 
 public class PlayerView extends LivingEntityView {
