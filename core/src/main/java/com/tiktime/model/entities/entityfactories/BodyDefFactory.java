@@ -34,14 +34,18 @@ public class BodyDefFactory {
     }
 
     public static BodyDef getPlayerBodyDef(float x, float y){
-        return getBodyDef(x, y, BodyDef.BodyType.DynamicBody,
+        BodyDef bodyDef = getBodyDef(x, y, BodyDef.BodyType.DynamicBody,
             GameConfig.getInstance().getPlayerConfig().getWidth(),
             GameConfig.getInstance().getPlayerConfig().getHeight());
+        bodyDef.linearDamping = 4f;
+        return bodyDef;
     }
 
     public static BodyDef getRusherEnemyBodyDef(float x, float y){
-        return getBodyDef(x, y, BodyDef.BodyType.DynamicBody,
+        BodyDef bodyDef = getBodyDef(x, y, BodyDef.BodyType.DynamicBody,
             GameConfig.getInstance().getRusherEnemyConfig().getWidth(),
             GameConfig.getInstance().getRusherEnemyConfig().getHeight());
+        bodyDef.linearDamping = 4f;
+        return bodyDef;
     }
 }

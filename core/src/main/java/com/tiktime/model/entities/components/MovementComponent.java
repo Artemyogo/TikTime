@@ -29,7 +29,6 @@ public class MovementComponent {
     }
 
 
-    /// TODO: too wierd idk
     public void move(Body body, float delta) {
         if (direction.isZero()) {
             Vector2 stoppingImpulse = body.getLinearVelocity().scl(-body.getMass());
