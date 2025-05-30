@@ -24,8 +24,8 @@ public class ContactMasks {
         else
             throw new IllegalArgumentException("Category " + cat + " is not in this mask");
     }
-    public boolean check(Category catA, Category catB){
-        return (catA.is(A) && catB.is(B)) || (catA.is(B) && catB.is(A));
+    public boolean check(short catA, short catB){
+        return ((catA&A) == A && (catB&B) == B) || ((catA&B) == B && (catB&A) == A);
     }
 
 }

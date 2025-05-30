@@ -11,8 +11,9 @@ public class CollisionController implements ContactListener {
     private final WorldController worldController;
     private final List<Interaction> interactions = new ArrayList<>();
 
-    public void addInteraction(Interaction interaction) {
+    public CollisionController addInteraction(Interaction interaction) {
         interactions.add(interaction);
+        return this;
     }
 
     public CollisionController(WorldController worldController) {
@@ -21,34 +22,20 @@ public class CollisionController implements ContactListener {
 
     @Override
     public void beginContact(Contact contact) {
-        ContactMasks contactMasks = new ContactMasks(contact);
-        if(contactMasks.check(Category.PLAYER, Category.DOOR)) {
-            worldController.onDoorEntry();
-        }
-        if(contactMasks.check(Category.ENEMY_RUSHER, Category.DYNAMITE) || contactMasks.check(Category.PLAYER, Category.DYNAMITE)) {
-            Fixture dynamiteFixture = contactMasks.getFixture(Category.DYNAMITE);
-            worldController.explosion(dynamiteFixture.getBody(), 10, 100f);
-            worldController.deleteBody(dynamiteFixture.getBody());
-        }
+        for(Interaction interaction : interactions)
+            interaction.beginContact(contact);
     }
 
     @Override
     public void endContact(Contact contact) {
-        ContactMasks contactMasks = new ContactMasks(contact);
-        if(contactMasks.check(Category.PLAYER, Category.DOOR)) {
-            worldController.onDoorExit();
-        }
-
+        for(Interaction interaction : interactions)
+            interaction.endContact(contact);
     }
 
     @Override
     public void preSolve(Contact contact, Manifold manifold) {
-        ContactMasks contactMasks = new ContactMasks(contact);
-        if(contactMasks.check(Category.ENEMY_RUSHER, Category.PLAYER) || contactMasks.check(Category.ENEMY_RUSHER, Category.ENEMY_RUSHER)){
-            contact.setEnabled(false);
-            worldController.pushApart(contact.getFixtureA().getBody(), contact.getFixtureB().getBody());
-        }
-
+        for(Interaction interaction : interactions)
+            interaction.preSolve(contact);
     }
 
     @Override

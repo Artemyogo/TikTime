@@ -7,11 +7,15 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.tiktime.Main;
+import com.tiktime.controller.Interactions.DoorInteraction;
+import com.tiktime.controller.Interactions.DynamiteInteraction;
+import com.tiktime.controller.Interactions.EntityInteraction;
 import com.tiktime.controller.utils.MapSelector;
 import com.tiktime.controller.utils.MapSelectorStrategy;
 import com.tiktime.controller.utils.RandomSelectorStrategy;
 import com.tiktime.model.GameConfig;
 import com.tiktime.model.WorldModel;
+import com.tiktime.model.entities.Category;
 import com.tiktime.model.entities.livingenteties.PlayerModel;
 import com.tiktime.screens.MenuScreen;
 import com.tiktime.view.enteties.weapons.WeaponType;
@@ -38,7 +42,10 @@ public class WorldController {
         this.gameView = gameView;
         this.mapSelector = new MapSelector();
         TiledMap map = mapSelector.getMap(selectorStrategy);
-        this.worldModel = new WorldModel(map, new CollisionController(this));
+        this.worldModel = new WorldModel(map, new CollisionController(this).
+            addInteraction(new DynamiteInteraction(this)).
+            addInteraction(new DoorInteraction(this)).
+            addInteraction(new EntityInteraction(this)));
         gameView.setController(this);
 
         gameView.setWorld(worldModel.getWorld());
