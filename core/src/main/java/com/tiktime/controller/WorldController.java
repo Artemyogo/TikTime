@@ -13,6 +13,8 @@ import com.tiktime.controller.Interactions.EntityInteraction;
 import com.tiktime.controller.utils.MapSelector;
 import com.tiktime.controller.utils.MapSelectorStrategy;
 import com.tiktime.controller.utils.RandomSelectorStrategy;
+import com.tiktime.model.BodyManager;
+import com.tiktime.model.DoorSensorModel;
 import com.tiktime.model.GameConfig;
 import com.tiktime.model.WorldModel;
 import com.tiktime.model.entities.Category;
@@ -24,29 +26,27 @@ import com.tiktime.view.world.GameView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WorldController {
+public class WorldController implements IExplosive{
     private final Main game;
     private final GameView gameView;
     private WorldModel worldModel;
     private final MapSelector mapSelector;
-    private final MapSelectorStrategy selectorStrategy = new RandomSelectorStrategy();
     private boolean paused = false;
-    private int isInDoor = 0;
-    private final List<Body> toDelete = new ArrayList<>();
+    private final DoorSensorModel doorSensorModel = new DoorSensorModel();
     private WorldInputProcessor inputProcessor = new WorldInputProcessor(this);
     private final PlayerController playerController;
     private final EnemyController enemyController;
+    private BodyManager bodyManager;
 
     public WorldController(Main game, GameView gameView) {
         this.game = game;
         this.gameView = gameView;
         this.mapSelector = new MapSelector();
-        TiledMap map = mapSelector.getMap(selectorStrategy);
-        this.worldModel = new WorldModel(map, new CollisionController(this).
-            addInteraction(new DynamiteInteraction(this)).
-            addInteraction(new DoorInteraction(this)).
-            addInteraction(new EntityInteraction(this)));
+        TiledMap map = mapSelector.getMap(new RandomSelectorStrategy());
+        this.worldModel = new WorldModel(map);
         gameView.setController(this);
+
+        bodyManager = new BodyManager(worldModel.getWorld());
 
         gameView.setWorld(worldModel.getWorld());
         gameView.setMapRenderer(map);
@@ -54,6 +54,11 @@ public class WorldController {
         PlayerModel player = worldModel.getPlayerModel();
 
         playerController = new PlayerController(player, gameView.getWorldView());
+
+        worldModel.setCollisionController(new CollisionController(this).
+            addInteraction(new DynamiteInteraction(this, bodyManager)).
+            addInteraction(new DoorInteraction(doorSensorModel)).
+            addInteraction(new EntityInteraction()));
 
         gameView.setHud(PlayerModel.CurrentStats.getCoins());
         enemyController = new EnemyController(worldModel, gameView);
@@ -77,24 +82,27 @@ public class WorldController {
         if (paused) {
             return;
         }
-        inputProcessor.setInDoor(isInDoor > 0);
-        gameView.setIsInDoor(isInDoor > 0);
+        inputProcessor.setInDoor(doorSensorModel.isInDoor());
+        gameView.setIsInDoor(doorSensorModel.isInDoor());
         Vector2 direction = inputProcessor.getDirection();
 
         playerController.update(delta, direction);
         worldModel.update(delta);
         enemyController.update(delta);
-
-        for(Body i : toDelete)
-            worldModel.getWorld().destroyBody(i);
-        toDelete.clear();
+        bodyManager.flush();
     }
 
     public void changeMap(){
-        isInDoor = 0;
-        TiledMap map = mapSelector.getMap(selectorStrategy);
+        doorSensorModel.reset();
+        TiledMap map = mapSelector.getMap(new RandomSelectorStrategy());
         PlayerModel playerModel = worldModel.getPlayerModel();
-        this.worldModel = new WorldModel(map, new CollisionController(this), playerModel);
+
+        this.worldModel = new WorldModel(map, playerModel);
+        this.bodyManager = new BodyManager(worldModel.getWorld());
+        worldModel.setCollisionController(new CollisionController(this).
+            addInteraction(new DynamiteInteraction(this, bodyManager)).
+            addInteraction(new DoorInteraction(doorSensorModel)).
+            addInteraction(new EntityInteraction()));
 
         gameView.setWorld(worldModel.getWorld());
         gameView.setMapRenderer(map);
@@ -111,22 +119,11 @@ public class WorldController {
         return new Vector3(playerPosition.x, playerPosition.y + 0.2f, 0f);
     }
 
-    public void onDoorEntry(){
-        isInDoor++;
-    }
-
-    public void onDoorExit(){
-        isInDoor--;
-    }
 
     public void explosion(Body body, float radius, float force) {
         TiledMapTileLayer.Cell cell = (TiledMapTileLayer.Cell) body.getUserData();
         cell.setTile(null);
         worldModel.explosion(body.getPosition().x, body.getPosition().y, radius, force);
-    }
-
-    public void deleteBody(Body body){
-        toDelete.add(body);
     }
 
     public void setPaused(boolean paused) {
@@ -145,15 +142,5 @@ public class WorldController {
     public void goToMenu() {
         game.setScreen(new MenuScreen(game));
     }
-
-    public void pushApart(Body A, Body B) {
-        float pushMagnitude = 0.3f;
-        Vector2 directionAtoB = B.getPosition().cpy().sub(A.getPosition()).nor();
-        Vector2 impulseForA = directionAtoB.cpy().scl(-pushMagnitude);
-        A.applyLinearImpulse(impulseForA, A.getWorldCenter(), true);
-        Vector2 impulseForB = directionAtoB.cpy().scl(pushMagnitude);
-        B.applyLinearImpulse(impulseForB, B.getWorldCenter(), true);
-    }
-
 
 }

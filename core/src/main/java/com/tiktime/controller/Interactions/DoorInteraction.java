@@ -3,23 +3,24 @@ package com.tiktime.controller.Interactions;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.tiktime.controller.ContactMasks;
 import com.tiktime.controller.WorldController;
+import com.tiktime.model.DoorSensorModel;
 import com.tiktime.model.entities.Category;
 
 public class DoorInteraction extends Interaction {
-    WorldController worldController;
-    public DoorInteraction(WorldController worldController) {
+    DoorSensorModel doorSensorModel;
+    public DoorInteraction(DoorSensorModel doorSensorModel) {
         super(Category.DOOR.getBits(), Category.PLAYER.getBits());
-        this.worldController = worldController;
+        this.doorSensorModel = doorSensorModel;
     }
 
     @Override
     protected void onBeginContactInternal(Contact contact) {
-        worldController.onDoorEntry();
+        doorSensorModel.onDoorEntry();
     }
 
     @Override
     protected void onEndContactInternal(Contact contact) {
-        worldController.onDoorExit();
+        doorSensorModel.onDoorExit();
     }
 
     @Override
