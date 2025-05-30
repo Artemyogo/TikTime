@@ -10,8 +10,9 @@ import com.tiktime.model.entities.components.MovementComponent;
 import static com.badlogic.gdx.math.MathUtils.ceil;
 
 public abstract class LivingEntityModel extends EntityModel implements Movable, Healthable {
-    MovementComponent movementComponent;
-    HealthComponent healthComponent;
+    private MovementComponent movementComponent;
+    private HealthComponent healthComponent;
+    private boolean isExposlionApplied = false;
 
     public LivingEntityModel(MovementComponent movementComponent, HealthComponent healthComponent,
                              Body body, float width, float height, int id) {
@@ -72,6 +73,12 @@ public abstract class LivingEntityModel extends EntityModel implements Movable, 
 
     @Override
     public void setDirectionAndMove(Vector2 direction, float delta) {
+        if(isExposlionApplied){
+            if(body.getLinearVelocity().isZero(1f))
+                isExposlionApplied = false;
+            else
+                return;
+        }
         movementComponent.setDirection(direction);
         movementComponent.move(body, delta);
     }
@@ -85,6 +92,7 @@ public abstract class LivingEntityModel extends EntityModel implements Movable, 
 
     @Override
     public void applyExplosion(float x, float y, float radius, float force){
+        isExposlionApplied = true;
         float dist = getPosition().dst(x, y);
 
         float effect = (radius - dist) / radius;
