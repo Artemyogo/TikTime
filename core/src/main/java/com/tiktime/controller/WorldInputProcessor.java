@@ -2,6 +2,7 @@ package com.tiktime.controller;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Vector2;
 import com.tiktime.model.entities.MovingDirections;
@@ -12,6 +13,7 @@ import java.util.Collection;
 public class WorldInputProcessor implements InputProcessor {
     private boolean isInDoor = false;
     private final WorldController worldController;
+    /// WHEN CHANGED INPUT CONTROLLER THEN WE NEED TO CLEAR DIRECTIONS
     private final Collection<MovingDirections> directions = new ArrayList<>();
     private int mouseX, mouseY;
 
@@ -36,7 +38,7 @@ public class WorldInputProcessor implements InputProcessor {
     }
     @Override
     public boolean keyDown(int keycode) {
-        Gdx.app.log("INPUT", "Key pressed: " + keycode);
+//        Gdx.app.log("INPUT", "Key pressed: " + keycode);
         switch (keycode) {
             case Input.Keys.E:
                 if (isInDoor) {

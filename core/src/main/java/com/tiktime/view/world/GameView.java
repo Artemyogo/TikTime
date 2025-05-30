@@ -134,6 +134,10 @@ public class GameView implements Pausable, Renderable, Disposable {
         worldView.setPlayerDirection(direction);
     }
 
+    public WorldView getWorldView() {
+        return worldView;
+    }
+
     public void updatePlayerWeaponRotation(Vector3 screenCoords, Vector3 weaponCoords) {
         worldView.updatePlayerWeaponRotation(screenCoords, weaponCoords);
     }
