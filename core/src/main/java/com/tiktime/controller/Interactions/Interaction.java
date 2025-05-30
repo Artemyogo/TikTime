@@ -1,39 +1,41 @@
 package com.tiktime.controller.Interactions;
 
+import com.badlogic.gdx.physics.box2d.Contact;
 import com.tiktime.controller.ContactMasks;
 import com.tiktime.model.entities.Category;
 
 public abstract class Interaction {
-    protected final Category catA;
-    protected final Category catB;
+    protected final short catA;
+    protected final short catB;
 
-    protected Interaction(Category catA, Category catB) {
-        if (catA == null || catB == null) {
-            throw new IllegalArgumentException("Interaction categories cannot be null");
-        }
+    protected Interaction(short catA, short catB) {
         this.catA = catA;
         this.catB = catB;
     }
 
-    public final void beginContact(ContactMasks masks) {
-        if (masks == null)
-            throw new NullPointerException("ContactMasks cannot be null");
-        if (!masks.check(this.catA, this.catB)) {
-            return;
-        }
-        onBeginContactInternal(masks);
+    public final void beginContact(Contact contact) {
+        if (contact == null)
+            throw new NullPointerException("Contact cannot be null");
+        if (!new ContactMasks(contact).check(this.catA, this.catB)) return;
+        onBeginContactInternal(contact);
     }
 
-    protected abstract void onBeginContactInternal(ContactMasks masks);
-    void endContact(ContactMasks masks) {
-        if (masks == null)
-            throw new NullPointerException("ContactMasks cannot be null");
-         if (!masks.check(this.catA, this.catB)) return;
-
+    protected abstract void onBeginContactInternal(Contact contact);
+    public void endContact(Contact contact) {
+        if (contact == null)
+            throw new NullPointerException("Contact cannot be null");
+        if (!new ContactMasks(contact).check(this.catA, this.catB)) return;
+        onEndContactInternal(contact);
     };
 
-    protected abstract void onEndContactInternal(ContactMasks masks);
+    protected abstract void onEndContactInternal(Contact contact);
 
-    void preSolve() {};
+    public final void preSolve(Contact contact) {
+        if (contact == null)
+            throw new NullPointerException("Contact cannot be null");
+        if (!new ContactMasks(contact).check(this.catA, this.catB)) return;
+        onPreSolveContactInterval(contact);
+    };
+    protected abstract void onPreSolveContactInterval(Contact masks);
     void postSolve() {};
 }
