@@ -29,7 +29,7 @@ public class WorldController {
     private boolean paused = false;
     private int isInDoor = 0;
     private final List<Body> toDelete = new ArrayList<>();
-    private final WorldInputProcessor inputProcessor = new WorldInputProcessor(this);
+    private WorldInputProcessor inputProcessor = new WorldInputProcessor(this);
     private final PlayerController playerController;
     private final EnemyController enemyController;
 
@@ -46,13 +46,14 @@ public class WorldController {
 
         PlayerModel player = worldModel.getPlayerModel();
 
-        playerController = new PlayerController(player, gameView);
+        playerController = new PlayerController(player, gameView.getWorldView());
 
         gameView.setHud(PlayerModel.CurrentStats.getCoins());
         enemyController = new EnemyController(worldModel, gameView);
     }
 
     public void activateInputProcessor() {
+        inputProcessor = new WorldInputProcessor(this);
         Gdx.input.setInputProcessor(inputProcessor);
     }
 
@@ -80,7 +81,6 @@ public class WorldController {
         for(Body i : toDelete)
             worldModel.getWorld().destroyBody(i);
         toDelete.clear();
-
     }
 
     public void changeMap(){

@@ -1,19 +1,21 @@
 package com.tiktime.controller;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.tiktime.model.entities.livingenteties.PlayerModel;
 import com.tiktime.view.enteties.Direction;
 import com.tiktime.view.enteties.livingenteties.LivingEntityState;
 import com.tiktime.view.enteties.weapons.WeaponType;
 import com.tiktime.view.world.GameView;
+import com.tiktime.view.world.WorldView;
 
 public class PlayerController {
     PlayerModel player;
-    GameView gameView;
-    public PlayerController(PlayerModel playerModel, GameView gameView) {
+    WorldView worldView;
+    public PlayerController(PlayerModel playerModel, WorldView worldView) {
         this.player = playerModel;
-        this.gameView = gameView;
-        gameView.setPlayer(
+        this.worldView = worldView;
+        worldView.setPlayer(
             player.getPosition().x,
             player.getPosition().y,
             playerModel.getWidth(),
@@ -32,16 +34,18 @@ public class PlayerController {
 
     void update(float delta, Vector2 direction) {
         player.setDirectionAndMove(direction, delta);
+//        Gdx.app.log("PlayerController", player.getCurrentHealth() + "/" + player.getMaxHealth());
+        worldView.setPlayerCurHealth(player.getCurrentHealth());
+        worldView.setPlayerMaxHealth(player.getMaxHealth());
         Vector2 playerPosition = player.getPosition();
-        gameView.setPlayerCoordinates(playerPosition.x, playerPosition.y);
+        worldView.setPlayerCoordinates(playerPosition.x, playerPosition.y);
         if (direction.equals(Vector2.Zero)) {
-            gameView.setPlayerState(LivingEntityState.IDLE);
+            worldView.setPlayerState(LivingEntityState.IDLE);
         } else {
             if (direction.x != 0) {
-                gameView.setPlayerDirection(Direction.getDirection(direction));
+                worldView.setPlayerDirection(Direction.getDirection(direction));
             }
-            gameView.setPlayerState(LivingEntityState.RUNNING);
+            worldView.setPlayerState(LivingEntityState.RUNNING);
         }
     }
-
 }

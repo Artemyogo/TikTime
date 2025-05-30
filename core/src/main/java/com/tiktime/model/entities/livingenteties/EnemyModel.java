@@ -1,5 +1,6 @@
 package com.tiktime.model.entities.livingenteties;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
@@ -33,8 +34,11 @@ public abstract class EnemyModel extends LivingEntityModel implements Categoriab
         InPathRaycast callback = new InPathRaycast(player.getBody().getUserData());
         world.rayCast(callback, getBody().getPosition(), player.getBody().getPosition());
         if(callback.isInPath()){
+            Gdx.app.log(this.getClass().getSimpleName(), "In Path");
             Vector2 vec = new Vector2(player.getPosition()).sub(getPosition()).nor().scl(delta);
             setDirectionAndMove(vec, delta);
+        } else {
+            setDirectionAndMove(Vector2.Zero, delta);
         }
     }
 }

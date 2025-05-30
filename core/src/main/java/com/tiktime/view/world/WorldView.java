@@ -31,8 +31,8 @@ import java.util.Map;
 import static com.tiktime.view.consts.ScreenConstants.PPM;
 
 public class WorldView implements Pausable, Renderable, Disposable {
-//    private final boolean debug = true;
-    private final boolean debug = false;
+    private final boolean debug = true;
+//    private final boolean debug = false;
     private boolean paused = true;
     private final OrthographicCamera worldCamera;
     private final SpriteBatch worldBatch;
@@ -154,6 +154,14 @@ public class WorldView implements Pausable, Renderable, Disposable {
 
     public void setPlayerDirection(Direction direction) {
         playerView.setDirection(direction);
+    }
+
+    public void setPlayerCurHealth(int curHealth) {
+        playerView.setCurHealth(curHealth);
+    }
+
+    public void setPlayerMaxHealth(int maxHealth) {
+        playerView.setMaxHealth(maxHealth);
     }
 
     public void updatePlayerWeaponRotation(Vector3 screenCoords, Vector3 weaponCoords) {

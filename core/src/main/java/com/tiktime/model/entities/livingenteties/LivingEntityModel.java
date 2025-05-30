@@ -1,5 +1,6 @@
 package com.tiktime.model.entities.livingenteties;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.tiktime.model.entities.EntityModel;
@@ -77,7 +78,8 @@ public abstract class LivingEntityModel extends EntityModel implements Movable, 
 
     @Override
     public void applyDamage(int damage){
-        if(healthComponent.getCurrentHealth() <= 0) return;
+//        if(healthComponent.getCurrentHealth() <= 0) return;
+        Gdx.app.log(this.getClass().getSimpleName(), "apply damage " + damage);
         healthComponent.setCurrentHealth(healthComponent.getCurrentHealth() - damage);
     }
 
