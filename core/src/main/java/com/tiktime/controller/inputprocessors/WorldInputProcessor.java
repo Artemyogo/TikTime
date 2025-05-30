@@ -1,17 +1,18 @@
-package com.tiktime.controller;
+package com.tiktime.controller.inputprocessors;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Vector2;
+import com.tiktime.controller.WorldController;
 import com.tiktime.model.entities.MovingDirections;
+import com.tiktime.view.world.Pausable;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class WorldInputProcessor implements InputProcessor {
+public class WorldInputProcessor implements InputProcessor, Pausable {
     private boolean isInDoor = false;
+    private boolean paused = false;
     private final WorldController worldController;
     /// WHEN CHANGED INPUT CONTROLLER THEN WE NEED TO CLEAR DIRECTIONS
     private final Collection<MovingDirections> directions = new ArrayList<>();
@@ -36,16 +37,22 @@ public class WorldInputProcessor implements InputProcessor {
     public void setInDoor(boolean inDoor) {
         isInDoor = inDoor;
     }
+
+    @Override
+    public void setPause(boolean paused) {
+        this.paused = paused;
+    }
+
     @Override
     public boolean keyDown(int keycode) {
-//        Gdx.app.log("INPUT", "Key pressed: " + keycode);
         switch (keycode) {
-            case Input.Keys.E:
-                if (isInDoor) {
+            case Input.Keys.E: {
+                if (isInDoor && !paused) {
                     worldController.changeMap();
                     return true;
                 }
                 return false;
+            }
             case Input.Keys.W: {
                 directions.add(MovingDirections.UP);
                 return true;
@@ -88,21 +95,25 @@ public class WorldInputProcessor implements InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        mouseMoved(screenX, screenY);
         return false;
     }
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        mouseMoved(screenX, screenY);
         return false;
     }
 
     @Override
     public boolean touchCancelled(int screenX, int screenY, int pointer, int button) {
+        mouseMoved(screenX, screenY);
         return false;
     }
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
+        mouseMoved(screenX, screenY);
         return false;
     }
 

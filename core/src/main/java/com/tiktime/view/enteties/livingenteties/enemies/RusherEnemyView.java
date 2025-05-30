@@ -1,6 +1,8 @@
 package com.tiktime.view.enteties.livingenteties.enemies;
 
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.tiktime.view.enteties.Direction;
 import com.tiktime.view.enteties.livingenteties.LivingEntityState;
 
@@ -25,7 +27,7 @@ public class RusherEnemyView extends EnemyView {
         animManager.add("rusher-attacking", getAnimation("attacking-e", attackFrameDuration,
             LivingEntityState.ATTACKING.playMode));
 
-        float deathFrameDuration  = 0.1f;
+        float deathFrameDuration = 0.1f;
         animManager.add("rusher-dying", getAnimation("death-e", deathFrameDuration, LivingEntityState.DYING.playMode));
     }
 

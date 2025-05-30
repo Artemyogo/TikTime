@@ -9,9 +9,14 @@ import com.tiktime.model.entities.Category;
 import com.tiktime.model.entities.components.HealthComponent;
 import com.tiktime.model.entities.components.MovementComponent;
 import com.tiktime.model.entities.raycasts.InPathRaycast;
+import com.tiktime.model.events.EventManager;
+import com.tiktime.model.events.GameEvent;
+import com.tiktime.model.events.GameEventType;
+import com.tiktime.model.upgrades.UpgradeModel;
 
 public abstract class EnemyModel extends LivingEntityModel implements Categoriable {
     public static int idNext = 0;
+    private boolean deleted = false;
     Category category;
 
     public EnemyModel(Category category, MovementComponent movementComponent, HealthComponent healthComponent, Body body,
@@ -32,11 +37,22 @@ public abstract class EnemyModel extends LivingEntityModel implements Categoriab
         InPathRaycast callback = new InPathRaycast(player.getBody().getUserData());
         world.rayCast(callback, getBody().getPosition(), player.getBody().getPosition());
         if(callback.isInPath()){
-            Gdx.app.log(this.getClass().getSimpleName(), "In Path");
+//            Gdx.app.log(this.getClass().getSimpleName(), "In Path");
             Vector2 vec = new Vector2(player.getPosition()).sub(getPosition()).nor().scl(delta);
             setDirectionAndMove(vec, delta);
         } else {
             setDirectionAndMove(Vector2.Zero, delta);
         }
     }
+
+    @Override
+    public void death() {
+        UpgradeModel.getInstance().addMoney(100);
+        if (deleted)
+            throw new RuntimeException("You can't death now");
+        EventManager.fireEvent(new GameEvent(GameEventType.ENEMY_DEATH, this));
+        deleted = true;
+    }
+
+
 }

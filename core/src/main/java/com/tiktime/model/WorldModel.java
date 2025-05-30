@@ -7,6 +7,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Disposable;
 import com.tiktime.controller.CollisionController;
 import com.tiktime.model.entities.entityfactories.EntityFactory;
 import com.tiktime.model.entities.livingenteties.EnemyModel;
@@ -18,10 +19,18 @@ import com.tiktime.model.entities.entityfactories.BodyFactory;
 import com.tiktime.model.entities.entityfactories.FixtureFactory;
 
 import com.tiktime.model.entities.raycasts.InPathRaycast;
+import com.tiktime.model.events.EventListener;
+import com.tiktime.model.events.EventManager;
+import com.tiktime.model.events.GameEvent;
+import com.tiktime.model.events.GameEventType;
+import com.tiktime.view.enteties.livingenteties.LivingEntityState;
+
+import java.util.HashSet;
+import java.util.Set;
 
 import static com.tiktime.view.consts.ScreenConstants.PPM;
 
-public class WorldModel {
+public class WorldModel implements EventListener, Disposable {
     private final World world;
     private final float timeStep = 1 / 60f;
     private final int velocityIterations = 6;
@@ -29,7 +38,7 @@ public class WorldModel {
 
     private final TiledMap map;
     private PlayerModel player;
-    private Array<EnemyModel> enemies = new Array<>();
+    private Set<EnemyModel> enemies = new HashSet<>();
 
     public void update(float delta){
         world.step(delta, velocityIterations, positionIterations);
@@ -75,6 +84,8 @@ public class WorldModel {
 
     public void setCollisionController(CollisionController collisionController){
         world.setContactListener(collisionController);
+
+        EventManager.subscribe(GameEventType.ENEMY_DEATH, this);
     }
 
     public PlayerModel getPlayerModel(){
@@ -85,8 +96,8 @@ public class WorldModel {
         return player.getPosition();
     }
 
-    public Array<EnemyModel> getEnemies(){
-        return new Array<>(enemies);
+    public Set<EnemyModel> getEnemies(){
+        return new HashSet<>(enemies);
     }
 
     public World getWorld() {
@@ -94,7 +105,7 @@ public class WorldModel {
     }
 
     public void explosion(float x, float y, float radius, float force){
-        Array<LivingEntityModel> entities = new Array<>(enemies);
+        HashSet<LivingEntityModel> entities = new HashSet<>(enemies);
         entities.add(player);
         Vector2 position = new Vector2(x, y);
         entities.forEach(entity -> {
@@ -108,5 +119,22 @@ public class WorldModel {
 
     public float distance(Vector2 start, Vector2 end){
         return (float) Math.hypot(start.x - end.x, start.y - end.y);
+    }
+
+    @Override
+    public void onEvent(GameEvent event) {
+        if (event.type == GameEventType.ENEMY_DEATH) {
+            if (!(event.data instanceof EnemyModel)) {
+                throw new RuntimeException("WHAAAAAAAAAAAAT?!?!");
+            }
+
+            EnemyModel enemyModel = (EnemyModel) event.data;
+            enemies.remove(enemyModel);
+        }
+    }
+
+    @Override
+    public void dispose() {
+        EventManager.subscribe(GameEventType.ENEMY_DEATH, this);
     }
 }

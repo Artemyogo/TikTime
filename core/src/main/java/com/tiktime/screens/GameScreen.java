@@ -33,6 +33,7 @@ public class GameScreen extends ScreenAdapter {
 
     @Override
     public void dispose() {
+        worldController.dispose();
         gameView.dispose();
     }
 

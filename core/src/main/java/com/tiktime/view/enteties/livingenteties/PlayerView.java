@@ -36,7 +36,9 @@ public class PlayerView extends LivingEntityView {
         weapon.update(delta);
     }
 
-    public void setWeaponRotationDeg(float rotationDeg) {
+    public void updateWeaponRotationDeg(float rotationDeg) {
+        if (pause)
+            return;
         weapon.setRotationDeg(rotationDeg);
     }
 

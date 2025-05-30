@@ -37,6 +37,11 @@ public class PlayerModel extends LivingEntityModel implements Weaponable, Catego
     Category category;
 
     @Override
+    public void death() {
+
+    }
+
+    @Override
     public Category getCategory() {
         return category;
     }
@@ -60,8 +65,8 @@ public class PlayerModel extends LivingEntityModel implements Weaponable, Catego
                        HealthComponent healthComponent, Body body, float width, float height, int id) {
         super(movementComponent, healthComponent, body, width, height, id);
         this.weaponModel = weaponModel;
-        if (!Category.PLAYER.intercept(category.getBits()))
-            throw new IllegalArgumentException("Category intercepted by PlayerModel");
+        if (!Category.PLAYER.is(category.getBits()))
+            throw new IllegalArgumentException("Category is not Player");
 
         this.category = category;
     }
