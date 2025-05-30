@@ -38,11 +38,11 @@ public class WorldModel {
         }
     }
 
-    public WorldModel(TiledMap map, CollisionController collisionController) {
-        this(map, collisionController, null);
+    public WorldModel(TiledMap map) {
+        this(map, null);
     }
 
-    public WorldModel(TiledMap map, CollisionController collisionController, PlayerModel player) {
+    public WorldModel(TiledMap map, PlayerModel player) {
         this.map = map;
         this.world = new World(new Vector2(0, 0), true);
         MapProperties properties = map.getLayers().get("objects").getObjects().get("playerSpawn").getProperties();
@@ -71,6 +71,9 @@ public class WorldModel {
 
         TiledMapTileLayer dynamiteLayer = (TiledMapTileLayer) map.getLayers().get("dynamite");
         BodyFactory.createBodies(world, dynamiteLayer, FixtureFactory.getDynamiteFixture(), BodyDef.BodyType.StaticBody);
+    }
+
+    public void setCollisionController(CollisionController collisionController){
         world.setContactListener(collisionController);
     }
 
