@@ -143,20 +143,13 @@ public class GameView implements Pausable, Renderable, Disposable {
         worldView.updatePlayerWeaponRotation(screenCoords, weaponCoords);
     }
 
-    public void show() {
-        Gdx.input.setInputProcessor(Gdx.input.getInputProcessor());
-    }
+    public void show() {}
 
     public void resize(int width, int height) {
         worldView.resize(width, height);
         screenViewport.update(width, height, false);
         screenCamera.update();
         screenCamera.setToOrtho(false, width, height);
-    }
-
-    public void hide() {
-        Gdx.input.setInputProcessor(null);
-        dispose();
     }
 
     @Override

@@ -64,7 +64,6 @@ public class WorldController implements Pausable, Disposable, EventListener, IEx
         gameView.setMapRenderer(map);
 
         PlayerModel player = worldModel.getPlayerModel();
-
         playerController = new PlayerController(player, gameView.getWorldView());
 
         worldModel.setCollisionController(new CollisionController(this).
@@ -73,7 +72,8 @@ public class WorldController implements Pausable, Disposable, EventListener, IEx
             addInteraction(new EntityInteraction()));
 
         gameView.setHud(PlayerModel.CurrentStats.getCoins());
-        enemyController = new EnemyController(bodyManager, gameView);
+        enemyController = new EnemyController(gameView);
+        enemyController.setBodyManager(bodyManager);
         enemyController.setEnemies(worldModel.getEnemies());
 
         EventManager.subscribe(GameEventType.PLAYER_DEATH, this);
@@ -111,8 +111,8 @@ public class WorldController implements Pausable, Disposable, EventListener, IEx
         Vector2 direction = inputProcessor.getDirection();
 
         playerController.update(delta, direction);
-        worldModel.update(delta);
         enemyController.update(delta);
+        worldModel.update(delta);
         bodyManager.flush();
     }
 
@@ -121,8 +121,10 @@ public class WorldController implements Pausable, Disposable, EventListener, IEx
         TiledMap map = mapSelector.getMap(new RandomSelectorStrategy());
         PlayerModel playerModel = worldModel.getPlayerModel();
 
+        worldModel.dispose();
         this.worldModel = new WorldModel(map, playerModel);
         this.bodyManager = new BodyManager(worldModel.getWorld());
+        enemyController.setBodyManager(this.bodyManager);
         worldModel.setCollisionController(new CollisionController(this).
             addInteraction(new DynamiteInteraction(this, bodyManager)).
             addInteraction(new DoorInteraction(doorSensorModel)).
@@ -132,6 +134,7 @@ public class WorldController implements Pausable, Disposable, EventListener, IEx
         gameView.setMapRenderer(map);
         playerController.setPlayer(worldModel.getPlayerModel());
         enemyController.setEnemies(worldModel.getEnemies());
+//        enemyController.resubscribe();
     }
 
     Vector3 getWeaponPosition(Vector2 playerPosition, WeaponType weapon) {

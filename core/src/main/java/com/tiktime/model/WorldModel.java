@@ -80,12 +80,13 @@ public class WorldModel implements EventListener, Disposable {
 
         TiledMapTileLayer dynamiteLayer = (TiledMapTileLayer) map.getLayers().get("dynamite");
         BodyFactory.createBodies(world, dynamiteLayer, FixtureFactory.getDynamiteFixture(), BodyDef.BodyType.StaticBody);
+
+        EventManager.subscribe(GameEventType.ENEMY_DEATH, this);
     }
 
     public void setCollisionController(CollisionController collisionController){
         world.setContactListener(collisionController);
 
-        EventManager.subscribe(GameEventType.ENEMY_DEATH, this);
     }
 
     public PlayerModel getPlayerModel(){
@@ -135,6 +136,6 @@ public class WorldModel implements EventListener, Disposable {
 
     @Override
     public void dispose() {
-        EventManager.subscribe(GameEventType.ENEMY_DEATH, this);
+        EventManager.unsubscribe(GameEventType.ENEMY_DEATH, this);
     }
 }

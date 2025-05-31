@@ -113,6 +113,8 @@ public class WorldView implements Pausable, Renderable, Disposable {
         Gdx.app.log("DIFF", "--------");
         for (Map.Entry<Integer, EnemyView> i : enemyViews.entrySet())
         {
+
+            Gdx.app.log("ADDDED ID ENEMY obj", this.toString());
             Gdx.app.log("ADDDED ID ENEM", i.getKey().toString() + "/" + i.getValue().getId());
 
         }
