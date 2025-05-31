@@ -1,4 +1,4 @@
-package com.tiktime.controller;
+package com.tiktime.controller.world;
 
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.Fixture;

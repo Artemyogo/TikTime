@@ -27,7 +27,7 @@ public class MenuScreen extends ScreenAdapter {
 
     @Override
     public void hide() {
-        menuView.hide();
+        dispose();
     }
 
     @Override

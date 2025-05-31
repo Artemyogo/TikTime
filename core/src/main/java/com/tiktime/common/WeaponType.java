@@ -1,4 +1,4 @@
-package com.tiktime.model.entities.weapons;
+package com.tiktime.common;
 
 public enum WeaponType {
     AK47,

@@ -1,10 +1,9 @@
 package com.tiktime.view.enteties.livingenteties.enemies;
 
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.tiktime.view.enteties.Direction;
-import com.tiktime.view.enteties.livingenteties.LivingEntityState;
+import com.tiktime.common.Direction;
+import com.tiktime.common.EnemyType;
+import com.tiktime.common.LivingEntityState;
 
 public class RusherEnemyView extends EnemyView {
     public static final String atlasPath = "animations/rusher.atlas";

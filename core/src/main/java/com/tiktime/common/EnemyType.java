@@ -1,4 +1,4 @@
-package com.tiktime.view.enteties.livingenteties.enemies;
+package com.tiktime.common;
 
 public enum EnemyType {
     MARKSMAN(0),

@@ -1,4 +1,4 @@
-package com.tiktime.view.enteties.livingenteties;
+package com.tiktime.common;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
 

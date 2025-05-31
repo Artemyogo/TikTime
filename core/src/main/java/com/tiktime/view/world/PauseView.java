@@ -12,7 +12,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.tiktime.controller.WorldController;
+import com.tiktime.common.Pausable;
+import com.tiktime.controller.world.WorldController;
 import com.tiktime.controller.inputprocessors.SeparatorFromWorldInputProcessor;
 
 public class PauseView implements Pausable, Renderable, Disposable {
@@ -59,7 +60,7 @@ public class PauseView implements Pausable, Renderable, Disposable {
     }
 
     @Override
-    public void setPause(boolean paused) {
+    public void setPaused(boolean paused) {
         this.paused = paused;
     }
 

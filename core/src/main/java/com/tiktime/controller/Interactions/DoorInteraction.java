@@ -1,8 +1,6 @@
 package com.tiktime.controller.Interactions;
 
 import com.badlogic.gdx.physics.box2d.Contact;
-import com.tiktime.controller.ContactMasks;
-import com.tiktime.controller.WorldController;
 import com.tiktime.model.DoorSensorModel;
 import com.tiktime.model.entities.Category;
 

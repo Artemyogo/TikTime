@@ -11,8 +11,8 @@ import com.tiktime.view.enteties.AnimationManager;
 import java.util.Comparator;
 
 public abstract class AnimatedEntityView extends EntityView {
-    protected final TextureAtlas atlas;
     protected final AnimationManager animManager;
+    protected final TextureAtlas atlas;
     protected final SpriteBatch batch;
 
     public AnimatedEntityView(float x, float y, float width, float height, String atlasPath, SpriteBatch batch) {

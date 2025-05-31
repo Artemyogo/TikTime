@@ -1,7 +1,7 @@
 package com.tiktime.model.configs;
 
 import com.tiktime.model.configs.configdata.*;
-import com.tiktime.model.entities.weapons.WeaponType;
+import com.tiktime.common.WeaponType;
 
 public final class GameConfig {
     private static final ConfigData data = ConfigLoader.load();

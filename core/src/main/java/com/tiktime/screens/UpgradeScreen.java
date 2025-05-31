@@ -4,7 +4,7 @@ import com.badlogic.gdx.ScreenAdapter;
 import com.tiktime.Main;
 import com.tiktime.controller.UpgradeController;
 import com.tiktime.model.upgrades.UpgradeModel;
-import com.tiktime.view.world.UpgradeView;
+import com.tiktime.view.UpgradeView;
 
 public class UpgradeScreen extends ScreenAdapter {
     UpgradeController controller;

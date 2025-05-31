@@ -14,7 +14,7 @@ import com.tiktime.model.entities.livingenteties.PlayerModel;
 import com.tiktime.model.entities.livingenteties.RusherEnemyModel;
 import com.tiktime.model.entities.weapons.Ak47WeaponModel;
 import com.tiktime.model.entities.weapons.WeaponModel;
-import com.tiktime.model.entities.weapons.WeaponType;
+import com.tiktime.common.WeaponType;
 
 public class EntityFactory {
     public static PlayerModel createPlayerModel(World world, float x, float y) {
@@ -63,7 +63,6 @@ public class EntityFactory {
 
     public static RusherEnemyModel createRusherEnemyModel(World world, float x, float y) {
         RusherEnemyData rusherConfig = GameConfig.getRusherEnemyConfig();
-//        WeaponModel weaponModel = createAk47WeaponModel();
         MovementComponent movementComponent = new MovementComponent(
             rusherConfig.getBaseSpeed(),
             Vector2.Zero
@@ -77,6 +76,7 @@ public class EntityFactory {
             Category.ENEMY_RUSHER,
             movementComponent,
             healthComponent,
+            rusherConfig.getReward(),
             BodyFactory.createRusherEnemyBody(world, x, y),
             rusherConfig.getWidth(),
             rusherConfig.getHeight()

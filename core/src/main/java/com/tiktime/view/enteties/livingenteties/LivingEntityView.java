@@ -3,7 +3,8 @@ package com.tiktime.view.enteties.livingenteties;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.tiktime.view.enteties.Direction;
+import com.tiktime.common.Direction;
+import com.tiktime.common.LivingEntityState;
 
 public abstract class LivingEntityView extends HealthEntityView {
     protected Direction direction;

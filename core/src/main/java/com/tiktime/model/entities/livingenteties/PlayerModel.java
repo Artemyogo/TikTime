@@ -13,7 +13,7 @@ import com.tiktime.model.events.GameEvent;
 import com.tiktime.model.events.GameEventType;
 import com.tiktime.model.upgrades.UpgradeModel;
 import com.tiktime.model.upgrades.UpgradeType;
-import com.tiktime.model.entities.weapons.WeaponType;
+import com.tiktime.common.WeaponType;
 
 public class PlayerModel extends LivingEntityModel implements Weaponable, Categoriable {
     public static class CurrentStats {
@@ -28,7 +28,7 @@ public class PlayerModel extends LivingEntityModel implements Weaponable, Catego
         }
 
         public static float getSpeed() {
-            return upgradeModel.getUpgrade(UpgradeType.SPEED).getLevel() * 3 + playerConfig.getBaseSpeed();
+            return upgradeModel.getUpgrade(UpgradeType.SPEED).getLevel() * 0.3f + playerConfig.getBaseSpeed();
         }
 
         public static float getDamage() {

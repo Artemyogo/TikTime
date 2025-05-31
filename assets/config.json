@@ -22,7 +22,8 @@
     "height": 1.5,
     "baseHp": 15,
     "baseSpeed": 3,
-    "baseDamage": 10
+    "baseDamage": 10,
+    "reward": 100
   },
   "ak47": {},
   "entity": {

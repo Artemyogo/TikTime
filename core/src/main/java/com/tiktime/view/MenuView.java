@@ -9,8 +9,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.Disposable;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.tiktime.controller.MenuController;
 import com.tiktime.view.world.Renderable;
 
@@ -22,12 +25,13 @@ public class MenuView implements Disposable, Renderable {
     private TextButton exitButton;
     private Label titleLabel;
     private TextButton upgradeButton;
-    private FitViewport viewport;
+    private Viewport screenViewport;
 
     public MenuView(MenuController menuController) {
         this.menuController = menuController;
-        viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        stage = new Stage(viewport);
+        screenViewport = new ScreenViewport();
+        screenViewport.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
+        stage = new Stage(screenViewport);
         skin = new Skin(Gdx.files.internal("flat-earth/skin/flat-earth-ui.json"));
 
         createUI();
@@ -35,11 +39,6 @@ public class MenuView implements Disposable, Renderable {
 
     public void show() {
         Gdx.input.setInputProcessor(stage);
-    }
-
-    public void hide() {
-        Gdx.input.setInputProcessor(null);
-        dispose();
     }
 
     @Override
@@ -50,7 +49,7 @@ public class MenuView implements Disposable, Renderable {
     }
 
     public void resize(int width, int height) {
-        stage.getViewport().update(width, height, true);
+        screenViewport.update(width, height, true);
     }
 
     @Override
@@ -61,7 +60,7 @@ public class MenuView implements Disposable, Renderable {
 
     private void createUI() {
         Table table = new Table();
-        table.setFillParent(true); // Растягиваем на весь экран
+        table.setFillParent(true);
         stage.addActor(table);
 
         //titleLabel = new Label("TikTime", skin, "title");
@@ -73,7 +72,6 @@ public class MenuView implements Disposable, Renderable {
         startButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                // Через menuController обрабатываем
                 menuController.onPlayClicked();
             }
         });
@@ -84,7 +82,6 @@ public class MenuView implements Disposable, Renderable {
         upgradeButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                // Через menuController обрабатываем
                 menuController.onUpgradeClicked();
             }
         });
@@ -95,7 +92,6 @@ public class MenuView implements Disposable, Renderable {
         exitButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                // Через menuController обрабатываем
                 menuController.onExitClicked();
             }
         });
