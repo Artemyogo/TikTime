@@ -27,6 +27,8 @@ public class EnemyController implements EventListener, Disposable {
     /// TODO: REDO THIS
     private final int deathTime = 100;
     private Map<EnemyModel, Integer> enemyTimeLeft = new HashMap<>();
+    private final float baseAttackTics = 0.1f;
+    private Map<EnemyModel, Float> curAttackTics = new HashMap<>();
     private WorldController worldController;
     private GameView gameView;
     private BodyManager bodyManager;
@@ -34,6 +36,7 @@ public class EnemyController implements EventListener, Disposable {
     public EnemyController(GameView gameView) {
         this.gameView = gameView;
         EventManager.subscribe(GameEventType.ENEMY_DEATH, this);
+        EventManager.subscribe(GameEventType.ENEMY_ATTACKED, this);
     }
 
     public void setBodyManager(BodyManager bodyManager) {
@@ -45,7 +48,7 @@ public class EnemyController implements EventListener, Disposable {
 //        EventManager.subscribe(GameEventType.ENEMY_DEATH, this);
 //    }
 
-    public void update(double delta) {
+    public void update(float delta) {
         HashSet<EnemyModel> readyToDie = new HashSet<>();
 
         enemiesToDie.forEach(e -> {
@@ -61,6 +64,7 @@ public class EnemyController implements EventListener, Disposable {
             gameView.deleteEnemy(e.getId());
             enemies.remove(e);
             enemyTimeLeft.remove(e);
+            curAttackTics.remove(e);
         });
 
         enemies.forEach(e -> {
@@ -71,6 +75,9 @@ public class EnemyController implements EventListener, Disposable {
                 if (!e.getDirection().equals(Vector2.Zero)) {
                     gameView.setEnemyDirection(Direction.getDirection(e.getDirection()), e.getId());
                 }
+
+                curAttackTics.put(e, Math.max(0f, curAttackTics.get(e) - delta));
+                gameView.setEnemyIsAttacked(e.getId(), curAttackTics.get(e) != 0f);
             }
         });
 
@@ -84,7 +91,8 @@ public class EnemyController implements EventListener, Disposable {
         this.enemies = enemies;
 
         for (EnemyModel e : enemies) {
-            Gdx.app.log("setEnemiesMODEL", String.valueOf(e.getId()));
+            curAttackTics.put(e, 0f);
+//            Gdx.app.log("setEnemiesMODEL", String.valueOf(e.getId()));
             gameView.addEnemy(e.getBody().getPosition().x, e.getBody().getPosition().y,
                 e.getWidth(), e.getHeight(),
                 e.getCurrentHealth(), e.getMaxHealth(),
@@ -106,13 +114,23 @@ public class EnemyController implements EventListener, Disposable {
             gameView.setEnemyState(LivingEntityState.DYING, enemyModel.getId());
             enemiesToDie.add(enemyModel);
             enemyTimeLeft.put(enemyModel, deathTime);
-            Gdx.app.log("HAHAHAH", String.valueOf(enemyModel.getId()));
+//            Gdx.app.log("HAHAHAH", String.valueOf(enemyModel.getId()));
             bodyManager.setToDelete(enemyModel.getBody());
+        }
+
+        if (event.type == GameEventType.ENEMY_ATTACKED) {
+            if (!(event.data instanceof EnemyModel)) {
+                throw new RuntimeException("WHAAAAAAAAAAAAT?!?!");
+            }
+
+            EnemyModel enemyModel = (EnemyModel) event.data;
+            curAttackTics.put(enemyModel, baseAttackTics);
         }
     }
 
     @Override
     public void dispose() {
         EventManager.unsubscribe(GameEventType.ENEMY_DEATH, this);
+        EventManager.unsubscribe(GameEventType.ENEMY_ATTACKED, this);
     }
 }

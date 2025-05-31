@@ -76,6 +76,14 @@ public class GameView implements Pausable, Renderable, Disposable {
             coins);
     }
 
+    public void setPlayerIsAttacked(boolean isAttacked) {
+        worldView.setPlayerIsAttacked(isAttacked);
+    }
+
+    public void setEnemyIsAttacked(int id, boolean isAttacked) {
+        worldView.setEnemyIsAttacked(id, isAttacked);
+    }
+
     @Override
     public void render(float delta) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
