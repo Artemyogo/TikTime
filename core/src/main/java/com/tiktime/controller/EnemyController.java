@@ -31,11 +31,19 @@ public class EnemyController implements EventListener, Disposable {
     private GameView gameView;
     private BodyManager bodyManager;
 
-    public EnemyController(BodyManager bodyManager, GameView gameView) {
+    public EnemyController(GameView gameView) {
         this.gameView = gameView;
-        this.bodyManager = bodyManager;
         EventManager.subscribe(GameEventType.ENEMY_DEATH, this);
     }
+
+    public void setBodyManager(BodyManager bodyManager) {
+        this.bodyManager = bodyManager;
+    }
+
+//    public void resubscribe() {
+//        EventManager.unsubscribe(GameEventType.ENEMY_DEATH, this);
+//        EventManager.subscribe(GameEventType.ENEMY_DEATH, this);
+//    }
 
     public void update(double delta) {
         HashSet<EnemyModel> readyToDie = new HashSet<>();
