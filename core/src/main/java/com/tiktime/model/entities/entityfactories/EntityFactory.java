@@ -21,12 +21,12 @@ public class EntityFactory {
         WeaponModel weaponModel = createAk47WeaponModel();
         PlayerData playerConfig = GameConfig.getPlayerConfig();
         MovementComponent movementComponent = new MovementComponent(
-            playerConfig.getBaseSpeed(),
-            Vector2.Zero
+                PlayerModel.CurrentStats.getSpeed(),
+                Vector2.Zero
         );
         HealthComponent healthComponent = new HealthComponent(
-            playerConfig.getBaseHp(),
-            playerConfig.getBaseHp()
+                PlayerModel.CurrentStats.getHealth(),
+                PlayerModel.CurrentStats.getHealth()
         );
 
         return new PlayerModel(
@@ -47,7 +47,7 @@ public class EntityFactory {
         WeaponModel weaponModel = playerModel.getWeaponModel();
         MovementComponent movementComponent = playerModel.getMovementComponent();
         HealthComponent healthComponent = playerModel.getHealthComponent();
-        healthComponent.regenerateHealth(playerConfig.getBaseRegen());
+        healthComponent.regenerateHealth(PlayerModel.CurrentStats.getRegenHealth());
 
         return new PlayerModel(
             Category.PLAYER,
