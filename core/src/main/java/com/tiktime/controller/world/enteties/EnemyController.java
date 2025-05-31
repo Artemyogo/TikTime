@@ -65,10 +65,10 @@ public class EnemyController implements EventListener, Disposable {
                 if (!e.getDirection().equals(Vector2.Zero)) {
                     worldView.setEnemyDirection(Direction.getDirection(e.getDirection()), e.getId());
                 }
-
-                curDamageTime.put(e, Math.max(0f, curDamageTime.get(e) - delta));
-                worldView.setEnemyIsAttacked(e.getId(), curDamageTime.get(e) != 0f);
             }
+
+            curDamageTime.put(e, Math.max(0f, curDamageTime.get(e) - delta));
+            worldView.setEnemyIsAttacked(e.getId(), curDamageTime.get(e) != 0f);
         });
 
         readyToDie.forEach(e -> {
