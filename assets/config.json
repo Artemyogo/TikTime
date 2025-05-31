@@ -9,7 +9,7 @@
     "baseHp": 100,
     "baseSpeed": 15 ,
     "baseDamage": 10,
-    "baseRegen": 0
+    "baseRegen": 10
   },
   "marksman": {},
   "animan": {},
