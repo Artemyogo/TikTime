@@ -3,9 +3,9 @@ package com.tiktime.controller.inputprocessors;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Vector2;
-import com.tiktime.controller.WorldController;
+import com.tiktime.controller.world.WorldController;
 import com.tiktime.model.entities.MovingDirections;
-import com.tiktime.view.world.Pausable;
+import com.tiktime.common.Pausable;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -39,7 +39,7 @@ public class WorldInputProcessor implements InputProcessor, Pausable {
     }
 
     @Override
-    public void setPause(boolean paused) {
+    public void setPaused(boolean paused) {
         this.paused = paused;
     }
 

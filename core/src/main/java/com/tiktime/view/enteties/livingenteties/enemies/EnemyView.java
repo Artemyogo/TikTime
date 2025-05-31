@@ -1,8 +1,9 @@
 package com.tiktime.view.enteties.livingenteties.enemies;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.tiktime.view.enteties.Direction;
-import com.tiktime.view.enteties.livingenteties.LivingEntityState;
+import com.tiktime.common.Direction;
+import com.tiktime.common.EnemyType;
+import com.tiktime.common.LivingEntityState;
 import com.tiktime.view.enteties.livingenteties.LivingEntityView;
 
 public abstract class EnemyView extends LivingEntityView {

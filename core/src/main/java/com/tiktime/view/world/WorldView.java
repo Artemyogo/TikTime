@@ -1,6 +1,5 @@
 package com.tiktime.view.world;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -14,15 +13,16 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.tiktime.common.Pausable;
 import com.tiktime.view.consts.ScreenConstants;
-import com.tiktime.view.enteties.Direction;
-import com.tiktime.view.enteties.livingenteties.LivingEntityState;
+import com.tiktime.common.Direction;
+import com.tiktime.common.LivingEntityState;
 import com.tiktime.view.enteties.livingenteties.LivingEntityView;
 import com.tiktime.view.enteties.livingenteties.PlayerView;
-import com.tiktime.view.enteties.livingenteties.enemies.EnemyType;
+import com.tiktime.common.EnemyType;
 import com.tiktime.view.enteties.livingenteties.enemies.EnemyView;
 import com.tiktime.view.enteties.livingenteties.enemies.RusherEnemyView;
-import com.tiktime.model.entities.weapons.WeaponType;
+import com.tiktime.common.WeaponType;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -100,9 +100,9 @@ public class WorldView implements Pausable, Renderable, Disposable {
         }
     }
 
-    public void setPlayer(float x, float y, float width, float height, int curHealth, int maxHealth,
+    public void setPlayer(float x, float y, float width, float height, int curHealth, int maxHealth, int coins,
                           Direction direction, LivingEntityState state, WeaponType weapon) {
-        playerView = new PlayerView(x, y, width, height, curHealth, maxHealth, direction, state, weapon, worldBatch);
+        playerView = new PlayerView(x, y, width, height, curHealth, maxHealth, coins, direction, state, weapon, worldBatch);
     }
 
     public void addEnemy(float x, float y, float width, float height, int curHealth, int maxHealth, int id, Direction direction,
@@ -116,20 +116,9 @@ public class WorldView implements Pausable, Renderable, Disposable {
             default:
                 throw new RuntimeException("SJOHAGFJIGHSDGJIKHLBSD");
         }
-
-//        Gdx.app.log("ADDDED ID ENEM", String.valueOf(id));
-//        Gdx.app.log("DIFF", "--------");
-//        for (Map.Entry<Integer, EnemyView> i : enemyViews.entrySet())
-//        {
-//
-//            Gdx.app.log("ADDDED ID ENEMY obj", this.toString());
-//            Gdx.app.log("ADDDED ID ENEM", i.getKey().toString() + "/" + i.getValue().getId());
-//
-//        }
     }
 
     public void deleteEnemy(int id) {
-//        Gdx.app.log("DELET ID ENEM", String.valueOf(id));
         enemyViews.remove(id);
     }
 
@@ -146,25 +135,10 @@ public class WorldView implements Pausable, Renderable, Disposable {
         enemyView.setPosition(x, y);
     }
 
-    public void setEnemySize(float width, float height, int id) {
-        EnemyView enemyView = enemyViews.get(id);
-        enemyView.setSize(width, height);
-    }
 
     public void setEnemyState(LivingEntityState state, int id) {
-//        Gdx.app.log("SETENEMY STATE", String.valueOf(id));
         EnemyView enemyView = enemyViews.get(Integer.valueOf(id));
         enemyView.setState(state);
-//        if (enemyView == null) {
-//            Gdx.app.log("CRYCRY", "1");
-//
-//            for (EnemyView e : enemyViews.values()) {
-//                Gdx.app.log("SETENEMY STATE NULL EXC", String.valueOf(e.getId()));
-//            }
-//        }
-//        } else {
-
-//        }
     }
 
     public void setEnemyDirection(Direction direction, int id) {
@@ -176,10 +150,6 @@ public class WorldView implements Pausable, Renderable, Disposable {
         playerView.setPosition(x, y);
         worldCamera.position.set(x, y, 0);
         worldCamera.update();
-    }
-
-    public void setPlayerSizes(float width, float height) {
-        playerView.setSize(width, height);
     }
 
     public void setPlayerState(LivingEntityState state) {
@@ -207,14 +177,7 @@ public class WorldView implements Pausable, Renderable, Disposable {
     }
 
     public void clearEnemies() {
-        Gdx.app.log("CLEAR ENEMIES", "0");
         enemyViews.clear();
-        Gdx.app.log("CLEAR ENEMIES SIZE AND ELSE", String.valueOf(enemyViews.size()));
-        for (Map.Entry<Integer, EnemyView> i : enemyViews.entrySet())
-        {
-            Gdx.app.log("CLEAR ENEMIES CNT", i.getKey().toString() + "/" + i.getValue().getId());
-        }
-
     }
 
     public ArrayList<LivingEntityView> getLivingEntities() {
@@ -224,10 +187,10 @@ public class WorldView implements Pausable, Renderable, Disposable {
     }
 
     @Override
-    public void setPause(boolean paused) {
+    public void setPaused(boolean paused) {
         this.paused = paused;
         ArrayList<? extends Pausable> allPausables = getLivingEntities();
-        allPausables.forEach(p -> p.setPause(paused));
+        allPausables.forEach(p -> p.setPaused(paused));
     }
 
     @Override

@@ -1,9 +1,7 @@
 package com.tiktime.controller.Interactions;
 
 import com.badlogic.gdx.physics.box2d.Contact;
-import com.tiktime.controller.ContactMasks;
-import com.tiktime.controller.PhysicsController;
-import com.tiktime.controller.WorldController;
+import com.tiktime.controller.world.PhysicsController;
 import com.tiktime.model.entities.Category;
 
 public class EntityInteraction extends Interaction {

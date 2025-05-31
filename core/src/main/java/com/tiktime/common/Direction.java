@@ -1,4 +1,4 @@
-package com.tiktime.view.enteties;
+package com.tiktime.common;
 
 import com.badlogic.gdx.math.Vector2;
 

@@ -2,7 +2,7 @@ package com.tiktime.screens;
 
 import com.badlogic.gdx.ScreenAdapter;
 import com.tiktime.Main;
-import com.tiktime.controller.WorldController;
+import com.tiktime.controller.world.WorldController;
 import com.tiktime.view.world.GameView;
 
 public class GameScreen extends ScreenAdapter {
@@ -17,7 +17,6 @@ public class GameScreen extends ScreenAdapter {
     @Override
     public void show() {
         worldController.activateInputProcessor();
-        gameView.show();
     }
 
     @Override

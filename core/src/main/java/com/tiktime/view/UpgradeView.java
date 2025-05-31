@@ -1,4 +1,4 @@
-package com.tiktime.view.world;
+package com.tiktime.view;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -15,6 +15,7 @@ import com.tiktime.controller.UpgradeController;
 import com.tiktime.model.upgrades.Upgrade;
 import com.tiktime.model.upgrades.UpgradeManager;
 import com.tiktime.model.upgrades.UpgradeType;
+import com.tiktime.view.world.Renderable;
 
 import java.util.EnumMap;
 import java.util.Map;
@@ -50,7 +51,6 @@ public class UpgradeView implements Disposable, Renderable {
     }
 
     public void setController(UpgradeController controller) {
-
         backButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -66,7 +66,6 @@ public class UpgradeView implements Disposable, Renderable {
                 }
             });
         }
-
     }
 
     private void createUI() {

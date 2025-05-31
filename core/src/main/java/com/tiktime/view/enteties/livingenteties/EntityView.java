@@ -1,6 +1,6 @@
 package com.tiktime.view.enteties.livingenteties;
 
-import com.tiktime.view.world.Pausable;
+import com.tiktime.common.Pausable;
 import com.tiktime.view.world.Renderable;
 
 public abstract class EntityView implements Pausable, Renderable {
@@ -24,7 +24,8 @@ public abstract class EntityView implements Pausable, Renderable {
         this.height = height;
     }
 
-    public void setPause(boolean pause) {
+    @Override
+    public void setPaused(boolean pause) {
         this.pause = pause;
     }
 

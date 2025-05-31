@@ -52,10 +52,6 @@ public class HudView implements Renderable, Disposable {
         health.dispose();
     }
 
-    public void setCoins(int coins) {
-        this.coins = coins;
-    }
-
     @Override
     public void render(float delta) {
         update(delta);
@@ -98,6 +94,7 @@ public class HudView implements Renderable, Disposable {
     public void update(float delta) {
         health.setCurValue(playerView.getCurHealth());
         health.setMaxValue(playerView.getMaxHealth());
+        coins = playerView.getCoins();
     }
 
     public void setIsInDoor(boolean isInDoor) {

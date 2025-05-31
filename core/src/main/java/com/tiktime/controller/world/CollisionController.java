@@ -1,8 +1,7 @@
-package com.tiktime.controller;
+package com.tiktime.controller.world;
 
 import com.badlogic.gdx.physics.box2d.*;
 import com.tiktime.controller.Interactions.Interaction;
-import com.tiktime.model.entities.Category;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -2,9 +2,8 @@ package com.tiktime.controller.Interactions;
 
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.Fixture;
-import com.tiktime.controller.ContactMasks;
-import com.tiktime.controller.IExplosive;
-import com.tiktime.controller.WorldController;
+import com.tiktime.controller.world.ContactMasks;
+import com.tiktime.controller.world.IExplosive;
 import com.tiktime.model.BodyManager;
 import com.tiktime.model.entities.Category;
 

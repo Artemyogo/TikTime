@@ -1,8 +1,7 @@
 package com.tiktime.controller.Interactions;
 
 import com.badlogic.gdx.physics.box2d.Contact;
-import com.tiktime.controller.ContactMasks;
-import com.tiktime.model.entities.Category;
+import com.tiktime.controller.world.ContactMasks;
 
 public abstract class Interaction {
     protected final short catA;
