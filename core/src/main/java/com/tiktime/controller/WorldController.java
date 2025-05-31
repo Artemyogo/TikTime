@@ -46,6 +46,8 @@ public class WorldController implements Pausable, Disposable, EventListener, IEx
     private final PlayerController playerController;
     private final EnemyController enemyController;
     private BodyManager bodyManager;
+    private final float baseAttackTics = 0.1f;
+    private float curAttackTics = 0;
 
     public WorldController(Main game, GameView gameView) {
         this.game = game;
@@ -78,6 +80,7 @@ public class WorldController implements Pausable, Disposable, EventListener, IEx
 
         EventManager.subscribe(GameEventType.PLAYER_DEATH, this);
         EventManager.subscribe(GameEventType.ENEMY_DEATH, this);
+        EventManager.subscribe(GameEventType.PLAYER_ATTACKED, this);
     }
 
     /// TODO: BEWARE idk this is good or not maybe with 'stage' it is acceptable
@@ -106,6 +109,11 @@ public class WorldController implements Pausable, Disposable, EventListener, IEx
         if (paused) {
             return;
         }
+
+        curAttackTics = Math.max(0, curAttackTics - delta);
+        Gdx.app.log(this.toString(), String.valueOf(curAttackTics));
+        gameView.setPlayerIsAttacked(curAttackTics != 0);
+
         inputProcessor.setInDoor(doorSensorModel.isInDoor());
         gameView.setIsInDoor(doorSensorModel.isInDoor());
         Vector2 direction = inputProcessor.getDirection();
@@ -183,6 +191,7 @@ public class WorldController implements Pausable, Disposable, EventListener, IEx
     public void dispose() {
         EventManager.unsubscribe(GameEventType.ENEMY_DEATH, this);
         EventManager.unsubscribe(GameEventType.PLAYER_DEATH, this);
+        EventManager.unsubscribe(GameEventType.PLAYER_ATTACKED, this);
         enemyController.dispose();
         worldModel.dispose();
     }
@@ -208,6 +217,13 @@ public class WorldController implements Pausable, Disposable, EventListener, IEx
             }
 
 
+        }
+        if (event.type == GameEventType.PLAYER_ATTACKED) {
+            if (!(event.data instanceof PlayerModel)) {
+                throw new RuntimeException("WHAAAAAAAAAAAAT?!?!");
+            }
+
+            curAttackTics = baseAttackTics;
         }
     }
 }

@@ -6,7 +6,7 @@
     "acceleration": 50.0,
     "width": 1,
     "height": 1.5,
-    "baseHp": 10,
+    "baseHp": 100,
     "baseSpeed": 15 ,
     "baseDamage": 10,
     "baseRegen": 0
@@ -20,7 +20,7 @@
     "acceleration": 5.0,
     "width": 1,
     "height": 1.5,
-    "baseHp": 10,
+    "baseHp": 15,
     "baseSpeed": 3,
     "baseDamage": 10
   },

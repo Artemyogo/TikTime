@@ -46,6 +46,12 @@ public abstract class EnemyModel extends LivingEntityModel implements Categoriab
     }
 
     @Override
+    public void applyDamage(int damage){
+        super.applyDamage(damage);
+        EventManager.fireEvent(new GameEvent(GameEventType.ENEMY_ATTACKED, this));
+    }
+
+    @Override
     public void death() {
         UpgradeModel.getInstance().addMoney(100);
         if (deleted)

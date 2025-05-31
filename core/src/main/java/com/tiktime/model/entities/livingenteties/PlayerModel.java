@@ -8,6 +8,9 @@ import com.tiktime.model.entities.Category;
 import com.tiktime.model.entities.components.HealthComponent;
 import com.tiktime.model.entities.components.MovementComponent;
 import com.tiktime.model.entities.weapons.WeaponModel;
+import com.tiktime.model.events.EventManager;
+import com.tiktime.model.events.GameEvent;
+import com.tiktime.model.events.GameEventType;
 import com.tiktime.model.upgrades.UpgradeModel;
 import com.tiktime.model.upgrades.UpgradeType;
 import com.tiktime.model.entities.weapons.WeaponType;
@@ -35,6 +38,12 @@ public class PlayerModel extends LivingEntityModel implements Weaponable, Catego
 
     WeaponModel weaponModel;
     Category category;
+
+    @Override
+    public void applyDamage(int damage){
+        super.applyDamage(damage);
+        EventManager.fireEvent(new GameEvent(GameEventType.PLAYER_ATTACKED, this));
+    }
 
     @Override
     public void death() {

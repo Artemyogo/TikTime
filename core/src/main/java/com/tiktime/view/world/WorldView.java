@@ -66,6 +66,14 @@ public class WorldView implements Pausable, Renderable, Disposable {
         mapRenderer = new OrthogonalTiledMapRenderer(map, 1f / PPM);
     }
 
+    public void setPlayerIsAttacked(boolean isAttacked) {
+        playerView.setIsAttacked(isAttacked);
+    }
+
+    public void setEnemyIsAttacked(int id, boolean isAttacked) {
+        enemyViews.get(id).setIsAttacked(isAttacked);
+    }
+
     public void setWorld(World world) {
         this.world = world;
     }
@@ -110,18 +118,18 @@ public class WorldView implements Pausable, Renderable, Disposable {
         }
 
 //        Gdx.app.log("ADDDED ID ENEM", String.valueOf(id));
-        Gdx.app.log("DIFF", "--------");
-        for (Map.Entry<Integer, EnemyView> i : enemyViews.entrySet())
-        {
-
-            Gdx.app.log("ADDDED ID ENEMY obj", this.toString());
-            Gdx.app.log("ADDDED ID ENEM", i.getKey().toString() + "/" + i.getValue().getId());
-
-        }
+//        Gdx.app.log("DIFF", "--------");
+//        for (Map.Entry<Integer, EnemyView> i : enemyViews.entrySet())
+//        {
+//
+//            Gdx.app.log("ADDDED ID ENEMY obj", this.toString());
+//            Gdx.app.log("ADDDED ID ENEM", i.getKey().toString() + "/" + i.getValue().getId());
+//
+//        }
     }
 
     public void deleteEnemy(int id) {
-        Gdx.app.log("DELET ID ENEM", String.valueOf(id));
+//        Gdx.app.log("DELET ID ENEM", String.valueOf(id));
         enemyViews.remove(id);
     }
 
@@ -144,17 +152,17 @@ public class WorldView implements Pausable, Renderable, Disposable {
     }
 
     public void setEnemyState(LivingEntityState state, int id) {
-        Gdx.app.log("SETENEMY STATE", String.valueOf(id));
+//        Gdx.app.log("SETENEMY STATE", String.valueOf(id));
         EnemyView enemyView = enemyViews.get(Integer.valueOf(id));
-        if (enemyView == null) {
-            Gdx.app.log("CRYCRY", "1");
-
-            for (EnemyView e : enemyViews.values()) {
-                Gdx.app.log("SETENEMY STATE NULL EXC", String.valueOf(e.getId()));
-            }
-        }
+        enemyView.setState(state);
+//        if (enemyView == null) {
+//            Gdx.app.log("CRYCRY", "1");
+//
+//            for (EnemyView e : enemyViews.values()) {
+//                Gdx.app.log("SETENEMY STATE NULL EXC", String.valueOf(e.getId()));
+//            }
+//        }
 //        } else {
-            enemyView.setState(state);
 
 //        }
     }
