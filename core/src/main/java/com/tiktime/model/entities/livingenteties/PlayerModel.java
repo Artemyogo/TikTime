@@ -23,6 +23,10 @@ public class PlayerModel extends LivingEntityModel implements Weaponable, Catego
             return upgradeModel.getUpgrade(UpgradeType.HP).getLevel() * 10 + playerConfig.getBaseHp();
         }
 
+        public static int getRegenHealth() {
+            return upgradeModel.getUpgrade(UpgradeType.REGEN).getLevel() * 2 + playerConfig.getBaseRegen();
+        }
+
         public static float getSpeed() {
             return upgradeModel.getUpgrade(UpgradeType.SPEED).getLevel() * 3 + playerConfig.getBaseSpeed();
         }
