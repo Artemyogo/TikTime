@@ -13,12 +13,12 @@ public abstract class WeaponModel implements Attackable {
     }
 
     @Override
-    public int getDamage() {
+    public int getAttackDamage() {
         return attackComponent.getDamage();
     }
 
     @Override
-    public void setDamage(int damage) {
+    public void setAttackDamage(int damage) {
         attackComponent.setDamage(damage);
     }
 

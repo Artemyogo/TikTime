@@ -9,8 +9,8 @@ public class BulletModel extends EntityModel {
     private Body body;
     private float damage;
 
-    public BulletModel(Body body, int id) {
-        super(body, id);
+    public BulletModel(Body body) {
+        super(body, idNext++);
     }
 
 }

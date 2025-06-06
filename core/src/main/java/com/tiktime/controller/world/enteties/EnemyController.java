@@ -1,5 +1,6 @@
 package com.tiktime.controller.world.enteties;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Disposable;
 import com.tiktime.model.BodyManager;
@@ -63,9 +64,15 @@ public class EnemyController implements EventListener, Disposable {
                 worldView.setEnemyCoordinates(e.getBody().getPosition().x,
                     e.getBody().getPosition().y,
                     e.getId());
-                if (!e.getDirection().equals(Vector2.Zero)) {
+
+                if (e.getDirection().x != 0) {
                     worldView.setEnemyDirection(Direction.getDirection(e.getDirection()), e.getId());
                 }
+
+                if (e.isChasing())
+                    worldView.setEnemyState(LivingEntityState.RUNNING, e.getId());
+                else
+                    worldView.setEnemyState(LivingEntityState.IDLE, e.getId());
             }
 
             curDamageTime.put(e, Math.max(0f, curDamageTime.get(e) - delta));

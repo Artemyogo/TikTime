@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 
 public abstract class EntityModel implements Entitiable {
+    public static int idNext = 0;
     private final int id;
     protected final Body body;
 

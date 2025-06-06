@@ -1,10 +1,12 @@
 package com.tiktime.view.enteties.livingenteties;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.tiktime.common.Direction;
 import com.tiktime.common.LivingEntityState;
+import com.tiktime.view.enteties.livingenteties.enemies.EnemyView;
 
 public abstract class LivingEntityView extends HealthEntityView {
     protected Direction direction;
@@ -25,6 +27,8 @@ public abstract class LivingEntityView extends HealthEntityView {
 
     public void setState(LivingEntityState state) {
         boolean stateChanged = (this.state != state);
+//        if (this instanceof EnemyView)
+//            Gdx.app.log("LivingEntityView", "state1: " + this.state + ",  state2: " + state);
         this.state = state;
         if (stateChanged) {
             updateAnimation();

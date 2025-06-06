@@ -1,5 +1,6 @@
 package com.tiktime.view.enteties.livingenteties.enemies;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.tiktime.common.Direction;
 import com.tiktime.common.EnemyType;
@@ -17,11 +18,12 @@ public class RusherEnemyView extends EnemyView {
 
     @Override
     protected void loadAnimations() {
+        // TODO magic constants
         float runFrameDuration  = 0.1f;
         animManager.add("rusher-running", getAnimation("running-e", runFrameDuration, LivingEntityState.RUNNING.playMode));
         animManager.add("rusher-idle", getAnimation("idle-e", runFrameDuration, LivingEntityState.IDLE.playMode));
 
-        /// TODO IDK WHAT TO SET
+        // TODO IDK WHAT TO SET
         float attackFrameDuration  = 0.1f;
         animManager.add("rusher-attacking", getAnimation("attacking-e", attackFrameDuration,
             LivingEntityState.ATTACKING.playMode));
@@ -34,5 +36,6 @@ public class RusherEnemyView extends EnemyView {
     protected void updateAnimation() {
         String animName = String.format("%s-%s", "rusher", state.name().toLowerCase());
         animManager.set(animName);
+        Gdx.app.log("RusherEnemyView", state.name().toLowerCase());
     }
 }
