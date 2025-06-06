@@ -12,13 +12,6 @@ public class BodyDefFactory {
         return bodyDef;
     }
 
-    public static BodyDef getBulletBodyDef(float x, float y){
-        return getBodyDef(x,y,BodyDef.BodyType.StaticBody,
-            GameConfig.getBulletConfig().getWidth(),
-            GameConfig.getBulletConfig().getHeight()
-        );
-    }
-
     public static BodyDef getWallBodyDef(float x, float y){
         return getBodyDef(x, y, BodyDef.BodyType.StaticBody,
             GameConfig.getWallConfig().getWidth(),
@@ -46,6 +39,18 @@ public class BodyDefFactory {
             GameConfig.getRusherEnemyConfig().getWidth(),
             GameConfig.getRusherEnemyConfig().getHeight());
         bodyDef.linearDamping = 4f;
+        return bodyDef;
+    }
+
+    public static BodyDef getFistAttackBodyDef(float x, float y, float width, float height){
+        return getBodyDef(x, y, BodyDef.BodyType.StaticBody,
+            width, height);
+    }
+
+    public static BodyDef getBulletBodyDef(float x, float y, float width, float height){
+        BodyDef bodyDef = getBodyDef(x, y, BodyDef.BodyType.DynamicBody,
+            width, height);
+        bodyDef.bullet = true;
         return bodyDef;
     }
 }
