@@ -23,6 +23,7 @@ import com.tiktime.common.EnemyType;
 import com.tiktime.view.enteties.livingenteties.enemies.EnemyView;
 import com.tiktime.view.enteties.livingenteties.enemies.RusherEnemyView;
 import com.tiktime.common.WeaponType;
+import com.tiktime.view.enteties.weapons.BulletView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,7 +40,8 @@ public class WorldView implements Pausable, Renderable, Disposable {
     private final Viewport worldViewport;
     private OrthogonalTiledMapRenderer mapRenderer;
     private final Box2DDebugRenderer debugRenderer;
-    private final Map<Integer, EnemyView> enemyViews;
+    private final Map<Integer, EnemyView> enemyViews = new HashMap<>();
+    private final Map<Integer, BulletView> bulletViews = new HashMap<>();
     private PlayerView playerView;
     private World world;
 
@@ -52,7 +54,6 @@ public class WorldView implements Pausable, Renderable, Disposable {
             ScreenConstants.VIEWPORT_HEIGHT,
             worldCamera);
         worldViewport.update((int) ScreenConstants.VIEWPORT_WIDTH, (int) ScreenConstants.VIEWPORT_HEIGHT, false);
-        enemyViews = new HashMap<>();
     }
 
     public void setMapRenderer(TiledMap map) {
@@ -92,7 +93,10 @@ public class WorldView implements Pausable, Renderable, Disposable {
 
             return e1.getY() > e2.getY() ? -1 : 1;
         });
-        allLivingEntities.forEach(e -> {e.render(delta);});
+
+        ArrayList<Renderable> renderables = new ArrayList<>(allLivingEntities);
+        renderables.addAll(bulletViews.values());
+        renderables.forEach(r -> r.render(delta));
         worldBatch.end();
 
         if (debug) {
@@ -108,13 +112,15 @@ public class WorldView implements Pausable, Renderable, Disposable {
     public void addEnemy(float x, float y, float width, float height, int curHealth, int maxHealth, int id, Direction direction,
                          LivingEntityState state, EnemyType enemyType) {
         switch (enemyType) {
-            case RUSHER:
+            case RUSHER: {
                 enemyViews.put(id, new RusherEnemyView(x, y, width, height, curHealth, maxHealth, id, direction, state, worldBatch));
                 break;
+            }
+
             case ANIMAN:
             case MARKSMAN:
             default:
-                throw new RuntimeException("SJOHAGFJIGHSDGJIKHLBSD");
+                throw new RuntimeException("Invalid enemyType");
         }
     }
 

@@ -70,8 +70,8 @@ public class PlayerModel extends LivingEntityModel implements Weaponable, Catego
     }
 
     public PlayerModel(Category category, WeaponModel weaponModel, MovementComponent movementComponent,
-                       HealthComponent healthComponent, Body body, float width, float height, int id) {
-        super(movementComponent, healthComponent, body, width, height, id);
+                       HealthComponent healthComponent, Body body, int id) {
+        super(movementComponent, healthComponent, body, id);
         this.weaponModel = weaponModel;
         if (!Category.PLAYER.is(category.getBits()))
             throw new IllegalArgumentException("Category is not Player");
