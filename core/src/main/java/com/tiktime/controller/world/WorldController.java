@@ -13,6 +13,7 @@ import com.tiktime.controller.Interactions.DoorInteraction;
 import com.tiktime.controller.Interactions.DynamiteInteraction;
 import com.tiktime.controller.Interactions.EntityInteraction;
 import com.tiktime.controller.inputprocessors.WorldInputProcessor;
+import com.tiktime.controller.utils.DebugSelectorStrategy;
 import com.tiktime.controller.utils.MapSelector;
 import com.tiktime.controller.utils.RandomSelectorStrategy;
 import com.tiktime.controller.world.enteties.EnemyController;
@@ -46,6 +47,8 @@ public class WorldController implements Pausable, Disposable, IExplosive {
     private final EnemyController enemyController;
 
     private boolean paused = false;
+//    private boolean debug = false;
+    private boolean debug = true;
 
     public WorldController(Main game, GameView gameView) {
         this.game = game;
@@ -53,7 +56,11 @@ public class WorldController implements Pausable, Disposable, IExplosive {
         worldView = gameView.getWorldView();
 
         mapSelector = new MapSelector();
-        TiledMap map = mapSelector.getMap(new RandomSelectorStrategy());
+        TiledMap map;
+        if (!debug)
+            map = mapSelector.getMap(new RandomSelectorStrategy());
+        else
+            map = mapSelector.getMap(new DebugSelectorStrategy());
         worldModel = new WorldModel(map);
 
         setInputProcessor();
@@ -95,6 +102,10 @@ public class WorldController implements Pausable, Disposable, IExplosive {
     }
 
     public void updateMousePosition(int x, int y) {
+        if (paused) {
+            return;
+        }
+
         Vector3 mousePosition = new Vector3(x, y, 0);
 
         worldView.updatePlayerWeaponRotation(mousePosition,
@@ -121,7 +132,12 @@ public class WorldController implements Pausable, Disposable, IExplosive {
 
     public void changeMap(){
         doorSensorModel.reset();
-        TiledMap map = mapSelector.getMap(new RandomSelectorStrategy());
+        TiledMap map;
+        if (!debug)
+            map = mapSelector.getMap(new RandomSelectorStrategy());
+        else
+            map = mapSelector.getMap(new DebugSelectorStrategy());
+
         PlayerModel playerModel = worldModel.getPlayerModel();
 
         worldModel.dispose();

@@ -3,10 +3,7 @@ package com.tiktime.model.entities.entityfactories;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.tiktime.model.configs.GameConfig;
-import com.tiktime.model.configs.configdata.FistsWeaponData;
-import com.tiktime.model.configs.configdata.PlayerData;
-import com.tiktime.model.configs.configdata.RusherEnemyData;
-import com.tiktime.model.configs.configdata.WeaponData;
+import com.tiktime.model.configs.configdata.*;
 import com.tiktime.model.entities.Category;
 import com.tiktime.model.entities.components.AttackComponent;
 import com.tiktime.model.entities.components.HealthComponent;
@@ -14,6 +11,7 @@ import com.tiktime.model.entities.components.MovementComponent;
 import com.tiktime.model.entities.livingenteties.PlayerModel;
 import com.tiktime.model.entities.livingenteties.RusherEnemyModel;
 import com.tiktime.model.entities.weapons.Ak47WeaponModel;
+import com.tiktime.model.entities.weapons.BulletModel;
 import com.tiktime.model.entities.weapons.FistsWeaponModel;
 import com.tiktime.model.entities.weapons.WeaponModel;
 import com.tiktime.common.WeaponType;
@@ -97,5 +95,8 @@ public class EntityFactory {
         );
 
         return new Ak47WeaponModel(attackComponent);
+    }
+    public static BulletModel createBuleltModel(World world, float x, float y) {
+        return new BulletModel(BodyFactory.createBulletBody(world, x, y));
     }
 }

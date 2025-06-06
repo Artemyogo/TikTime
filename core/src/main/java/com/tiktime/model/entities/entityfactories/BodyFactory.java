@@ -37,13 +37,13 @@ public class BodyFactory {
     }
 
     public static List<Body> createBodies(World world, TiledMapTileLayer layer, FixtureDef fixtureDef, BodyDef.BodyType bodyType) {
-        /// TODO PEREDELAT ETY HU..
+        // TODO PEREDELAT ETY HU..
         if(layer == null) return null;
         List<Body> res = new ArrayList<>();
         for (int x = 0; x < layer.getWidth(); x++) {
             for (int y = 0; y < layer.getHeight(); y++) {
                 if (layer.getCell(x, y) == null) continue;
-                /// TODO 1f IS BAD
+                // TODO 1f IS BAD
                 Body body = createBody(world, BodyDefFactory.getBodyDef(x, y, bodyType, 1f, 1f), fixtureDef);
                 body.setUserData(layer.getCell(x, y));
                 res.add(body);

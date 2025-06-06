@@ -1,5 +1,6 @@
 package com.tiktime.model.entities.raycasts;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.tiktime.model.entities.Category;
@@ -25,6 +26,7 @@ public class InPathRaycast implements RayCastCallback {
         Filter filter = fixture.getFilterData();
         if(Category.OBSTACLE.intercept(filter.categoryBits)) {
             if (inPath && closestFraction > fraction) {
+                Gdx.app.log("InPathRaycast", "BAAAAAAAAD");
                 inPath = false;
                 closestFraction = fraction;
                 return 0;

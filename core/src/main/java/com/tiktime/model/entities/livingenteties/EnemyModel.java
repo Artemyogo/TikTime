@@ -17,10 +17,10 @@ import com.tiktime.model.events.GameEventType;
 import com.tiktime.model.upgrades.UpgradeModel;
 
 public abstract class EnemyModel extends LivingEntityModel implements Categoriable, Weaponable {
-    public static int idNext = 0;
     protected int reward;
-    Category category;
-    WeaponModel weaponModel;
+    protected Category category;
+    protected WeaponModel weaponModel;
+    protected boolean isChasing = false;
 
     public EnemyModel(Category category, MovementComponent movementComponent, HealthComponent healthComponent, WeaponModel weaponModel,
                       int reward, Body body)  {
@@ -48,7 +48,9 @@ public abstract class EnemyModel extends LivingEntityModel implements Categoriab
     }
     public void chasePlayer(float delta, PlayerModel player, World world){
         InPathRaycast callback = new InPathRaycast(player.getBody().getUserData());
-        world.rayCast(callback, getBody().getPosition(), player.getBody().getPosition());
+        world.rayCast(callback, body.getPosition(), player.getBody().getPosition());
+        isChasing = callback.isInPath();
+        Gdx.app.log("EnemyModel",  "isChasing: " + isChasing);
         if(callback.isInPath()){
             Vector2 vec = new Vector2(player.getPosition()).sub(getPosition()).nor().scl(delta);
             setDirectionAndMove(vec, delta);
@@ -69,5 +71,7 @@ public abstract class EnemyModel extends LivingEntityModel implements Categoriab
         EventManager.fireEvent(new GameEvent(GameEventType.ENEMY_DEATH, this));
     }
 
-
+    public boolean isChasing() {
+        return isChasing;
+    }
 }
