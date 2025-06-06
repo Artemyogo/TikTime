@@ -4,7 +4,7 @@ import com.tiktime.model.configs.configdata.*;
 import com.tiktime.common.WeaponType;
 
 public final class GameConfig {
-    private static final ConfigData data = ConfigLoader.load();
+    private static final ConfigData data = new JsonConfigLoader("config.json").load();
 
     private GameConfig() {
         throw new AssertionError("Do not instantiate GameConfig");

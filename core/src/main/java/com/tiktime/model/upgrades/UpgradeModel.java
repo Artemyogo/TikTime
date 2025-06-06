@@ -1,21 +1,20 @@
 package com.tiktime.model.upgrades;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Preferences;
-
 public final class UpgradeModel {
-    private final Preferences prefs;
+    private final PreferencesUpgradeStorage preferencesUpgradeStorage;
     private final UpgradeManager manager;
     private int money;
 
     private UpgradeModel() {
-        prefs = Gdx.app.getPreferences("com.tiktime.upgrades");
         manager = new UpgradeManager();
         manager.addUpgrade(new Upgrade(UpgradeType.HP));
         manager.addUpgrade(new Upgrade(UpgradeType.SPEED));
         manager.addUpgrade(new Upgrade(UpgradeType.DAMAGE));
         manager.addUpgrade(new Upgrade(UpgradeType.REGEN));
-        load();
+
+        preferencesUpgradeStorage = new PreferencesUpgradeStorage("com.tiktime.upgrades");
+        money = preferencesUpgradeStorage.loadMoney();
+        preferencesUpgradeStorage.loadUpgrades(manager.getUpgrades());
     }
 
     private static UpgradeModel upgradeModel;
@@ -36,16 +35,6 @@ public final class UpgradeModel {
         return manager.getUpgrade(type);
     }
 
-    private void load() {
-        prefs.clear();
-        prefs.putInteger("money", 1000);
-        prefs.flush();
-        money = prefs.getInteger("money", 0);
-        for (Upgrade upgrade : manager.getUpgrades()) {
-            upgrade.setLevel(prefs.getInteger(upgrade.getType().getName(), 0));
-        }
-    }
-
     public void setMoney(int money) {
         if (money < 0) throw new IllegalArgumentException("Money cannot be negative");
 
@@ -63,10 +52,6 @@ public final class UpgradeModel {
     }
 
     public void save() {
-        prefs.putInteger("money", money);
-        for (Upgrade upgrade : manager.getUpgrades()) {
-            prefs.putInteger(upgrade.getType().getName(), upgrade.getLevel());
-        }
-        prefs.flush();
+        preferencesUpgradeStorage.save(money, manager.getUpgrades());
     }
 }
