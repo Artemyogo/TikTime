@@ -36,8 +36,6 @@ public abstract class WeaponView extends AnimatedEntityView {
             flip ? -1 : 1,
             rotationDeg
         );
-
-//        Gdx.app.log("WeaponView", String.valueOf(rotationDeg));
     }
 
     @Override

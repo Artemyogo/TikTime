@@ -3,6 +3,7 @@ package com.tiktime.controller.world.enteties;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Disposable;
 import com.tiktime.model.BodyManager;
+import com.tiktime.model.configs.GameConfig;
 import com.tiktime.model.entities.livingenteties.EnemyModel;
 import com.tiktime.model.events.EventListener;
 import com.tiktime.model.events.EventManager;
@@ -82,9 +83,9 @@ public class EnemyController implements EventListener, Disposable {
 
         for (EnemyModel e : enemies) {
             curDamageTime.put(e, 0f);
-
             worldView.addEnemy(e.getBody().getPosition().x, e.getBody().getPosition().y,
-                e.getWidth(), e.getHeight(),
+                GameConfig.getRusherEnemyConfig().getWidth(),
+                GameConfig.getRusherEnemyConfig().getHeight(),
                 e.getCurrentHealth(), e.getMaxHealth(),
                 e.getId(),
                 (Math.random() < 0.5 ? Direction.EAST : Direction.WEST),

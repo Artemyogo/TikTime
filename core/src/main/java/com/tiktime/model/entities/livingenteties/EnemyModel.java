@@ -19,9 +19,8 @@ public abstract class EnemyModel extends LivingEntityModel implements Categoriab
     protected int reward;
     Category category;
 
-    public EnemyModel(Category category, MovementComponent movementComponent, HealthComponent healthComponent, int reward, Body body,
-                    float width, float height)  {
-        super(movementComponent, healthComponent, body, width, height, idNext++);
+    public EnemyModel(Category category, MovementComponent movementComponent, HealthComponent healthComponent, int reward, Body body)  {
+        super(movementComponent, healthComponent, body, idNext++);
         if (!Category.ENEMY.intercept(category.getBits())) {
             throw new IllegalArgumentException("Invalid category");
         }
