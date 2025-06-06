@@ -5,15 +5,17 @@ import com.tiktime.model.upgrades.Upgrade;
 import com.tiktime.model.upgrades.UpgradeModel;
 import com.tiktime.model.upgrades.UpgradeType;
 import com.tiktime.screens.MenuScreen;
+import com.tiktime.screens.Screen;
+import com.tiktime.screens.ScreenHandler;
 import com.tiktime.view.UpgradeView;
 
 public class UpgradeController {
-    private final Main game;
+    private final ScreenHandler screenHandler;
     private final UpgradeModel model;
     private final UpgradeView view;
 
-    public UpgradeController(Main game, UpgradeView view) {
-        this.game = game;
+    public UpgradeController(ScreenHandler screenHandler, UpgradeView view) {
+        this.screenHandler = screenHandler;
         this.view = view;
         this.model = UpgradeModel.getInstance();
 
@@ -36,7 +38,7 @@ public class UpgradeController {
 
     public void onExitClicked() {
         view.dispose();
-        game.setScreen(new MenuScreen(game));
+        screenHandler.setScreen(Screen.MAIN_MENU);
     }
 
     private void updateState() {

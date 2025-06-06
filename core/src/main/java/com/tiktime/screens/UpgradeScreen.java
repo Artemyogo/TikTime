@@ -10,9 +10,9 @@ public class UpgradeScreen extends ScreenAdapter {
     UpgradeController controller;
     UpgradeView view;
 
-    public UpgradeScreen(Main game){
+    public UpgradeScreen(ScreenHandler screenHandler){
         view = new UpgradeView(UpgradeModel.getInstance().getManager());
-        controller = new UpgradeController(game, view);
+        controller = new UpgradeController(screenHandler, view);
         view.setController(controller);
     }
 

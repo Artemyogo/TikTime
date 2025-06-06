@@ -8,7 +8,6 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Disposable;
-import com.tiktime.Main;
 import com.tiktime.controller.Interactions.DoorInteraction;
 import com.tiktime.controller.Interactions.DynamiteInteraction;
 import com.tiktime.controller.Interactions.EntityInteraction;
@@ -25,13 +24,14 @@ import com.tiktime.model.configs.GameConfig;
 import com.tiktime.model.configs.configdata.WeaponData;
 import com.tiktime.model.entities.livingenteties.PlayerModel;
 import com.tiktime.common.WeaponType;
-import com.tiktime.screens.MenuScreen;
+import com.tiktime.screens.Screen;
+import com.tiktime.screens.ScreenHandler;
 import com.tiktime.view.world.GameView;
 import com.tiktime.common.Pausable;
 import com.tiktime.view.world.WorldView;
 
 public class WorldController implements Pausable, Disposable, IExplosive {
-    private final Main game;
+    private final ScreenHandler screenHandler;
     private final GameView gameView;
     private final WorldView worldView;
 
@@ -50,8 +50,8 @@ public class WorldController implements Pausable, Disposable, IExplosive {
 //    private boolean debug = false;
     private boolean debug = true;
 
-    public WorldController(Main game, GameView gameView) {
-        this.game = game;
+    public WorldController(ScreenHandler screenHandler, GameView gameView) {
+        this.screenHandler = screenHandler;
         this.gameView = gameView;
         worldView = gameView.getWorldView();
 
@@ -175,7 +175,7 @@ public class WorldController implements Pausable, Disposable, IExplosive {
     }
 
     public void goToMenu() {
-        game.setScreen(new MenuScreen(game));
+        screenHandler.setScreen(Screen.MAIN_MENU);
     }
 
     // TODO: same here, mb getter for controller is not good idea, but it for inputProcessor, so idk

@@ -10,8 +10,8 @@ public class MenuScreen extends ScreenAdapter {
     private final MenuController menuController;
     private final MenuView menuView;
 
-    public MenuScreen(Main game) {
-        menuController = new MenuController(game);
+    public MenuScreen(ScreenHandler screenHandler) {
+        menuController = new MenuController(screenHandler);
         menuView = new MenuView(menuController);
     }
 
