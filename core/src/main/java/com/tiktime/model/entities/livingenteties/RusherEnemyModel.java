@@ -9,7 +9,7 @@ import com.tiktime.model.entities.weapons.FistsWeaponModel;
 
 public class RusherEnemyModel extends EnemyModel {
     public RusherEnemyModel(Category category, MovementComponent movementComponent, HealthComponent healthComponent,
-                            int reward, Body body) {
-        super(category, movementComponent, healthComponent, reward, body);
+                            FistsWeaponModel fistsWeaponModel, int reward, Body body) {
+        super(category, movementComponent, healthComponent, fistsWeaponModel, reward, body);
     }
 }

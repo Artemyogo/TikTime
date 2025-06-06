@@ -20,9 +20,10 @@ public abstract class EnemyModel extends LivingEntityModel implements Categoriab
     public static int idNext = 0;
     protected int reward;
     Category category;
-    WeaponModel weapon;
+    WeaponModel weaponModel;
 
-    public EnemyModel(Category category, MovementComponent movementComponent, HealthComponent healthComponent, int reward, Body body)  {
+    public EnemyModel(Category category, MovementComponent movementComponent, HealthComponent healthComponent, WeaponModel weaponModel,
+                      int reward, Body body)  {
         super(movementComponent, healthComponent, body, idNext++);
         if (!Category.ENEMY.intercept(category.getBits())) {
             throw new IllegalArgumentException("Invalid category");
@@ -30,15 +31,15 @@ public abstract class EnemyModel extends LivingEntityModel implements Categoriab
 
         this.category = category;
         this.reward = reward;
-        this.weapon = weapon;
+        this.weaponModel = weaponModel;
     }
     @Override
     public WeaponModel getWeaponModel(){
-        return weapon;
+        return weaponModel;
     }
     @Override
     public void setWeaponModel(WeaponModel weaponModel){
-        weapon = weaponModel;
+        this.weaponModel = weaponModel;
     }
 
     @Override
