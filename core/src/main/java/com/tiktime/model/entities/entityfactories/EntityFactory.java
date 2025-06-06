@@ -3,6 +3,7 @@ package com.tiktime.model.entities.entityfactories;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.tiktime.model.configs.GameConfig;
+import com.tiktime.model.configs.configdata.FistsWeaponData;
 import com.tiktime.model.configs.configdata.PlayerData;
 import com.tiktime.model.configs.configdata.RusherEnemyData;
 import com.tiktime.model.configs.configdata.WeaponData;
@@ -13,6 +14,7 @@ import com.tiktime.model.entities.components.MovementComponent;
 import com.tiktime.model.entities.livingenteties.PlayerModel;
 import com.tiktime.model.entities.livingenteties.RusherEnemyModel;
 import com.tiktime.model.entities.weapons.Ak47WeaponModel;
+import com.tiktime.model.entities.weapons.FistsWeaponModel;
 import com.tiktime.model.entities.weapons.WeaponModel;
 import com.tiktime.common.WeaponType;
 
@@ -61,6 +63,7 @@ public class EntityFactory {
         );
     }
 
+
     public static RusherEnemyModel createRusherEnemyModel(World world, float x, float y) {
         RusherEnemyData rusherConfig = GameConfig.getRusherEnemyConfig();
         MovementComponent movementComponent = new MovementComponent(
@@ -71,27 +74,37 @@ public class EntityFactory {
             rusherConfig.getBaseHp(),
             rusherConfig.getBaseHp()
         );
-
         return new RusherEnemyModel(
-            Category.ENEMY_RUSHER,
-            movementComponent,
-            healthComponent,
+                    Category.ENEMY_RUSHER,
+                    movementComponent,
+                    healthComponent,
+            createFistsWeaponModel(),
             rusherConfig.getReward(),
             BodyFactory.createRusherEnemyBody(world, x, y),
             rusherConfig.getWidth(),
             rusherConfig.getHeight()
-        );
+                );
     }
 
+    public static FistsWeaponModel createFistsWeaponModel(){
+        WeaponData weaponConfig = GameConfig.getWeaponConfig(WeaponType.FISTS);
+        AttackComponent attackComponent = new AttackComponent(
+            weaponConfig.getDamage(),
+            weaponConfig.getAttackCooldown(),
+            weaponConfig.getAttackRange()
+        );
+
+        return new FistsWeaponModel(attackComponent);
+    }
     public static Ak47WeaponModel createAk47WeaponModel() {
-        WeaponType weaponType = WeaponType.AK47;
-        WeaponData weaponConfig = GameConfig.getWeaponConfig(weaponType);
+        WeaponData weaponConfig = GameConfig.getWeaponConfig(WeaponType.AK47);
         assert weaponConfig != null;
         AttackComponent attackComponent = new AttackComponent(
             weaponConfig.getDamage(),
-            weaponConfig.getAttackCooldown()
+            weaponConfig.getAttackCooldown(),
+            weaponConfig.getAttackRange()
         );
 
-        return new Ak47WeaponModel(attackComponent, weaponType);
+        return new Ak47WeaponModel(attackComponent);
     }
 }

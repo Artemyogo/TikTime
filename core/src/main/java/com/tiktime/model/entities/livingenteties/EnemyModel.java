@@ -4,23 +4,26 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
+import com.tiktime.common.WeaponType;
 import com.tiktime.model.entities.Categoriable;
 import com.tiktime.model.entities.Category;
 import com.tiktime.model.entities.components.HealthComponent;
 import com.tiktime.model.entities.components.MovementComponent;
 import com.tiktime.model.entities.raycasts.InPathRaycast;
+import com.tiktime.model.entities.weapons.WeaponModel;
 import com.tiktime.model.events.EventManager;
 import com.tiktime.model.events.GameEvent;
 import com.tiktime.model.events.GameEventType;
 import com.tiktime.model.upgrades.UpgradeModel;
 
-public abstract class EnemyModel extends LivingEntityModel implements Categoriable {
+public abstract class EnemyModel extends LivingEntityModel implements Categoriable, Weaponable {
     public static int idNext = 0;
     protected int reward;
     Category category;
+    WeaponModel weapon;
 
     public EnemyModel(Category category, MovementComponent movementComponent, HealthComponent healthComponent, int reward, Body body,
-                    float width, float height)  {
+                    float width, float height, WeaponModel weapon)  {
         super(movementComponent, healthComponent, body, width, height, idNext++);
         if (!Category.ENEMY.intercept(category.getBits())) {
             throw new IllegalArgumentException("Invalid category");
@@ -28,6 +31,15 @@ public abstract class EnemyModel extends LivingEntityModel implements Categoriab
 
         this.category = category;
         this.reward = reward;
+        this.weapon = weapon;
+    }
+    @Override
+    public WeaponModel getWeaponModel(){
+        return weapon;
+    }
+    @Override
+    public void setWeaponModel(WeaponModel weaponModel){
+        weapon = weaponModel;
     }
 
     @Override

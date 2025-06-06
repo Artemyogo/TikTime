@@ -99,7 +99,7 @@ public abstract class LivingEntityModel extends EntityModel implements Movable, 
     public abstract void death();
 
     @Override
-    public void applyExplosion(float x, float y, float radius, float force){
+    public void applyForce(float x, float y, float radius, float force){
         isExposlionApplied = true;
         float dist = getPosition().dst(x, y);
 

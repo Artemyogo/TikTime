@@ -40,4 +40,8 @@ public abstract class WeaponModel implements Attackable {
     public WeaponType getWeaponType() {
         return weaponType;
     }
+
+    public float getRange() {
+        return attackComponent.getAttackRange();
+    }
 }

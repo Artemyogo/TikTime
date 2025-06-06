@@ -13,7 +13,9 @@ public final class GameConfig {
     public static WeaponData getWeaponConfig(WeaponType weapon) {
         switch (weapon) {
             case AK47:
-                return data.getWeapon(); // currently weapon == ak47
+                return data.getAk47(); // currently weapon == ak47
+            case FISTS:
+                return data.getWeapon();
             case GLOCK:
             case SHOTGUN:
                 return null;

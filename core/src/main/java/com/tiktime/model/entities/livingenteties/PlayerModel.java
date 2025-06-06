@@ -60,11 +60,6 @@ public class PlayerModel extends LivingEntityModel implements Weaponable, Catego
     }
 
     @Override
-    public WeaponType getWeaponType() {
-        return weaponModel.getWeaponType();
-    }
-
-    @Override
     public WeaponModel getWeaponModel() {
         return weaponModel;
     }
