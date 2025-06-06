@@ -9,9 +9,9 @@ public class GameScreen extends ScreenAdapter {
     private final WorldController worldController;
     private final GameView gameView;
 
-    public GameScreen(Main game) {
+    public GameScreen(ScreenHandler screenHandler) {
         gameView = new GameView();
-        worldController = new WorldController(game, gameView);
+        worldController = new WorldController(screenHandler, gameView);
     }
 
     @Override

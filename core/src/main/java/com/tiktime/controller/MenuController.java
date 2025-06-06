@@ -3,27 +3,25 @@ package com.tiktime.controller;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.tiktime.Main;
-import com.tiktime.screens.GameScreen;
-import com.tiktime.screens.SettingsScreen;
-import com.tiktime.screens.UpgradeScreen;
+import com.tiktime.screens.*;
 
 public class MenuController {
-    private final Main game;
+    private final ScreenHandler screenHandler;
 
-    public MenuController(Main game) {
-        this.game = game;
+    public MenuController(ScreenHandler screenHandler) {
+        this.screenHandler = screenHandler;
     }
 
     public void onPlayClicked() {
-        game.setScreen(new GameScreen(game));
+        screenHandler.setScreen(Screen.GAME_SCREEN);
     }
 
     public void onUpgradeClicked() {
-        game.setScreen(new UpgradeScreen(game));
+        screenHandler.setScreen(Screen.UPGRADE_MENU);
     }
 
     public void onSettingsClicked() {
-        game.setScreen(new SettingsScreen());
+        screenHandler.setScreen(Screen.SETTINGS_MENU);
     }
 
     public void onExitClicked() {

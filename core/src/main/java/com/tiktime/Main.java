@@ -1,11 +1,28 @@
 package com.tiktime;
 
 import com.badlogic.gdx.Game;
-import com.tiktime.screens.MenuScreen;
+import com.tiktime.screens.*;
 
-public class Main extends Game {
+public class Main extends Game implements ScreenHandler {
     @Override
     public void create() {
-        setScreen(new MenuScreen(this));
+        setScreen(Screen.MAIN_MENU);
+    }
+
+    @Override
+    public void setScreen(Screen screen) {
+        if (screen == null) throw new NullPointerException("Screen cannot be null");
+
+        if (screen == Screen.GAME_SCREEN) {
+            setScreen(new GameScreen(this));
+        } else if (screen == Screen.MAIN_MENU) {
+            setScreen(new MenuScreen(this));
+        } else if (screen == Screen.UPGRADE_MENU) {
+            setScreen(new UpgradeScreen(this));
+        } else if (screen == Screen.SETTINGS_MENU) {
+            setScreen(new SettingsScreen(this));
+        } else {
+            throw new IllegalArgumentException("Unknown screen: " + screen);
+        }
     }
 }
