@@ -123,7 +123,7 @@ public class WorldModel implements EventListener, Disposable {
     public void onEvent(GameEvent event) {
         if (event.type == GameEventType.ENEMY_DEATH) {
             if (!(event.data instanceof EnemyModel)) {
-                throw new RuntimeException("WHAAAAAAAAAAAAT?!?!");
+                throw new RuntimeException("Invalid event data");
             }
 
             EnemyModel enemyModel = (EnemyModel) event.data;

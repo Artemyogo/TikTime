@@ -2,6 +2,7 @@ package com.tiktime.controller.world.enteties;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Disposable;
+import com.tiktime.model.configs.GameConfig;
 import com.tiktime.model.entities.livingenteties.EnemyModel;
 import com.tiktime.model.entities.livingenteties.PlayerModel;
 import com.tiktime.model.events.EventListener;
@@ -23,11 +24,12 @@ public class PlayerController implements EventListener, Disposable {
     public PlayerController(PlayerModel playerModel, WorldView worldView) {
         this.playerModel = playerModel;
         this.worldView = worldView;
+
         worldView.setPlayer(
             playerModel.getPosition().x,
             playerModel.getPosition().y,
-            playerModel.getWidth(),
-            playerModel.getHeight(),
+            GameConfig.getPlayerConfig().getWidth(),
+            GameConfig.getPlayerConfig().getHeight(),
             playerModel.getCurrentHealth(),
             playerModel.getMaxHealth(),
             PlayerModel.CurrentStats.getCoins(),

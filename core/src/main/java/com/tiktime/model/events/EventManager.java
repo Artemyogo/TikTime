@@ -4,7 +4,7 @@ import java.util.*;
 import com.tiktime.model.events.EventListener;
 
 public class EventManager {
-    private static final Map<GameEventType, List<EventListener>> listeners = new HashMap<>();
+    private static final EnumMap<GameEventType, List<EventListener>> listeners = new EnumMap<>(GameEventType.class);
 
     public static void subscribe(GameEventType type, EventListener listener) {
         listeners.computeIfAbsent(type, k -> new ArrayList<>()).add(listener);

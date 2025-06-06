@@ -12,9 +12,9 @@ public enum Direction {
     SOUTH(270),    // ↓
     SOUTH_EAST(315); // ↘
 
-    private final float angleDeg;
+    private final int angleDeg;
 
-    Direction(float angleDeg) {
+    Direction(int angleDeg) {
         this.angleDeg = angleDeg;
     }
 
@@ -31,7 +31,6 @@ public enum Direction {
             throw new RuntimeException("Invalid direction");
         }
 
-//        Gdx.app.log("WorldController", "Direction: " + dir);
         if (dir.x == 0)
             throw new IllegalArgumentException("Invalid direction, shouldnt change direction");
 
