@@ -7,6 +7,7 @@ public class WeaponData {
     protected float height;
     protected float offsetX;
     protected float offsetY;
+    protected float attackRange;
 
     public int getDamage() {
         return damage;
@@ -30,5 +31,9 @@ public class WeaponData {
 
     public float getOffsetY() {
         return offsetY;
+    }
+
+    public float getAttackRange() {
+        return attackRange;
     }
 }

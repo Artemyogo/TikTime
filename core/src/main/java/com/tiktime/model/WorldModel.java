@@ -110,7 +110,7 @@ public class WorldModel implements EventListener, Disposable {
             InPathRaycast callback = new InPathRaycast(entity.getBody().getUserData());
             world.rayCast(callback, new Vector2(position), entity.getBody().getPosition());
             if (callback.isInPath()) {
-                entity.applyExplosion(x, y, radius, force);
+                entity.applyForce(x, y, radius, force);
             }
         });
     }

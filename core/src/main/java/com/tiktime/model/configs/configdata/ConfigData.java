@@ -1,5 +1,7 @@
 package com.tiktime.model.configs.configdata;
 
+import com.tiktime.model.entities.weapons.FistsWeaponModel;
+
 public class ConfigData {
     private PlayerData player;
     //        private MarksmanEnemyData marksman;
@@ -12,6 +14,7 @@ public class ConfigData {
     private WeaponData weapon;
     private DynamiteData dynamite;
     private BulletData bullet;
+    private FistsWeaponData fists;
 
     public PlayerData getPlayer() {
         return player;
@@ -36,6 +39,10 @@ public class ConfigData {
 
     public Ak47WeaponData getAk47() {
         return ak47;
+    }
+
+    public FistsWeaponData getFists() {
+        return fists;
     }
 
     public WeaponData getWeapon() {

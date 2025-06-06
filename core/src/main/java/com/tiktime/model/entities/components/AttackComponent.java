@@ -5,10 +5,12 @@ public class AttackComponent {
     private final float attackCooldown;
     private float attackCooldownTimer;
     private boolean readyToAttack = true;
+    private float attackRange;
 
-    public AttackComponent(int damage, float attackCooldown) {
+    public AttackComponent(int damage, float attackCooldown, float attackRange) {
         this.damage = damage;
         this.attackCooldownTimer = this.attackCooldown = attackCooldown;
+        this.attackRange = attackRange;
     }
 
     public int getDamage() {
@@ -40,5 +42,8 @@ public class AttackComponent {
         }
 
         return false;
+    }
+    public float getAttackRange(){
+        return attackRange;
     }
 }
