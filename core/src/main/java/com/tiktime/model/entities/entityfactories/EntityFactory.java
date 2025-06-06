@@ -69,6 +69,7 @@ public class EntityFactory {
             Category.ENEMY_RUSHER,
             movementComponent,
             healthComponent,
+            createFistsWeaponModel(),
             rusherConfig.getReward(),
             BodyFactory.createRusherEnemyBody(world, x, y)
         );
