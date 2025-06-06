@@ -32,8 +32,12 @@ public class BodyFactory {
         return createBody(world, BodyDefFactory.getRusherEnemyBodyDef(x, y), FixtureFactory.getRusherEnemyFixture());
     }
 
-    public static Body createBulletBody(World world, float x, float y) {
-        return createBody(world, BodyDefFactory.getBulletBodyDef(x, y), FixtureFactory.getBulletFixture());
+    public static Body createBulletBody(World world, float x, float y, float width, float height) {
+        return createBody(world, BodyDefFactory.getBulletBodyDef(x, y, width, height), FixtureFactory.getBulletFixture());
+    }
+
+    public static Body createFistAttackBody(World world, float x, float y, float width, float height) {
+        return createBody(world, BodyDefFactory.getBulletBodyDef(x, y, width, height), FixtureFactory.getBulletFixture());
     }
 
     public static List<Body> createBodies(World world, TiledMapTileLayer layer, FixtureDef fixtureDef, BodyDef.BodyType bodyType) {

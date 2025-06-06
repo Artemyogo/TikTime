@@ -1,6 +1,7 @@
 package com.tiktime.model.entities.livingenteties;
 
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.World;
 import com.tiktime.model.configs.GameConfig;
 import com.tiktime.model.configs.configdata.PlayerData;
 import com.tiktime.model.entities.Categoriable;
@@ -15,7 +16,7 @@ import com.tiktime.model.upgrades.UpgradeModel;
 import com.tiktime.model.upgrades.UpgradeType;
 import com.tiktime.common.WeaponType;
 
-public class PlayerModel extends LivingEntityModel implements Weaponable, Categoriable {
+public class PlayerModel extends WeaponableLivingEntityModel implements Categoriable {
     public static class CurrentStats {
         private static final PlayerData playerConfig = GameConfig.getPlayerConfig();
         private static final UpgradeModel upgradeModel = UpgradeModel.getInstance();
@@ -39,8 +40,6 @@ public class PlayerModel extends LivingEntityModel implements Weaponable, Catego
             return upgradeModel.getMoney();
         }
     }
-
-    WeaponModel weaponModel;
     Category category;
 
     @Override
@@ -59,20 +58,9 @@ public class PlayerModel extends LivingEntityModel implements Weaponable, Catego
         return category;
     }
 
-    @Override
-    public WeaponModel getWeaponModel() {
-        return weaponModel;
-    }
-
-    @Override
-    public void setWeaponModel(WeaponModel weaponModel) {
-        this.weaponModel = weaponModel;
-    }
-
     public PlayerModel(Category category, WeaponModel weaponModel, MovementComponent movementComponent,
                        HealthComponent healthComponent, Body body, int id) {
-        super(movementComponent, healthComponent, body, id);
-        this.weaponModel = weaponModel;
+        super(movementComponent, healthComponent, weaponModel, body, id);
         if (!Category.PLAYER.is(category.getBits()))
             throw new IllegalArgumentException("Category is not Player");
 

@@ -16,7 +16,7 @@ import com.tiktime.model.events.GameEvent;
 import com.tiktime.model.events.GameEventType;
 import com.tiktime.model.upgrades.UpgradeModel;
 
-public abstract class EnemyModel extends LivingEntityModel implements Categoriable, Weaponable {
+public abstract class EnemyModel extends WeaponableLivingEntityModel implements Categoriable {
     protected int reward;
     protected Category category;
     protected WeaponModel weaponModel;
@@ -24,22 +24,13 @@ public abstract class EnemyModel extends LivingEntityModel implements Categoriab
 
     public EnemyModel(Category category, MovementComponent movementComponent, HealthComponent healthComponent, WeaponModel weaponModel,
                       int reward, Body body)  {
-        super(movementComponent, healthComponent, body, idNext++);
+        super(movementComponent, healthComponent, weaponModel, body, idNext++);
         if (!Category.ENEMY.intercept(category.getBits())) {
             throw new IllegalArgumentException("Invalid category");
         }
 
         this.category = category;
         this.reward = reward;
-        this.weaponModel = weaponModel;
-    }
-    @Override
-    public WeaponModel getWeaponModel(){
-        return weaponModel;
-    }
-    @Override
-    public void setWeaponModel(WeaponModel weaponModel){
-        this.weaponModel = weaponModel;
     }
 
     @Override

@@ -63,8 +63,6 @@ public class WorldController implements Pausable, Disposable, IExplosive {
             map = mapSelector.getMap(new DebugSelectorStrategy());
         worldModel = new WorldModel(map);
 
-        setInputProcessor();
-
         PlayerModel player = worldModel.getPlayerModel();
         playerController = new PlayerController(player, worldView);
         enemyController = new EnemyController(worldView);
@@ -79,6 +77,7 @@ public class WorldController implements Pausable, Disposable, IExplosive {
         worldView.setWorld(worldModel.getWorld());
         worldView.setMapRenderer(map);
         gameView.setHud(PlayerModel.CurrentStats.getCoins());
+        setInputProcessor();
     }
 
     private void setInputProcessor() {
@@ -107,10 +106,12 @@ public class WorldController implements Pausable, Disposable, IExplosive {
         }
 
         Vector3 mousePosition = new Vector3(x, y, 0);
-
+        Vector2 weaponPosition = new Vector2(worldModel.getPlayerModel().getBody().getPosition());
+        weaponPosition.x += GameConfig.getAk47WeaponConfig().getOffsetX();
+        weaponPosition.y += GameConfig.getAk47WeaponConfig().getOffsetY();
         worldView.updatePlayerWeaponRotation(mousePosition,
             getWeaponPosition(
-                worldModel.getPlayerModel().getBody().getPosition(),
+                weaponPosition,
                 WeaponType.AK47));
     }
 
@@ -139,7 +140,6 @@ public class WorldController implements Pausable, Disposable, IExplosive {
             map = mapSelector.getMap(new DebugSelectorStrategy());
 
         PlayerModel playerModel = worldModel.getPlayerModel();
-
         worldModel.dispose();
         worldModel = new WorldModel(map, playerModel);
         setBodyManager(worldModel.getWorld());

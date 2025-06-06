@@ -15,7 +15,6 @@ public class WorldInputProcessor implements InputProcessor, Pausable {
     private boolean isInDoor = false;
     private boolean paused = false;
     private final WorldController worldController;
-    /// WHEN CHANGED INPUT CONTROLLER THEN WE NEED TO CLEAR DIRECTIONS
     private final EnumSet<MovingDirections> directions = EnumSet.noneOf(MovingDirections.class);
     private int mouseX, mouseY;
 

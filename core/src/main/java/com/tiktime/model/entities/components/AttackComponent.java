@@ -1,16 +1,22 @@
 package com.tiktime.model.entities.components;
 
-public class AttackComponent {
-    private int damage;
-    private final float attackCooldown;
-    private float attackCooldownTimer;
-    private boolean readyToAttack = true;
-    private float attackRange;
+import com.badlogic.gdx.physics.box2d.World;
 
-    public AttackComponent(int damage, float attackCooldown, float attackRange) {
+import java.awt.*;
+
+public abstract class AttackComponent {
+    protected int damage;
+    protected final float attackCooldown;
+    protected float attackCooldownTimer;
+    protected boolean readyToAttack = true;
+    protected float attackRange;
+    protected World world;
+
+    public AttackComponent(int damage, float attackCooldown, float attackRange, World world) {
         this.damage = damage;
         this.attackCooldownTimer = this.attackCooldown = attackCooldown;
         this.attackRange = attackRange;
+        this.world = world;
     }
 
     public int getDamage() {
@@ -23,19 +29,24 @@ public class AttackComponent {
 
     public void updateAttackCycle(float delta) {
         attackCooldownTimer = Math.max(attackCooldownTimer - delta, 0);
-        readyToAttack = (attackCooldown == 0);
+        readyToAttack = (attackCooldownTimer == 0);
     }
 
-    public void doAttack() {
-        if (!readyToAttack)
-            throw new RuntimeException("is not readyToAttack");
+//    public void doAttack() {
+//        if (!readyToAttack)
+//            throw new RuntimeException("is not readyToAttack");
+//
+//        attackCooldownTimer = attackCooldown;
+//        readyToAttack = (attackCooldownTimer == 0);
+//    }
 
-        attackCooldownTimer = attackCooldown;
-        readyToAttack = (attackCooldown == 0);
+    public abstract void doAttack();
+
+    public void setWorld(World world) {
+        this.world = world;
     }
 
-    public boolean tryAttack(float delta) {
-        updateAttackCycle(delta);
+    public boolean tryAttack() {
         if (readyToAttack) {
             doAttack();
             return true;
