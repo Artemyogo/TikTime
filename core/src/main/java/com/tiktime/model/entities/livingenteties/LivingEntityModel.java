@@ -18,8 +18,8 @@ public abstract class LivingEntityModel extends EntityModel implements Movable, 
     private boolean isExposlionApplied = false;
 
     public LivingEntityModel(MovementComponent movementComponent, HealthComponent healthComponent,
-                             Body body, float width, float height, int id) {
-        super(body, width, height, id);
+                             Body body, int id) {
+        super(body, id);
         this.movementComponent = movementComponent;
         this.healthComponent = healthComponent;
     }

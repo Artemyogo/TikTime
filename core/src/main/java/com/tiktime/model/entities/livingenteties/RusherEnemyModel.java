@@ -8,8 +8,8 @@ import com.tiktime.model.entities.components.MovementComponent;
 import com.tiktime.model.entities.weapons.FistsWeaponModel;
 
 public class RusherEnemyModel extends EnemyModel {
-    public RusherEnemyModel(Category category, MovementComponent movementComponent, HealthComponent healthComponent, FistsWeaponModel fistsWeaponModel, int reward, Body body,
-        float width, float height) {
-        super(category, movementComponent, healthComponent, reward, body, width, height, fistsWeaponModel);
+    public RusherEnemyModel(Category category, MovementComponent movementComponent, HealthComponent healthComponent,
+                            int reward, Body body) {
+        super(category, movementComponent, healthComponent, reward, body);
     }
 }

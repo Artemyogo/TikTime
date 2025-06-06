@@ -21,7 +21,6 @@ import com.tiktime.common.WeaponType;
 public class EntityFactory {
     public static PlayerModel createPlayerModel(World world, float x, float y) {
         WeaponModel weaponModel = createAk47WeaponModel();
-        PlayerData playerConfig = GameConfig.getPlayerConfig();
         MovementComponent movementComponent = new MovementComponent(
                 PlayerModel.CurrentStats.getSpeed(),
                 Vector2.Zero
@@ -37,15 +36,11 @@ public class EntityFactory {
             movementComponent,
             healthComponent,
             BodyFactory.createPlayerBody(world, x, y),
-            playerConfig.getWidth(),
-            playerConfig.getHeight(),
             0
         );
     }
 
     public static PlayerModel createPlayerModelAtNextMap(World world, float x, float y, PlayerModel playerModel) {
-        PlayerData playerConfig = GameConfig.getPlayerConfig();
-
         WeaponModel weaponModel = playerModel.getWeaponModel();
         MovementComponent movementComponent = playerModel.getMovementComponent();
         HealthComponent healthComponent = playerModel.getHealthComponent();
@@ -57,12 +52,9 @@ public class EntityFactory {
             movementComponent,
             healthComponent,
             BodyFactory.createPlayerBody(world, x, y),
-            playerConfig.getWidth(),
-            playerConfig.getHeight(),
             0
         );
     }
-
 
     public static RusherEnemyModel createRusherEnemyModel(World world, float x, float y) {
         RusherEnemyData rusherConfig = GameConfig.getRusherEnemyConfig();
@@ -74,16 +66,15 @@ public class EntityFactory {
             rusherConfig.getBaseHp(),
             rusherConfig.getBaseHp()
         );
+
         return new RusherEnemyModel(
                     Category.ENEMY_RUSHER,
                     movementComponent,
                     healthComponent,
             createFistsWeaponModel(),
             rusherConfig.getReward(),
-            BodyFactory.createRusherEnemyBody(world, x, y),
-            rusherConfig.getWidth(),
-            rusherConfig.getHeight()
-                );
+            BodyFactory.createRusherEnemyBody(world, x, y)
+        );
     }
 
     public static FistsWeaponModel createFistsWeaponModel(){

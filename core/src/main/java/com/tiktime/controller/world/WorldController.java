@@ -86,7 +86,7 @@ public class WorldController implements Pausable, Disposable, IExplosive {
     }
 
     // TODO: BEWARE idk this is good or not maybe with 'stage' it is acceptable
-      public InputMultiplexer getInputMultiplexer() {
+    public InputMultiplexer getInputMultiplexer() {
         return inputMultiplexer;
     }
 
@@ -147,6 +147,7 @@ public class WorldController implements Pausable, Disposable, IExplosive {
         return new Vector3(playerPosition.x, playerPosition.y, 0f);
     }
 
+    @Override
     public void explosion(Body body, float radius, float force) {
         TiledMapTileLayer.Cell cell = (TiledMapTileLayer.Cell) body.getUserData();
         cell.setTile(null);

@@ -20,6 +20,7 @@ public class DynamiteInteraction extends Interaction{
     protected void onBeginContactInternal(Contact contact) {
         ContactMasks masks = new ContactMasks(contact);
         Fixture dynamiteFixture = masks.getFixture(Category.DYNAMITE);
+        // TODO: magic constants
         explosion.explosion(dynamiteFixture.getBody(), 10, 100f);
         bodyManager.setToDelete(dynamiteFixture.getBody());
     }
