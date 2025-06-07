@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
 import com.tiktime.common.WeaponType;
+import com.tiktime.model.BodyManager;
 import com.tiktime.model.entities.Categoriable;
 import com.tiktime.model.entities.Category;
 import com.tiktime.model.entities.components.HealthComponent;
@@ -23,8 +24,8 @@ public abstract class EnemyModel extends WeaponableLivingEntityModel implements 
     protected boolean isChasing = false;
 
     public EnemyModel(Category category, MovementComponent movementComponent, HealthComponent healthComponent, WeaponModel weaponModel,
-                      int reward, Body body)  {
-        super(movementComponent, healthComponent, weaponModel, body, idNext++);
+                      int reward, Body body, BodyManager bodyManager)  {
+        super(movementComponent, healthComponent, weaponModel, body, bodyManager, idNext++);
         if (!Category.ENEMY.intercept(category.getBits())) {
             throw new IllegalArgumentException("Invalid category");
         }
@@ -42,6 +43,7 @@ public abstract class EnemyModel extends WeaponableLivingEntityModel implements 
         world.rayCast(callback, body.getPosition(), player.getBody().getPosition());
         isChasing = callback.isInPath();
         Gdx.app.log("EnemyModel",  "isChasing: " + isChasing);
+        // TODO: mb in one point in which is problem (enemy and player)
         if(callback.isInPath()){
             Vector2 vec = new Vector2(player.getPosition()).sub(getPosition()).nor().scl(delta);
             setDirectionAndMove(vec, delta);

@@ -186,6 +186,15 @@ public class WorldView implements Pausable, Renderable, Disposable {
         enemyViews.clear();
     }
 
+    public void clearBullets() {
+        bulletViews.clear();
+    }
+
+    public void clearAll() {
+        clearEnemies();
+        clearBullets();
+    }
+
     public ArrayList<LivingEntityView> getLivingEntities() {
         ArrayList<LivingEntityView> allLivingEntities = new ArrayList<>(enemyViews.values());
         allLivingEntities.add(playerView);

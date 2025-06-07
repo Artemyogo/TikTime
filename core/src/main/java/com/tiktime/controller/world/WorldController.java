@@ -19,9 +19,10 @@ import com.tiktime.controller.world.enteties.EnemyController;
 import com.tiktime.controller.world.enteties.PlayerController;
 import com.tiktime.model.BodyManager;
 import com.tiktime.model.DoorSensorModel;
+import com.tiktime.model.MapModel;
 import com.tiktime.model.WorldModel;
-import com.tiktime.model.configs.GameConfig;
-import com.tiktime.model.configs.configdata.WeaponData;
+import com.tiktime.common.configs.GameConfig;
+import com.tiktime.common.configs.configdata.WeaponData;
 import com.tiktime.model.entities.livingenteties.PlayerModel;
 import com.tiktime.common.WeaponType;
 import com.tiktime.screens.Screen;
@@ -37,14 +38,13 @@ public class WorldController implements Pausable, Disposable, IExplosive {
 
     private final DoorSensorModel doorSensorModel = new DoorSensorModel();
     private final MapSelector mapSelector;
-    private BodyManager bodyManager;
     private WorldModel worldModel;
 
     private final WorldInputProcessor inputProcessor = new WorldInputProcessor(this);
     private final InputMultiplexer inputMultiplexer = new InputMultiplexer();
 
-    private final PlayerController playerController;
-    private final EnemyController enemyController;
+    private PlayerController playerController;
+    private EnemyController enemyController;
 
     private boolean paused = false;
 //    private boolean debug = false;
@@ -61,16 +61,14 @@ public class WorldController implements Pausable, Disposable, IExplosive {
             map = mapSelector.getMap(new RandomSelectorStrategy());
         else
             map = mapSelector.getMap(new DebugSelectorStrategy());
-        worldModel = new WorldModel(map);
+        worldModel = new WorldModel(new MapModel(map));
 
         PlayerModel player = worldModel.getPlayerModel();
         playerController = new PlayerController(player, worldView);
-        enemyController = new EnemyController(worldView);
-        enemyController.setEnemies(worldModel.getEnemies());
+        enemyController = new EnemyController(worldView, worldModel.getEnemies());
 
-        setBodyManager(worldModel.getWorld());
         worldModel.setCollisionController(new CollisionController(this).
-            addInteraction(new DynamiteInteraction(this, bodyManager)).
+            addInteraction(new DynamiteInteraction(this, worldModel.getBodyManager())). // TODO: this is bad, BM only in model sh be
             addInteraction(new DoorInteraction(doorSensorModel)).
             addInteraction(new EntityInteraction()));
 
@@ -84,11 +82,6 @@ public class WorldController implements Pausable, Disposable, IExplosive {
         inputMultiplexer.addProcessor(inputProcessor);
         gameView.setController(this);
         activateInputProcessor();
-    }
-
-    private void setBodyManager(World world) {
-        bodyManager = new BodyManager(world);
-        enemyController.setBodyManager(bodyManager);
     }
 
     // TODO: BEWARE idk this is good or not maybe with 'stage' it is acceptable
@@ -106,12 +99,9 @@ public class WorldController implements Pausable, Disposable, IExplosive {
         }
 
         Vector3 mousePosition = new Vector3(x, y, 0);
-        Vector2 weaponPosition = new Vector2(worldModel.getPlayerModel().getBody().getPosition());
-        weaponPosition.x += GameConfig.getAk47WeaponConfig().getOffsetX();
-        weaponPosition.y += GameConfig.getAk47WeaponConfig().getOffsetY();
         worldView.updatePlayerWeaponRotation(mousePosition,
             getWeaponPosition(
-                weaponPosition,
+                worldModel.getPlayerPosition(),
                 WeaponType.AK47));
     }
 
@@ -127,8 +117,6 @@ public class WorldController implements Pausable, Disposable, IExplosive {
         playerController.update(delta, direction);
         enemyController.update(delta);
         worldModel.update(delta);
-
-        bodyManager.flush();
     }
 
     public void changeMap(){
@@ -141,14 +129,16 @@ public class WorldController implements Pausable, Disposable, IExplosive {
 
         PlayerModel playerModel = worldModel.getPlayerModel();
         worldModel.dispose();
-        worldModel = new WorldModel(map, playerModel);
-        setBodyManager(worldModel.getWorld());
+        playerController.dispose();
+        enemyController.dispose();
+        worldView.clearAll();
+        worldModel = new WorldModel(new MapModel(map), playerModel);
+        playerController = new PlayerController(playerModel, worldView);
+        enemyController = new EnemyController(worldView, worldModel.getEnemies());
         worldModel.setCollisionController(new CollisionController(this).
-            addInteraction(new DynamiteInteraction(this, bodyManager)).
+            addInteraction(new DynamiteInteraction(this, worldModel.getBodyManager())). // TODO: same here as above
             addInteraction(new DoorInteraction(doorSensorModel)).
             addInteraction(new EntityInteraction()));
-        playerController.setPlayer(worldModel.getPlayerModel());
-        enemyController.setEnemies(worldModel.getEnemies());
 
         worldView.setWorld(worldModel.getWorld());
         worldView.setMapRenderer(map);
@@ -160,7 +150,7 @@ public class WorldController implements Pausable, Disposable, IExplosive {
             throw new RuntimeException("WeaponConfig is null");
         }
 
-        return new Vector3(playerPosition.x, playerPosition.y, 0f);
+        return new Vector3(playerPosition.x + weaponConfig.getOffsetX(), playerPosition.y + weaponConfig.getOffsetX(), 0f);
     }
 
     @Override
@@ -178,7 +168,7 @@ public class WorldController implements Pausable, Disposable, IExplosive {
         screenHandler.setScreen(Screen.MAIN_MENU);
     }
 
-    // TODO: same here, mb getter for controller is not good idea, but it for inputProcessor, so idk
+    // TODO: same here, mb getter for controller is not good idea, but it is for inputProcessor, so idk
     public boolean getPaused() {
         return paused;
     }
@@ -194,6 +184,5 @@ public class WorldController implements Pausable, Disposable, IExplosive {
         enemyController.dispose();
         playerController.dispose();
         worldModel.dispose();
-        Gdx.input.setInputProcessor(null);
     }
 }

@@ -1,6 +1,4 @@
-package com.tiktime.model.configs.configdata;
-
-import com.tiktime.model.entities.weapons.FistsWeaponModel;
+package com.tiktime.common.configs.configdata;
 
 public class ConfigData {
     private PlayerData player;

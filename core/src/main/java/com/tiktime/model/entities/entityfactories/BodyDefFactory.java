@@ -1,7 +1,8 @@
 package com.tiktime.model.entities.entityfactories;
 
 import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.tiktime.model.configs.GameConfig;
+import com.tiktime.common.WeaponType;
+import com.tiktime.common.configs.GameConfig;
 
 public class BodyDefFactory {
     public static BodyDef getBodyDef(float x, float y, BodyDef.BodyType bodyType, float width, float height){
@@ -42,14 +43,14 @@ public class BodyDefFactory {
         return bodyDef;
     }
 
-    public static BodyDef getFistAttackBodyDef(float x, float y, float width, float height){
+    public static BodyDef getFistAttackBodyDef(float x, float y){
         return getBodyDef(x, y, BodyDef.BodyType.StaticBody,
-            width, height);
+            GameConfig.getWeaponConfig(WeaponType.FISTS));
     }
 
-    public static BodyDef getBulletBodyDef(float x, float y, float width, float height){
+    public static BodyDef getBulletBodyDef(float x, float y){
         BodyDef bodyDef = getBodyDef(x, y, BodyDef.BodyType.DynamicBody,
-            width, height);
+            GameConfig.getBulletConfig().getWidth(), GameConfig.getBulletConfig().getHeight());
         bodyDef.bullet = true;
         return bodyDef;
     }

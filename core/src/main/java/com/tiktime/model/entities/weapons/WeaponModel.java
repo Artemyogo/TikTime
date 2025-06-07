@@ -2,15 +2,18 @@ package com.tiktime.model.entities.weapons;
 
 import com.badlogic.gdx.physics.box2d.World;
 import com.tiktime.common.WeaponType;
+import com.tiktime.model.BodyManager;
 import com.tiktime.model.entities.components.AttackComponent;
 
 public abstract class WeaponModel implements Attackable {
-    AttackComponent attackComponent;
-    WeaponType weaponType;
+    protected final AttackComponent attackComponent;
+    protected final WeaponType weaponType;
+    protected final BodyManager bodyManager;
 
-    public WeaponModel(AttackComponent attackComponent, WeaponType weaponType) {
+    public WeaponModel(AttackComponent attackComponent, WeaponType weaponType, BodyManager bodyManager) {
         this.attackComponent = attackComponent;
         this.weaponType = weaponType;
+        this.bodyManager = bodyManager;
     }
 
     @Override
@@ -34,7 +37,7 @@ public abstract class WeaponModel implements Attackable {
     }
 
     @Override
-    public boolean tryAttack(float delta) {
+    public boolean tryAttack() {
         return attackComponent.tryAttack();
     }
 

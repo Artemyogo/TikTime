@@ -22,6 +22,7 @@ public class DynamiteInteraction extends Interaction{
         Fixture dynamiteFixture = masks.getFixture(Category.DYNAMITE);
         // TODO: magic constants
         explosion.explosion(dynamiteFixture.getBody(), 10, 100f);
+        // TODO: i think there should be dynamite model in which we should call method delete, and Body manager should be only in model part
         bodyManager.setToDelete(dynamiteFixture.getBody());
     }
 

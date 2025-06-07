@@ -1,6 +1,4 @@
-package com.tiktime.model.configs.configdata;
-
-import com.sun.source.tree.BreakTree;
+package com.tiktime.common.configs.configdata;
 
 public class EntityData extends PhysicsData {
     protected int baseHp;

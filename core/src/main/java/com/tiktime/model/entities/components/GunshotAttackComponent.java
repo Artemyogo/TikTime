@@ -9,6 +9,6 @@ public class GunshotAttackComponent extends AttackComponent {
 
     @Override
     public void doAttack() {
-
+        super.doAttack();
     }
 }

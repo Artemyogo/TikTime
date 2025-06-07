@@ -1,9 +1,9 @@
 package com.tiktime.model.entities.livingenteties;
 
 import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.World;
-import com.tiktime.model.configs.GameConfig;
-import com.tiktime.model.configs.configdata.PlayerData;
+import com.tiktime.common.configs.GameConfig;
+import com.tiktime.common.configs.configdata.PlayerData;
+import com.tiktime.model.BodyManager;
 import com.tiktime.model.entities.Categoriable;
 import com.tiktime.model.entities.Category;
 import com.tiktime.model.entities.components.HealthComponent;
@@ -14,7 +14,6 @@ import com.tiktime.model.events.GameEvent;
 import com.tiktime.model.events.GameEventType;
 import com.tiktime.model.upgrades.UpgradeModel;
 import com.tiktime.model.upgrades.UpgradeType;
-import com.tiktime.common.WeaponType;
 
 public class PlayerModel extends WeaponableLivingEntityModel implements Categoriable {
     public static class CurrentStats {
@@ -58,9 +57,34 @@ public class PlayerModel extends WeaponableLivingEntityModel implements Categori
         return category;
     }
 
+    @Override
+    public int getAttackDamage() {
+        return weaponModel.getAttackDamage();
+    }
+
+    @Override
+    public void setAttackDamage(int damage) {
+        weaponModel.setAttackDamage(damage);
+    }
+
+    @Override
+    public void updateAttackCooldownTimer(float delta) {
+        weaponModel.updateAttackCooldownTimer(delta);
+    }
+
+    @Override
+    public void doAttack() {
+        weaponModel.doAttack();
+    }
+
+    @Override
+    public boolean tryAttack(float delta) {
+
+    }
+
     public PlayerModel(Category category, WeaponModel weaponModel, MovementComponent movementComponent,
-                       HealthComponent healthComponent, Body body, int id) {
-        super(movementComponent, healthComponent, weaponModel, body, id);
+                       HealthComponent healthComponent, Body body, BodyManager bodyManager, int id) {
+        super(movementComponent, healthComponent, weaponModel, body, bodyManager, id);
         if (!Category.PLAYER.is(category.getBits()))
             throw new IllegalArgumentException("Category is not Player");
 

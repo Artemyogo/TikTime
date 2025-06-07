@@ -22,68 +22,77 @@ import com.tiktime.model.events.EventManager;
 import com.tiktime.model.events.GameEvent;
 import com.tiktime.model.events.GameEventType;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import static com.tiktime.view.consts.ScreenConstants.PPM;
 
 public class WorldModel implements EventListener, Disposable {
     private final World world;
+    // TODO: magic constants
     private final float timeStep = 1 / 60f;
     private final int velocityIterations = 6;
     private final int positionIterations = 2;
 
-    private final TiledMap map;
-    private PlayerModel player;
-    private Set<EnemyModel> enemies = new HashSet<>();
+    private final MapModel mapModel;
+    private final BodyManager bodyManager;
+    private final PlayerModel player;
+    private final Set<EnemyModel> enemies = new HashSet<>();
 
     public void update(float delta){
         world.step(delta, velocityIterations, positionIterations);
         for(EnemyModel enemy : enemies){
             enemy.chasePlayer(delta, player, world);
         }
+        bodyManager.flush();
     }
 
-    public WorldModel(TiledMap map) {
-        this(map, null);
+    public WorldModel(MapModel mapModel) {
+        this(mapModel, null);
     }
 
-    public WorldModel(TiledMap map, PlayerModel player) {
-        this.map = map;
-        this.world = new World(new Vector2(0, 0), true);
-        MapProperties properties = map.getLayers().get("objects").getObjects().get("playerSpawn").getProperties();
+    public WorldModel(MapModel mapModel, PlayerModel player) {
+        this.mapModel = mapModel;
+        world = new World(new Vector2(0, 0), true);
+        bodyManager = new BodyManager(world);
+        Vector2 playerPosition = mapModel.getPlayerSpawnPosition();
         if (player == null) {
-            this.player = EntityFactory.createPlayerModel(world,
-                properties.get("x", Float.class) / PPM, properties.get("y", Float.class) / PPM);
+            this.player = EntityFactory.createPlayerModel(world, bodyManager,
+                playerPosition.x, playerPosition.y);
         } else {
-            this.player = EntityFactory.createPlayerModelAtNextMap(world,
-                properties.get("x", Float.class) / PPM, properties.get("y", Float.class) / PPM, player);
+            this.player = EntityFactory.createPlayerModelAtNextMap(world, bodyManager,
+                playerPosition.x, playerPosition.y, player);
         }
 
-        if (map.getLayers().get("enemies") != null) {
-            for (MapObject object : map.getLayers().get("enemies").getObjects()) {
-                RusherEnemyModel rusherEnemyModel = EntityFactory.createRusherEnemyModel(world,
-                    object.getProperties().get("x", Float.class) / PPM, object.getProperties().get("y", Float.class) / PPM);
+        ArrayList<Vector2> enemiesPositions = mapModel.getEnemiesSpawnPositions();
+        for (Vector2 p : enemiesPositions) {
+            RusherEnemyModel rusherEnemyModel = EntityFactory.createRusherEnemyModel(world, bodyManager,
+                p.x, p.y);
 
-                enemies.add(rusherEnemyModel);
-            }
+            enemies.add(rusherEnemyModel);
         }
 
-        TiledMapTileLayer wallLayer = (TiledMapTileLayer) map.getLayers().get("walls");
-        BodyFactory.createBodies(world, wallLayer, FixtureFactory.getWallFixture(), BodyDef.BodyType.StaticBody);
 
-        TiledMapTileLayer doorLayer = (TiledMapTileLayer) map.getLayers().get("doors");
-        BodyFactory.createBodies(world, doorLayer, FixtureFactory.getDoorFixture(), BodyDef.BodyType.StaticBody);
+        mapModel.createAll(world);
+        subscribeOnEvents();
+    }
 
-        TiledMapTileLayer dynamiteLayer = (TiledMapTileLayer) map.getLayers().get("dynamite");
-        BodyFactory.createBodies(world, dynamiteLayer, FixtureFactory.getDynamiteFixture(), BodyDef.BodyType.StaticBody);
-
+    private void subscribeOnEvents() {
         EventManager.subscribe(GameEventType.ENEMY_DEATH, this);
+    }
+
+    private void unsubscribeOnEvents() {
+        EventManager.unsubscribe(GameEventType.ENEMY_DEATH, this);
     }
 
     public void setCollisionController(CollisionController collisionController){
         world.setContactListener(collisionController);
+    }
 
+    public BodyManager getBodyManager() {
+        return bodyManager;
     }
 
     public PlayerModel getPlayerModel(){
@@ -133,6 +142,7 @@ public class WorldModel implements EventListener, Disposable {
 
     @Override
     public void dispose() {
-        EventManager.unsubscribe(GameEventType.ENEMY_DEATH, this);
+        unsubscribeOnEvents();
+        mapModel.dispose();
     }
 }
