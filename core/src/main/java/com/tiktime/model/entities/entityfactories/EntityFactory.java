@@ -1,5 +1,6 @@
 package com.tiktime.model.entities.entityfactories;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.tiktime.common.configs.GameConfig;
@@ -74,7 +75,9 @@ public class EntityFactory {
             createFistsWeaponModel(world, bodyManager),
             rusherConfig.getReward(),
             BodyFactory.createRusherEnemyBody(world, x, y),
-            bodyManager
+            bodyManager,
+            rusherConfig.getWidth(),
+            rusherConfig.getHeight()
         );
     }
 
@@ -89,7 +92,7 @@ public class EntityFactory {
             bodyManager
         );
 
-        return new FistsWeaponModel(attackComponent, weaponConfig.getOffsetAttackX(), weaponConfig.getOffsetAttackY());
+        return new FistsWeaponModel(attackComponent);
     }
     public static Ak47WeaponModel createAk47WeaponModel(World world, BodyManager bodyManager) {
         WeaponData weaponConfig = GameConfig.getWeaponConfig(WeaponType.AK47);
@@ -102,7 +105,7 @@ public class EntityFactory {
             bodyManager
         );
 
-        return new Ak47WeaponModel(attackComponent, weaponConfig.getOffsetAttackX(), weaponConfig.getOffsetAttackY());
+        return new Ak47WeaponModel(attackComponent);
     }
     public static BulletModel createBulletModel(World world, BodyManager bodyManager, float x, float y) {
         return new BulletModel(BodyFactory.createBulletBody(world, x, y), bodyManager);

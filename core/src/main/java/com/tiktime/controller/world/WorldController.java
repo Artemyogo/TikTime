@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.Disposable;
 import com.tiktime.controller.Interactions.DoorInteraction;
 import com.tiktime.controller.Interactions.DynamiteInteraction;
 import com.tiktime.controller.Interactions.EntityInteraction;
+import com.tiktime.controller.Interactions.MeleeAttackInteraction;
 import com.tiktime.controller.inputprocessors.WorldInputProcessor;
 import com.tiktime.controller.utils.DebugSelectorStrategy;
 import com.tiktime.controller.utils.MapSelector;
@@ -47,8 +48,8 @@ public class WorldController implements Pausable, Disposable, IExplosive {
     private EnemyController enemyController;
 
     private boolean paused = false;
-//    private boolean debug = false;
-    private boolean debug = true;
+    private boolean debug = false;
+//    private boolean debug = true;
 
     public WorldController(ScreenHandler screenHandler, GameView gameView) {
         this.screenHandler = screenHandler;
@@ -63,15 +64,16 @@ public class WorldController implements Pausable, Disposable, IExplosive {
             map = mapSelector.getMap(new DebugSelectorStrategy());
         worldModel = new WorldModel(new MapModel(map));
 
-        PlayerModel player = worldModel.getPlayerModel();
-        playerController = new PlayerController(player, worldView);
+        PlayerModel playerModel = worldModel.getPlayerModel();
+        playerController = new PlayerController(playerModel, worldView);
 //        Gdx.app.log("WorldController", worldModel.getEnemies());
         enemyController = new EnemyController(worldView, worldModel.getEnemies());
 
         worldModel.setCollisionController(new CollisionController(this).
             addInteraction(new DynamiteInteraction(this, worldModel.getBodyManager())). // TODO: this is bad, BM only in model sh be
             addInteraction(new DoorInteraction(doorSensorModel)).
-            addInteraction(new EntityInteraction()));
+            addInteraction(new EntityInteraction()).
+            addInteraction(new MeleeAttackInteraction()));
 
         worldView.setWorld(worldModel.getWorld());
         worldView.setMapRenderer(map);
@@ -134,15 +136,18 @@ public class WorldController implements Pausable, Disposable, IExplosive {
         enemyController.dispose();
         worldView.clearAll();
         worldModel = new WorldModel(new MapModel(map), playerModel);
+        playerModel = worldModel.getPlayerModel();
         playerController = new PlayerController(playerModel, worldView);
         enemyController = new EnemyController(worldView, worldModel.getEnemies());
         worldModel.setCollisionController(new CollisionController(this).
-            addInteraction(new DynamiteInteraction(this, worldModel.getBodyManager())). // TODO: same here as above
-            addInteraction(new DoorInteraction(doorSensorModel)).
-            addInteraction(new EntityInteraction()));
+            addInteraction(new DynamiteInteraction(this, worldModel.getBodyManager())). // TODO: this is bad, BM only in model sh be
+                addInteraction(new DoorInteraction(doorSensorModel)).
+            addInteraction(new EntityInteraction()).
+            addInteraction(new MeleeAttackInteraction()));
 
         worldView.setWorld(worldModel.getWorld());
         worldView.setMapRenderer(map);
+        gameView.setHud(PlayerModel.CurrentStats.getCoins());
     }
 
     Vector3 getWeaponPosition(Vector2 playerPosition, WeaponType weaponType) {

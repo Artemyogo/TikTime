@@ -14,9 +14,9 @@ import com.tiktime.model.events.GameEventType;
 import static com.badlogic.gdx.math.MathUtils.ceil;
 
 public abstract class LivingEntityModel extends EntityModel implements Movable, Healthable {
-    private MovementComponent movementComponent;
-    private HealthComponent healthComponent;
-    private boolean isExplosionApplied = false;
+    protected MovementComponent movementComponent;
+    protected HealthComponent healthComponent;
+    protected boolean isExplosionApplied = false;
 
     public LivingEntityModel(MovementComponent movementComponent, HealthComponent healthComponent,
                              Body body, BodyManager bodyManager, int id) {

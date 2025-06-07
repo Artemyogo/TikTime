@@ -5,6 +5,7 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
+import com.tiktime.model.entities.weapons.MeleeAttackable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,8 +37,12 @@ public class BodyFactory {
         return createBody(world, BodyDefFactory.getBulletBodyDef(x, y), FixtureFactory.getBulletFixture());
     }
 
-    public static Body createFistAttackBody(World world, float x, float y) {
-        return createBody(world, BodyDefFactory.getBulletBodyDef(x, y), FixtureFactory.getBulletFixture());
+    public static Body createFistAttackBody(World world, float x, float y, float width, float height, MeleeAttackable meleeAttackable) {
+        Body body = createBody(world, BodyDefFactory.getFistAttackBodyDef(x, y, width, height),
+            FixtureFactory.getFistAttackFixture(width, height));
+
+        body.setUserData(meleeAttackable);
+        return body;
     }
 
     public static List<Body> createBodiesOnLayer(World world, TiledMapTileLayer layer, FixtureDef fixtureDef, BodyDef.BodyType bodyType) {

@@ -1,5 +1,6 @@
 package com.tiktime.controller.world;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.physics.box2d.*;
 import com.tiktime.controller.Interactions.Interaction;
 
@@ -21,6 +22,8 @@ public class CollisionController implements ContactListener {
 
     @Override
     public void beginContact(Contact contact) {
+        Gdx.app.log("Contact", contact.getFixtureA().getFilterData().categoryBits + " " +
+            contact.getFixtureB().getFilterData().categoryBits);
         for(Interaction interaction : interactions)
             interaction.beginContact(contact);
     }

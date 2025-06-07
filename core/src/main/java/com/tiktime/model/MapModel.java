@@ -30,7 +30,8 @@ public class MapModel implements Disposable {
 
     ArrayList<Vector2> getEnemiesSpawnPositions() {
         if (map.getLayers().get("enemies") == null) {
-            throw new NullPointerException("Map does not contain enemies");
+            return new ArrayList<>(0);
+//            throw new NullPointerException("Map does not contain enemies");
         }
 
         ArrayList<Vector2> enemiesSpawnPositions = new ArrayList<>();

@@ -31,10 +31,10 @@ public enum Direction {
             throw new RuntimeException("Invalid direction");
         }
 
-        if (dir.x == 0)
-            throw new IllegalArgumentException("Invalid direction, shouldnt change direction");
+//        if (dir.x == 0)
+//            throw new IllegalArgumentException("Invalid direction, shouldnt change direction");
 
-        if (dir.x > 0) {
+        if (dir.x >= 0) {
             return Direction.EAST;
         }
 

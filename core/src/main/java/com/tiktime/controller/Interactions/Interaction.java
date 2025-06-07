@@ -1,5 +1,6 @@
 package com.tiktime.controller.Interactions;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.tiktime.controller.world.ContactMasks;
 
@@ -13,6 +14,7 @@ public abstract class Interaction {
     }
 
     public final void beginContact(Contact contact) {
+//        Gdx.app.log("Interaction", contact.getFixtureA().getFilterData().categoryBits + " " + contact.getFixtureB().getFilterData().categoryBits);
         if (contact == null)
             throw new NullPointerException("Contact cannot be null");
         if (!new ContactMasks(contact).check(this.catA, this.catB)) return;

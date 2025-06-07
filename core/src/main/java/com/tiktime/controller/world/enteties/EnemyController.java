@@ -83,7 +83,9 @@ public class EnemyController implements EventListener, Disposable {
                     worldView.setEnemyDirection(Direction.getDirection(e.getDirection()), e.getId());
                 }
 
-                if (e.isChasing())
+                if (e.isAttacking())
+                    worldView.setEnemyState(LivingEntityState.ATTACKING, e.getId());
+                else if (e.isChasing())
                     worldView.setEnemyState(LivingEntityState.RUNNING, e.getId());
                 else
                     worldView.setEnemyState(LivingEntityState.IDLE, e.getId());

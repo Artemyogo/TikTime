@@ -7,6 +7,7 @@ import com.tiktime.common.Direction;
 public class MovementComponent {
     private float speed;
     private Vector2 direction;
+    private Direction lastDirection = Direction.EAST;
 
     public MovementComponent(float speed, Vector2 direction) {
         this.speed = speed;
@@ -19,10 +20,13 @@ public class MovementComponent {
 
     public void setDirection(Vector2 direction) {
         this.direction = direction;
+        if (direction.x != 0) {
+            lastDirection = Direction.getDirection(direction);
+        }
     }
 
     public Direction getDirectionType() {
-        return Direction.getDirection(direction);
+        return lastDirection;
     }
 
     public float getSpeed() {

@@ -9,11 +9,14 @@ import com.tiktime.model.entities.components.AttackComponent;
 import com.tiktime.model.entities.components.HealthComponent;
 import com.tiktime.model.entities.components.MovementComponent;
 import com.tiktime.model.entities.weapons.FistsWeaponModel;
+import com.tiktime.model.entities.weapons.WeaponModel;
 
-public class RusherEnemyModel extends EnemyModel {
+public class RusherEnemyModel extends MeleeWeaponableEnemyModel {
     public RusherEnemyModel(Category category, MovementComponent movementComponent, HealthComponent healthComponent,
-                            FistsWeaponModel fistsWeaponModel, int reward, Body body, BodyManager bodyManager) {
-        super(category, movementComponent, healthComponent, fistsWeaponModel, reward, body, bodyManager);
+                            FistsWeaponModel fistsWeaponModel, int reward, Body body, BodyManager bodyManager, float width, float height) {
+        super(category, movementComponent, healthComponent, fistsWeaponModel, reward, body, bodyManager, width, height);
         assert reward == GameConfig.getRusherEnemyConfig().getReward(); // TODO: mb implace reward with this
     }
+
+
 }

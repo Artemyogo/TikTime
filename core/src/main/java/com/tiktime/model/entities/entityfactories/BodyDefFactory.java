@@ -44,10 +44,8 @@ public class BodyDefFactory {
         return bodyDef;
     }
 
-    public static BodyDef getFistAttackBodyDef(float x, float y){
-        return getBodyDef(x, y, BodyDef.BodyType.StaticBody,
-            GameConfig.getWeaponConfig(WeaponType.FISTS).getWidth(),
-            GameConfig.getWeaponConfig(WeaponType.FISTS).getHeight());
+    public static BodyDef getFistAttackBodyDef(float x, float y, float width, float height){
+        return getBodyDef(x, y, BodyDef.BodyType.StaticBody, width, height);
     }
 
     public static BodyDef getBulletBodyDef(float x, float y){
