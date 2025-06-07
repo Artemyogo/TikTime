@@ -1,5 +1,6 @@
 package com.tiktime.controller.world.enteties;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Disposable;
 import com.tiktime.common.configs.GameConfig;
 import com.tiktime.model.entities.livingenteties.EnemyModel;
@@ -29,6 +30,7 @@ public class EnemyController implements EventListener, Disposable {
     public EnemyController(WorldView worldView, Set<EnemyModel> enemies) {
         this.worldView = worldView;
         this.enemies = enemies;
+//        Gdx.app.log("EnemyController", enemies.toString());
 
         for (EnemyModel e : enemies) {
             curDamageTime.put(e, 0f);

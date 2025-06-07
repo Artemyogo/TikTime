@@ -1,5 +1,6 @@
 package com.tiktime.model.entities.livingenteties;
 
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.tiktime.common.configs.GameConfig;
 import com.tiktime.common.configs.configdata.PlayerData;
@@ -55,31 +56,6 @@ public class PlayerModel extends WeaponableLivingEntityModel implements Categori
     @Override
     public Category getCategory() {
         return category;
-    }
-
-    @Override
-    public int getAttackDamage() {
-        return weaponModel.getAttackDamage();
-    }
-
-    @Override
-    public void setAttackDamage(int damage) {
-        weaponModel.setAttackDamage(damage);
-    }
-
-    @Override
-    public void updateAttackCooldownTimer(float delta) {
-        weaponModel.updateAttackCooldownTimer(delta);
-    }
-
-    @Override
-    public void doAttack() {
-        weaponModel.doAttack();
-    }
-
-    @Override
-    public boolean tryAttack(float delta) {
-
     }
 
     public PlayerModel(Category category, WeaponModel weaponModel, MovementComponent movementComponent,

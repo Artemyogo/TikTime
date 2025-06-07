@@ -19,6 +19,32 @@ public abstract class WeaponableLivingEntityModel extends LivingEntityModel impl
     public WeaponModel getWeaponModel(){
         return weaponModel;
     }
+
+    @Override
+    public int getAttackDamage() {
+        return weaponModel.getAttackDamage();
+    }
+
+    @Override
+    public void setAttackDamage(int damage) {
+        weaponModel.setAttackDamage(damage);
+    }
+
+    @Override
+    public void updateAttackCooldownTimer(float delta) {
+        weaponModel.updateAttackCooldownTimer(delta);
+    }
+
+    @Override
+    public void doAttack() {
+        weaponModel.doAttack(body.getPosition());
+    }
+
+    @Override
+    public boolean tryAttack() {
+        return weaponModel.tryAttack(body.getPosition());
+    }
+
     @Override
     public void setWeaponModel(WeaponModel weaponModel){
         this.weaponModel = weaponModel;

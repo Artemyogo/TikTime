@@ -35,11 +35,12 @@ public class MapModel implements Disposable {
 
         ArrayList<Vector2> enemiesSpawnPositions = new ArrayList<>();
         for (MapObject object : map.getLayers().get("enemies").getObjects()) {
+
             Vector2 enemyPosition =
                 new Vector2(object.getProperties().get("x", Float.class) / PPM,
                     object.getProperties().get("y", Float.class) / PPM);
 
-            enemyPosition.add(enemyPosition);
+            enemiesSpawnPositions.add(enemyPosition);
         }
 
         return enemiesSpawnPositions;

@@ -16,7 +16,7 @@ import static com.badlogic.gdx.math.MathUtils.ceil;
 public abstract class LivingEntityModel extends EntityModel implements Movable, Healthable {
     private MovementComponent movementComponent;
     private HealthComponent healthComponent;
-    private boolean isExposlionApplied = false;
+    private boolean isExplosionApplied = false;
 
     public LivingEntityModel(MovementComponent movementComponent, HealthComponent healthComponent,
                              Body body, BodyManager bodyManager, int id) {
@@ -77,9 +77,9 @@ public abstract class LivingEntityModel extends EntityModel implements Movable, 
 
     @Override
     public void setDirectionAndMove(Vector2 direction, float delta) {
-        if(isExposlionApplied){
+        if(isExplosionApplied){
             if(body.getLinearVelocity().isZero(1f))
-                isExposlionApplied = false;
+                isExplosionApplied = false;
             else
                 return;
         }
@@ -101,7 +101,7 @@ public abstract class LivingEntityModel extends EntityModel implements Movable, 
 
     @Override
     public void applyForce(float x, float y, float radius, float force){
-        isExposlionApplied = true;
+        isExplosionApplied = true;
         float dist = getPosition().dst(x, y);
 
         float effect = (radius - dist) / radius;

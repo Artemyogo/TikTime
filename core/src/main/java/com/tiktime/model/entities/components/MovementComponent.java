@@ -2,6 +2,7 @@ package com.tiktime.model.entities.components;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.tiktime.common.Direction;
 
 public class MovementComponent {
     private float speed;
@@ -20,6 +21,10 @@ public class MovementComponent {
         this.direction = direction;
     }
 
+    public Direction getDirectionType() {
+        return Direction.getDirection(direction);
+    }
+
     public float getSpeed() {
         return speed;
     }
@@ -27,7 +32,6 @@ public class MovementComponent {
     public void setSpeed(float speed) {
         this.speed = speed;
     }
-
 
     public void move(Body body, float delta) {
         if (direction.isZero()) {
