@@ -43,10 +43,12 @@ public class WorldModel implements EventListener, Disposable {
     private final Set<EnemyModel> enemies = new HashSet<>();
 
     public void update(float delta){
+        // ORDER IS IMPORTANT
+        enemies.forEach(e -> {
+//            Gdx.app.log("WorldModel", e.getWeaponModel().toString());
+            e.update(delta, player, world);
+        });
         world.step(delta, velocityIterations, positionIterations);
-        for(EnemyModel enemy : enemies){
-            enemy.chasePlayer(delta, player, world);
-        }
         bodyManager.flush();
     }
 
@@ -68,7 +70,6 @@ public class WorldModel implements EventListener, Disposable {
         }
 
         ArrayList<Vector2> enemiesPositions = mapModel.getEnemiesSpawnPositions();
-//        Gdx.app.log("WorldModel", "Enemies spawn positions: " + enemiesPositions);
         for (Vector2 p : enemiesPositions) {
             RusherEnemyModel rusherEnemyModel = EntityFactory.createRusherEnemyModel(world, bodyManager,
                 p.x, p.y);

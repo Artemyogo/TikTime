@@ -45,18 +45,20 @@
     "height": 0.7,
     "offsetX": 0,
     "offsetY": 0.23,
-    "offsetAttackX": 0.5,
+    "offsetAttackX": 0,
     "offsetAttackY": 0,
     "attackRange": 10
   },
   "fists": {
     "damage": 5,
     "attackCooldown": 0.5,
-    "width": 1.3,
-    "height": 0.7,
+    "width": 1,
+    "height": 1,
     "offsetX": 0,
     "offsetY": 0.24,
-    "attackRange": 0.5
+    "offsetAttackX": 0,
+    "offsetAttackY": 0,
+    "attackRange": 1
   },
   "wall": {
     "density": 0,

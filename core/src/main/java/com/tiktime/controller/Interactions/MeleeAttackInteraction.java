@@ -1,5 +1,6 @@
 package com.tiktime.controller.Interactions;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.tiktime.model.entities.Category;
@@ -9,8 +10,9 @@ import com.tiktime.model.entities.livingenteties.PlayerModel;
 import com.tiktime.model.entities.weapons.Attackable;
 
 public class MeleeAttackInteraction extends Interaction {
-    protected MeleeAttackInteraction() {
+    public MeleeAttackInteraction() {
         super(Category.combine(Category.PLAYER), Category.combine(Category.ENEMY_ATTACK));
+        Gdx.app.log("MeleeAt", "I MADE");
     }
 
     @Override
@@ -18,22 +20,27 @@ public class MeleeAttackInteraction extends Interaction {
         Damagable damagable;
         Attackable attackable;
 
-        if (contact.getFixtureA().getUserData() instanceof PlayerModel && contact.getFixtureB().getUserData() instanceof PlayerModel) {
+        Gdx.app.log("Interactions", "AAAAAAAAAAA");
+
+        Object dataA = contact.getFixtureA().getBody().getUserData();
+        Object dataB = contact.getFixtureB().getBody().getUserData();
+
+        if (dataA instanceof PlayerModel && dataB instanceof PlayerModel) {
             throw new RuntimeException("Cannot two PlayerModels");
         }
 
-        if (contact.getFixtureA().getUserData() instanceof PlayerModel) {
-            damagable = (Damagable) contact.getFixtureA().getUserData();
-            if (!(contact.getFixtureB().getUserData() instanceof AttackComponent)) {
+        if (dataA instanceof PlayerModel) {
+            damagable = (Damagable) dataA;
+            if (!(dataB instanceof AttackComponent)) {
                 throw new RuntimeException("Must be AttackComponent");
             }
-            attackable = (Attackable) contact.getFixtureB().getUserData();
-        } else if (contact.getFixtureB().getUserData() instanceof PlayerModel) {
-            damagable = (Damagable) contact.getFixtureB().getUserData();
-            if (!(contact.getFixtureA().getUserData() instanceof AttackComponent)) {
+            attackable = (Attackable) dataB;
+        } else if (dataB instanceof PlayerModel) {
+            damagable = (Damagable) dataB;
+            if (!(dataA instanceof AttackComponent)) {
                 throw new RuntimeException("Must be AttackComponent");
             }
-            attackable = (Attackable) contact.getFixtureA().getUserData();
+            attackable = (Attackable) dataA;
         } else {
             throw new RuntimeException("Cannot zero PlayerModels");
         }

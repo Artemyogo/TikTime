@@ -2,6 +2,7 @@ package com.tiktime.model.entities.entityfactories;
 
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.tiktime.common.WeaponType;
 import com.tiktime.common.configs.GameConfig;
 import com.tiktime.common.configs.configdata.PhysicsData;
 import com.tiktime.model.entities.Category;
@@ -22,6 +23,25 @@ public class FixtureFactory {
         fixtureDef.filter.maskBits = maskBits;
 
         fixtureDef.isSensor = isSensor;
+        return fixtureDef;
+    }
+
+    private static FixtureDef getSensorFixture(float width, float height, short categoryBits, short maskBits){
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox(width / 2f, height / 2f);
+
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape = shape;
+        fixtureDef.filter.categoryBits = categoryBits;
+
+//        fixtureDef.density = 1;
+//        fixtureDef.restitution = 1;
+//        fixtureDef.friction = 1;
+
+        fixtureDef.filter.maskBits = maskBits;
+//        fixtureDef.isSensor = false;
+        fixtureDef.isSensor = true;
+
         return fixtureDef;
     }
     public static FixtureDef getBulletFixture() {
@@ -50,8 +70,14 @@ public class FixtureFactory {
 
     public static FixtureDef getPlayerFixtureDef(){
         return getFixture(GameConfig.getPlayerConfig(), Category.PLAYER.getBits(),
-            Category.combine(Category.BULLET, Category.DOOR, Category.DYNAMITE, Category.ENEMY, Category.WALL),
+            Category.combine(Category.BULLET, Category.DOOR, Category.DYNAMITE, Category.ENEMY, Category.WALL, Category.ENEMY_ATTACK),
             false);
+    }
+
+    public static FixtureDef getFistAttackFixture(float width, float height) {
+        return getSensorFixture(width, height,
+            Category.ENEMY_ATTACK.getBits(),
+            Category.combine(Category.PLAYER));
     }
 
 //    public static FixtureDef getBulletFixtureDef(){

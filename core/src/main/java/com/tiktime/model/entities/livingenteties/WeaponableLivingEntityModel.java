@@ -2,13 +2,14 @@ package com.tiktime.model.entities.livingenteties;
 
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
+import com.tiktime.common.Direction;
 import com.tiktime.model.BodyManager;
 import com.tiktime.model.entities.components.HealthComponent;
 import com.tiktime.model.entities.components.MovementComponent;
 import com.tiktime.model.entities.weapons.WeaponModel;
 
 public abstract class WeaponableLivingEntityModel extends LivingEntityModel implements Weaponable {
-    WeaponModel weaponModel;
+    protected WeaponModel weaponModel;
     public WeaponableLivingEntityModel(MovementComponent movementComponent, HealthComponent healthComponent, WeaponModel weaponModel,
                                        Body body, BodyManager bodyManager, int id) {
         super(movementComponent, healthComponent, body, bodyManager, id);
@@ -36,13 +37,13 @@ public abstract class WeaponableLivingEntityModel extends LivingEntityModel impl
     }
 
     @Override
-    public void doAttack() {
-        weaponModel.doAttack(body.getPosition());
+    public float getAttackRange() {
+        return weaponModel.getAttackRange();
     }
 
     @Override
-    public boolean tryAttack() {
-        return weaponModel.tryAttack(body.getPosition());
+    public boolean isAttacking() {
+        return weaponModel.isAttacking();
     }
 
     @Override
