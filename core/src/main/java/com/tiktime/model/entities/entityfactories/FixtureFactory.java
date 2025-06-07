@@ -2,8 +2,8 @@ package com.tiktime.model.entities.entityfactories;
 
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.tiktime.model.configs.GameConfig;
-import com.tiktime.model.configs.configdata.PhysicsData;
+import com.tiktime.common.configs.GameConfig;
+import com.tiktime.common.configs.configdata.PhysicsData;
 import com.tiktime.model.entities.Category;
 
 public class FixtureFactory {

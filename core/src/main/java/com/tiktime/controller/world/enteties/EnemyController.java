@@ -1,10 +1,7 @@
 package com.tiktime.controller.world.enteties;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Disposable;
-import com.tiktime.model.BodyManager;
-import com.tiktime.model.configs.GameConfig;
+import com.tiktime.common.configs.GameConfig;
 import com.tiktime.model.entities.livingenteties.EnemyModel;
 import com.tiktime.model.events.EventListener;
 import com.tiktime.model.events.EventManager;
@@ -21,24 +18,39 @@ import java.util.Map;
 import java.util.Set;
 
 public class EnemyController implements EventListener, Disposable {
-    private Set<EnemyModel> enemies;
-    private Map<EnemyModel, Float> enemyTimeLeft = new HashMap<>();
+    private final Set<EnemyModel> enemies;
+    private final Map<EnemyModel, Float> enemyTimeLeft = new HashMap<>();
+    private final Map<EnemyModel, Float> curDamageTime = new HashMap<>();
+    private final WorldView worldView;
+    // TODO: magic constants
     private final float deathTime = 0.5f;
-
     private final float baseDamageTime = 0.1f;
-    private Map<EnemyModel, Float> curDamageTime = new HashMap<>();
 
-    private WorldView worldView;
-    private BodyManager bodyManager;
-
-    public EnemyController(WorldView worldView) {
+    public EnemyController(WorldView worldView, Set<EnemyModel> enemies) {
         this.worldView = worldView;
+        this.enemies = enemies;
+
+        for (EnemyModel e : enemies) {
+            curDamageTime.put(e, 0f);
+            worldView.addEnemy(e.getBody().getPosition().x, e.getBody().getPosition().y,
+                GameConfig.getRusherEnemyConfig().getWidth(),
+                GameConfig.getRusherEnemyConfig().getHeight(),
+                e.getCurrentHealth(), e.getMaxHealth(),
+                e.getId(),
+                (Math.random() < 0.5 ? Direction.EAST : Direction.WEST),
+                LivingEntityState.IDLE, EnemyType.RUSHER);
+        }
+        subscribeOnEvents();
+    }
+
+    private void subscribeOnEvents() {
         EventManager.subscribe(GameEventType.ENEMY_DEATH, this);
         EventManager.subscribe(GameEventType.ENEMY_ATTACKED, this);
     }
 
-    public void setBodyManager(BodyManager bodyManager) {
-        this.bodyManager = bodyManager;
+    private void unsubscribeOnEvents() {
+        EventManager.unsubscribe(GameEventType.ENEMY_DEATH, this);
+        EventManager.unsubscribe(GameEventType.ENEMY_ATTACKED, this);
     }
 
     public void update(float delta) {
@@ -79,25 +91,7 @@ public class EnemyController implements EventListener, Disposable {
             worldView.setEnemyIsAttacked(e.getId(), curDamageTime.get(e) != 0f);
         });
 
-        readyToDie.forEach(e -> {
-            enemyTimeLeft.remove(e);
-        });
-    }
-
-    public void setEnemies(Set<EnemyModel> enemies) {
-        worldView.clearEnemies();
-        this.enemies = enemies;
-
-        for (EnemyModel e : enemies) {
-            curDamageTime.put(e, 0f);
-            worldView.addEnemy(e.getBody().getPosition().x, e.getBody().getPosition().y,
-                GameConfig.getRusherEnemyConfig().getWidth(),
-                GameConfig.getRusherEnemyConfig().getHeight(),
-                e.getCurrentHealth(), e.getMaxHealth(),
-                e.getId(),
-                (Math.random() < 0.5 ? Direction.EAST : Direction.WEST),
-                LivingEntityState.IDLE, EnemyType.RUSHER);
-        }
+        readyToDie.forEach(enemyTimeLeft::remove);
     }
 
     @Override
@@ -112,7 +106,7 @@ public class EnemyController implements EventListener, Disposable {
 
                 worldView.setEnemyState(LivingEntityState.DYING, enemyModel.getId());
                 enemyTimeLeft.put(enemyModel, deathTime);
-                bodyManager.setToDelete(enemyModel.getBody());
+                enemyModel.deleteBody();
                 break;
             }
             case ENEMY_ATTACKED: {
@@ -131,7 +125,6 @@ public class EnemyController implements EventListener, Disposable {
 
     @Override
     public void dispose() {
-        EventManager.unsubscribe(GameEventType.ENEMY_DEATH, this);
-        EventManager.unsubscribe(GameEventType.ENEMY_ATTACKED, this);
+        unsubscribeOnEvents();
     }
 }

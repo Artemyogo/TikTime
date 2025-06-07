@@ -1,4 +1,4 @@
-package com.tiktime.model.configs.configdata;
+package com.tiktime.common.configs.configdata;
 
 public class BulletData extends EntityData {
 

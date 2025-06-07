@@ -1,6 +1,6 @@
 package com.tiktime.model.upgrades;
 
-import com.tiktime.model.configs.GameConfig;
+import com.tiktime.common.configs.GameConfig;
 
 public enum UpgradeType {
     HP("health", GameConfig.getPlayerConfig().getBaseHp(), 10),

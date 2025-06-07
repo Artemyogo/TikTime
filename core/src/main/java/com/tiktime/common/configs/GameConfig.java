@@ -1,6 +1,6 @@
-package com.tiktime.model.configs;
+package com.tiktime.common.configs;
 
-import com.tiktime.model.configs.configdata.*;
+import com.tiktime.common.configs.configdata.*;
 import com.tiktime.common.WeaponType;
 
 public final class GameConfig {
@@ -15,7 +15,7 @@ public final class GameConfig {
             case AK47:
                 return data.getAk47(); // currently weapon == ak47
             case FISTS:
-                return data.getWeapon();
+                return data.getFists();
             case GLOCK:
             case SHOTGUN:
                 return null;

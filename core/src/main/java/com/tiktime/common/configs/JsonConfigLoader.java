@@ -1,10 +1,10 @@
-package com.tiktime.model.configs;
+package com.tiktime.common.configs;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.Json;
-import com.tiktime.model.configs.configdata.ConfigData;
+import com.tiktime.common.configs.configdata.ConfigData;
 
 public class JsonConfigLoader implements ConfigLoader {
     private final String configFilePath;

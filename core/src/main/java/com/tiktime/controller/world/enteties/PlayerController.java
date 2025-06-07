@@ -2,7 +2,7 @@ package com.tiktime.controller.world.enteties;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Disposable;
-import com.tiktime.model.configs.GameConfig;
+import com.tiktime.common.configs.GameConfig;
 import com.tiktime.model.entities.livingenteties.EnemyModel;
 import com.tiktime.model.entities.livingenteties.PlayerModel;
 import com.tiktime.model.events.EventListener;
@@ -16,8 +16,9 @@ import com.tiktime.model.upgrades.UpgradeModel;
 import com.tiktime.view.world.WorldView;
 
 public class PlayerController implements EventListener, Disposable {
-    PlayerModel playerModel;
-    WorldView worldView;
+    private final PlayerModel playerModel;
+    private final WorldView worldView;
+    // TODO: magic constants
     private final float baseDamageTime = 0.1f;
     private float damageTimeLeft = 0f;
 
@@ -38,13 +39,19 @@ public class PlayerController implements EventListener, Disposable {
             WeaponType.AK47
         );
 
+        subscribeOnEvents();
+    }
+
+    private void subscribeOnEvents() {
         EventManager.subscribe(GameEventType.PLAYER_ATTACKED, this);
         EventManager.subscribe(GameEventType.PLAYER_DEATH, this);
         EventManager.subscribe(GameEventType.ENEMY_DEATH, this);
     }
 
-    public void setPlayer(PlayerModel playerModel) {
-        this.playerModel = playerModel;
+    private void unsubscribeOnEvents() {
+        EventManager.unsubscribe(GameEventType.PLAYER_ATTACKED, this);
+        EventManager.unsubscribe(GameEventType.PLAYER_DEATH, this);
+        EventManager.unsubscribe(GameEventType.ENEMY_DEATH, this);
     }
 
     public void update(float delta, Vector2 direction) {
@@ -96,7 +103,7 @@ public class PlayerController implements EventListener, Disposable {
             }
 
             case PLAYER_DEATH: {
-
+                // TODO: to do)
                 break;
             }
 
@@ -106,8 +113,6 @@ public class PlayerController implements EventListener, Disposable {
 
     @Override
     public void dispose() {
-        EventManager.unsubscribe(GameEventType.PLAYER_ATTACKED, this);
-        EventManager.unsubscribe(GameEventType.PLAYER_DEATH, this);
-        EventManager.unsubscribe(GameEventType.ENEMY_DEATH, this);
+        unsubscribeOnEvents();
     }
 }

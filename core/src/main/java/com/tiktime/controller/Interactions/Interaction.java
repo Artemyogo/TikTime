@@ -35,6 +35,6 @@ public abstract class Interaction {
         if (!new ContactMasks(contact).check(this.catA, this.catB)) return;
         onPreSolveContactInterval(contact);
     };
-    protected abstract void onPreSolveContactInterval(Contact masks);
+    protected abstract void onPreSolveContactInterval(Contact contact);
     void postSolve() {};
 }
