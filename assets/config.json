@@ -45,6 +45,8 @@
     "height": 0.7,
     "offsetX": 0,
     "offsetY": 0.23,
+    "offsetAttackX": 0.5,
+    "offsetAttackY": 0,
     "attackRange": 10
   },
   "fists": {

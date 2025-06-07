@@ -18,7 +18,6 @@ public final class GameConfig {
                 return data.getFists();
             case GLOCK:
             case SHOTGUN:
-                return null;
             default:
                 throw new IllegalArgumentException("Unknown weapon type: " + weapon);
         }

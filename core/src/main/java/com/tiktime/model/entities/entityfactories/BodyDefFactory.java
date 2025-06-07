@@ -1,5 +1,6 @@
 package com.tiktime.model.entities.entityfactories;
 
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.tiktime.common.WeaponType;
 import com.tiktime.common.configs.GameConfig;
@@ -45,7 +46,8 @@ public class BodyDefFactory {
 
     public static BodyDef getFistAttackBodyDef(float x, float y){
         return getBodyDef(x, y, BodyDef.BodyType.StaticBody,
-            GameConfig.getWeaponConfig(WeaponType.FISTS));
+            GameConfig.getWeaponConfig(WeaponType.FISTS).getWidth(),
+            GameConfig.getWeaponConfig(WeaponType.FISTS).getHeight());
     }
 
     public static BodyDef getBulletBodyDef(float x, float y){

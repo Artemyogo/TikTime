@@ -65,6 +65,7 @@ public class WorldController implements Pausable, Disposable, IExplosive {
 
         PlayerModel player = worldModel.getPlayerModel();
         playerController = new PlayerController(player, worldView);
+//        Gdx.app.log("WorldController", worldModel.getEnemies());
         enemyController = new EnemyController(worldView, worldModel.getEnemies());
 
         worldModel.setCollisionController(new CollisionController(this).

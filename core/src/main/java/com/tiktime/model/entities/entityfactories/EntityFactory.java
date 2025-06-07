@@ -89,7 +89,7 @@ public class EntityFactory {
             bodyManager
         );
 
-        return new FistsWeaponModel(attackComponent);
+        return new FistsWeaponModel(attackComponent, weaponConfig.getOffsetAttackX(), weaponConfig.getOffsetAttackY());
     }
     public static Ak47WeaponModel createAk47WeaponModel(World world, BodyManager bodyManager) {
         WeaponData weaponConfig = GameConfig.getWeaponConfig(WeaponType.AK47);
@@ -98,12 +98,13 @@ public class EntityFactory {
             weaponConfig.getDamage(),
             weaponConfig.getAttackCooldown(),
             weaponConfig.getAttackRange(),
-            world
+            world,
+            bodyManager
         );
 
-        return new Ak47WeaponModel(attackComponent, bodyManager);
+        return new Ak47WeaponModel(attackComponent, weaponConfig.getOffsetAttackX(), weaponConfig.getOffsetAttackY());
     }
-    public static BulletModel createBulletModel(World world, float x, float y) {
-        return new BulletModel(BodyFactory.createBulletBody(world, x, y));
+    public static BulletModel createBulletModel(World world, BodyManager bodyManager, float x, float y) {
+        return new BulletModel(BodyFactory.createBulletBody(world, x, y), bodyManager);
     }
 }

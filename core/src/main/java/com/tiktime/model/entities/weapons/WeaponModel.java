@@ -1,48 +1,47 @@
 package com.tiktime.model.entities.weapons;
 
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.tiktime.common.WeaponType;
 import com.tiktime.model.BodyManager;
 import com.tiktime.model.entities.components.AttackComponent;
 
-public abstract class WeaponModel implements Attackable {
+public abstract class WeaponModel {
     protected final AttackComponent attackComponent;
     protected final WeaponType weaponType;
-    protected final BodyManager bodyManager;
+    protected float offsetAttackX;
+    protected float offsetAttackY;
 
-    public WeaponModel(AttackComponent attackComponent, WeaponType weaponType, BodyManager bodyManager) {
+    public WeaponModel(AttackComponent attackComponent, WeaponType weaponType,
+                       float offsetAttackX, float offsetAttackY) {
         this.attackComponent = attackComponent;
         this.weaponType = weaponType;
-        this.bodyManager = bodyManager;
+        this.offsetAttackX = offsetAttackX;
+        this.offsetAttackY = offsetAttackY;
     }
 
-    @Override
     public int getAttackDamage() {
-        return attackComponent.getDamage();
+        return attackComponent.getAttackDamage();
     }
 
-    @Override
     public void setAttackDamage(int damage) {
-        attackComponent.setDamage(damage);
+        attackComponent.setAttackDamage(damage);
     }
 
-    @Override
     public void updateAttackCooldownTimer(float delta) {
-        attackComponent.updateAttackCycle(delta);
+        attackComponent.updateAttackCooldownTimer(delta);
     }
 
-    @Override
-    public void doAttack() {
-        attackComponent.doAttack();
+    public void doAttack(Vector2 playerPosition) {
+        attackComponent.doAttack(playerPosition);
     }
 
-    @Override
-    public boolean tryAttack() {
-        return attackComponent.tryAttack();
+    public boolean tryAttack(Vector2 playerPosition) {
+        return attackComponent.tryAttack(playerPosition);
     }
 
     public void update(float delta) {
-        attackComponent.updateAttackCycle(delta);
+        attackComponent.updateAttackCooldownTimer(delta);
     }
 
     public void setWorld(World world) {

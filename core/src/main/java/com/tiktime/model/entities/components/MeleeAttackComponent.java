@@ -1,5 +1,6 @@
 package com.tiktime.model.entities.components;
 
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
 import com.tiktime.model.BodyManager;
@@ -11,14 +12,8 @@ public class MeleeAttackComponent extends AttackComponent {
     }
 
     @Override
-    public void doAttack(float x, float y) {
-        super.doAttack(x, y);
-        if (!readyToAttack)
-            throw new RuntimeException("is not readyToAttack");
-
-        attackCooldownTimer = attackCooldown;
-        readyToAttack = (attackCooldownTimer == 0);
-        Body body = BodyFactory.createFistAttackBody(world, x, y);
-
+    public void doAttack(Vector2 position) {
+        super.doAttack();
+        bodyManager.setToDelete(BodyFactory.createFistAttackBody(world, position.x, position.y));
     }
 }

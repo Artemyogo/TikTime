@@ -1,5 +1,6 @@
 package com.tiktime.model;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -67,13 +68,13 @@ public class WorldModel implements EventListener, Disposable {
         }
 
         ArrayList<Vector2> enemiesPositions = mapModel.getEnemiesSpawnPositions();
+//        Gdx.app.log("WorldModel", "Enemies spawn positions: " + enemiesPositions);
         for (Vector2 p : enemiesPositions) {
             RusherEnemyModel rusherEnemyModel = EntityFactory.createRusherEnemyModel(world, bodyManager,
                 p.x, p.y);
 
             enemies.add(rusherEnemyModel);
         }
-
 
         mapModel.createAll(world);
         subscribeOnEvents();
