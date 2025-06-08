@@ -10,10 +10,10 @@ public abstract class EntityModel implements Entitiable {
     protected final Body body;
     protected final BodyManager bodyManager;
 
-    public EntityModel(Body body, BodyManager bodyManager, int id) {
+    public EntityModel(Body body, BodyManager bodyManager) {
         this.bodyManager = bodyManager;
         this.body = body;
-        this.id = id;
+        this.id = idNext++;
         setBody();
     }
 

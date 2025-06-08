@@ -33,8 +33,8 @@ import java.util.Map;
 import static com.tiktime.view.consts.ScreenConstants.PPM;
 
 public class WorldView implements Pausable, Renderable, Disposable {
-    private final boolean debug = true;
-//    private final boolean debug = false;
+//    private final boolean debug = true;
+    private final boolean debug = false;
     private boolean paused = true;
     private final OrthographicCamera worldCamera;
     private final SpriteBatch worldBatch;
@@ -130,6 +130,18 @@ public class WorldView implements Pausable, Renderable, Disposable {
 
     public void deleteEnemy(int id) {
         enemyViews.remove(id);
+    }
+
+    public void addBullet(float x, float y, float width, float height, float rotationDeg, int id) {
+        bulletViews.put(id, new BulletView(x, y, width, height, rotationDeg, worldBatch));
+    }
+
+    public void setBulletPosition(float x, float y, int id) {
+        bulletViews.get(id).setPosition(x, y);
+    }
+
+    public void deleteBullet(int id) {
+        bulletViews.remove(id);
     }
 
     public PlayerView getPlayerView() {

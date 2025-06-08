@@ -22,7 +22,7 @@ public class Ak47WeaponView extends WeaponView {
     @Override
     protected void loadAnimations() {
 //        float attackFrameDuration = baseAttackTicks / getRegions("ak47-attacking").size;
-        float attackFrameDuration = 0.1f;
+        float attackFrameDuration = 0.04f;
         animManager.add("ak47-attacking", getAnimation("ak47-attacking", attackFrameDuration, Animation.PlayMode.LOOP));
         float idleFrameDuration = 0.1f;
         animManager.add("ak47-idle", getAnimation("ak47-idle", idleFrameDuration, Animation.PlayMode.LOOP));

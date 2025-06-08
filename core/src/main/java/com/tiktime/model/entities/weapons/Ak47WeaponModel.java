@@ -22,4 +22,10 @@ public class Ak47WeaponModel extends WeaponModel implements GunshotAttackable {
         GunshotAttackable gunshotAttackable = (GunshotAttackable) attackComponent;
         gunshotAttackable.updateWeaponRotation(rotationDeg);
     }
+
+    @Override
+    public float getRotationDeg() {
+        GunshotAttackable gunshotAttackable = (GunshotAttackable) attackComponent;
+        return gunshotAttackable.getRotationDeg();
+    }
 }

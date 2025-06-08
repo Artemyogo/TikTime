@@ -9,7 +9,8 @@ import com.tiktime.view.enteties.livingenteties.EntityView;
 import com.tiktime.view.world.Renderable;
 
 public class BulletView extends EntityView {
-    private final String texturePath = "assets/bullet.png";
+    // TODO: magic constant
+    private final String texturePath = "bullet.png";
     private final TextureRegion texture = new TextureRegion(new Texture(texturePath));
     private final SpriteBatch batch;
     private final float rotationDeg;

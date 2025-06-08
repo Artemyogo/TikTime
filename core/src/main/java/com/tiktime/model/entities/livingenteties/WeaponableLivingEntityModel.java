@@ -11,8 +11,8 @@ import com.tiktime.model.entities.weapons.WeaponModel;
 public abstract class WeaponableLivingEntityModel extends LivingEntityModel implements Weaponable {
     protected WeaponModel weaponModel;
     public WeaponableLivingEntityModel(MovementComponent movementComponent, HealthComponent healthComponent, WeaponModel weaponModel,
-                                       Body body, BodyManager bodyManager, int id) {
-        super(movementComponent, healthComponent, body, bodyManager, id);
+                                       Body body, BodyManager bodyManager) {
+        super(movementComponent, healthComponent, body, bodyManager);
         this.weaponModel = weaponModel;
     }
 
