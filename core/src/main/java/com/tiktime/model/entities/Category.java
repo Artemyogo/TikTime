@@ -30,6 +30,12 @@ public enum Category {
     public boolean intercept(short mask) {
         return (mask & bits) != 0;
     }
+    public static Category fromBits(short bits) {
+        for (Category c : values()) {
+            if (c.getBits() == bits) return c;
+        }
+        throw new IllegalArgumentException("Unknown category bits: " + bits);
+    }
 
     public static short combine(Category... categories) {
         short mask = 0;

@@ -25,7 +25,17 @@
     "baseDamage": 10,
     "reward": 100
   },
-  "ak47": {},
+  "ak47": {
+    "damage": 10,
+    "attackCooldown": 0.01,
+    "width": 1.3,
+    "height": 0.7,
+    "offsetX": 0,
+    "offsetY": 0.22,
+    "offsetAttackX": 0,
+    "offsetAttackY": 0,
+    "attackRange": 10
+  },
   "entity": {
     "density": 1,
     "restitution": 0.01,
@@ -40,7 +50,7 @@
   },
   "weapon": {
     "damage": 10,
-    "attackCooldown": 0.2,
+    "attackCooldown": 20,
     "width": 1.3,
     "height": 0.7,
     "offsetX": 0,
@@ -55,7 +65,7 @@
     "width": 1,
     "height": 1,
     "offsetX": 0,
-    "offsetY": 0.24,
+    "offsetY": 0,
     "offsetAttackX": 0,
     "offsetAttackY": 0,
     "attackRange": 1
@@ -80,6 +90,6 @@
     "friction": 0.5,
     "width": 0.2,
     "height": 0.1,
-    "baseSpeed": 300
+    "baseSpeed": 40
   }
 }

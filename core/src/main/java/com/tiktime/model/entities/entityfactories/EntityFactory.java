@@ -11,10 +11,7 @@ import com.tiktime.model.entities.Category;
 import com.tiktime.model.entities.components.*;
 import com.tiktime.model.entities.livingenteties.PlayerModel;
 import com.tiktime.model.entities.livingenteties.RusherEnemyModel;
-import com.tiktime.model.entities.weapons.Ak47WeaponModel;
-import com.tiktime.model.entities.weapons.BulletModel;
-import com.tiktime.model.entities.weapons.FistsWeaponModel;
-import com.tiktime.model.entities.weapons.WeaponModel;
+import com.tiktime.model.entities.weapons.*;
 import com.tiktime.common.WeaponType;
 
 public class EntityFactory {
@@ -41,7 +38,8 @@ public class EntityFactory {
     }
 
     public static PlayerModel createPlayerModelAtNextMap(World world, BodyManager bodyManager, float x, float y, PlayerModel playerModel) {
-        WeaponModel weaponModel = playerModel.getWeaponModel();
+        // TODO: redo this
+        WeaponModel weaponModel = createAk47WeaponModel(world, bodyManager);
         MovementComponent movementComponent = playerModel.getMovementComponent();
         HealthComponent healthComponent = playerModel.getHealthComponent();
         healthComponent.regenerateHealth(PlayerModel.CurrentStats.getRegenHealth());
@@ -101,13 +99,14 @@ public class EntityFactory {
             weaponConfig.getDamage(),
             weaponConfig.getAttackCooldown(),
             weaponConfig.getAttackRange(),
+            0,
             world,
             bodyManager
         );
 
         return new Ak47WeaponModel(attackComponent);
     }
-    public static BulletModel createBulletModel(World world, BodyManager bodyManager, float x, float y) {
-        return new BulletModel(BodyFactory.createBulletBody(world, x, y), bodyManager);
+    public static BulletModel createBulletModel(World world, BodyManager bodyManager, float x, float y, Vector2 direction) {
+        return new BulletModel(BodyFactory.createBulletBody(world, x, y, direction), bodyManager);
     }
 }

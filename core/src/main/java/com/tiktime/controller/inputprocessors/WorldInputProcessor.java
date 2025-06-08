@@ -1,5 +1,6 @@
 package com.tiktime.controller.inputprocessors;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Vector2;
@@ -96,12 +97,16 @@ public class WorldInputProcessor implements InputProcessor, Pausable {
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         mouseMoved(screenX, screenY);
+        worldController.setPlayerAttacking(true);
+        Gdx.app.log("InputProcessor", "touchDown");
         return false;
     }
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
         mouseMoved(screenX, screenY);
+        worldController.setPlayerAttacking(false);
+        Gdx.app.log("InputProcessor", "touchUp");
         return false;
     }
 

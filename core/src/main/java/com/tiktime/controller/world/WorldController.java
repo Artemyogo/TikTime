@@ -8,10 +8,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Disposable;
-import com.tiktime.controller.Interactions.DoorInteraction;
-import com.tiktime.controller.Interactions.DynamiteInteraction;
-import com.tiktime.controller.Interactions.EntityInteraction;
-import com.tiktime.controller.Interactions.MeleeAttackInteraction;
+import com.tiktime.controller.Interactions.*;
 import com.tiktime.controller.inputprocessors.WorldInputProcessor;
 import com.tiktime.controller.utils.DebugSelectorStrategy;
 import com.tiktime.controller.utils.MapSelector;
@@ -73,12 +70,17 @@ public class WorldController implements Pausable, Disposable, IExplosive {
             addInteraction(new DynamiteInteraction(this, worldModel.getBodyManager())). // TODO: this is bad, BM only in model sh be
             addInteraction(new DoorInteraction(doorSensorModel)).
             addInteraction(new EntityInteraction()).
-            addInteraction(new MeleeAttackInteraction()));
+            addInteraction(new MeleeAttackInteraction()).
+            addInteraction(new BulletInteraction(worldModel.getBodyManager())));
 
         worldView.setWorld(worldModel.getWorld());
         worldView.setMapRenderer(map);
         gameView.setHud(PlayerModel.CurrentStats.getCoins());
         setInputProcessor();
+    }
+
+    public void setPlayerAttacking(boolean playerAttacking) {
+        playerController.setAttacking(playerAttacking);
     }
 
     private void setInputProcessor() {
@@ -102,10 +104,13 @@ public class WorldController implements Pausable, Disposable, IExplosive {
         }
 
         Vector3 mousePosition = new Vector3(x, y, 0);
-        worldView.updatePlayerWeaponRotation(mousePosition,
-            getWeaponPosition(
-                worldModel.getPlayerPosition(),
-                WeaponType.AK47));
+        worldView.updatePlayerWeaponRotation(mousePosition, getWeaponPosition(worldModel.getPlayerPosition(), WeaponType.AK47));
+
+        mousePosition = new Vector3(x, y, 0);
+        float rotationDeg = worldView.getWeaponRotation(mousePosition,
+            getWeaponPosition(worldModel.getPlayerPosition(), WeaponType.AK47));
+//        Gdx.app.log("WorldController", "Rotation deg: " + rotationDeg);
+        playerController.updateWeaponRotation(rotationDeg);
     }
 
     public void update(float delta) {
@@ -143,20 +148,26 @@ public class WorldController implements Pausable, Disposable, IExplosive {
             addInteraction(new DynamiteInteraction(this, worldModel.getBodyManager())). // TODO: this is bad, BM only in model sh be
                 addInteraction(new DoorInteraction(doorSensorModel)).
             addInteraction(new EntityInteraction()).
-            addInteraction(new MeleeAttackInteraction()));
+            addInteraction(new MeleeAttackInteraction()).
+            addInteraction(new BulletInteraction(worldModel.getBodyManager())));
 
         worldView.setWorld(worldModel.getWorld());
         worldView.setMapRenderer(map);
         gameView.setHud(PlayerModel.CurrentStats.getCoins());
+        setInputProcessor();
     }
 
     Vector3 getWeaponPosition(Vector2 playerPosition, WeaponType weaponType) {
         WeaponData weaponConfig = GameConfig.getWeaponConfig(weaponType);
+//        WeaponData weaponConfig = GameConfig.getAk47WeaponConfig();
+
         if (weaponConfig == null) {
             throw new RuntimeException("WeaponConfig is null");
         }
 
-        return new Vector3(playerPosition.x + weaponConfig.getOffsetX(), playerPosition.y + weaponConfig.getOffsetX(), 0f);
+//        return new Vector3(playerPosition.x + weaponConfig.getOffsetX(), playerPosition.y + weaponConfig.getOffsetX(), 0f);
+        return new Vector3(playerPosition.x + weaponConfig.getOffsetX(), playerPosition.y + weaponConfig.getOffsetY(), 0f);
+//        return new Vector3(playerPosition.x, playerPosition.y, 0f);
     }
 
     @Override

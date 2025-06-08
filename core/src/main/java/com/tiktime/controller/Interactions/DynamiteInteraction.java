@@ -11,7 +11,7 @@ public class DynamiteInteraction extends Interaction{
     IExplosive explosion;
     BodyManager bodyManager;
     public DynamiteInteraction(IExplosive explosion, BodyManager bodyManager) {
-        super(Category.combine(Category.PLAYER, Category.ENEMY_RUSHER), Category.DYNAMITE.getBits());
+        super(Category.combine(Category.PLAYER, Category.ENEMY_RUSHER, Category.BULLET), Category.DYNAMITE.getBits());
         this.explosion = explosion;
         this.bodyManager = bodyManager;
     }
@@ -24,6 +24,12 @@ public class DynamiteInteraction extends Interaction{
         explosion.explosion(dynamiteFixture.getBody(), 10, 100f);
         // TODO: i think there should be dynamite model in which we should call method delete, and Body manager should be only in model part
         bodyManager.setToDelete(dynamiteFixture.getBody());
+        if (Category.BULLET.is(contact.getFixtureA().getFilterData().categoryBits)) {
+            bodyManager.setToDelete(contact.getFixtureA().getBody());
+        }
+        if (Category.BULLET.is(contact.getFixtureB().getFilterData().categoryBits)) {
+            bodyManager.setToDelete(contact.getFixtureB().getBody());
+        }
     }
 
     @Override

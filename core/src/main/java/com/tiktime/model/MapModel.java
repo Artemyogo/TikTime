@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Disposable;
+import com.tiktime.model.entities.Category;
 import com.tiktime.model.entities.entityfactories.BodyFactory;
 import com.tiktime.model.entities.entityfactories.FixtureFactory;
 
@@ -49,17 +50,17 @@ public class MapModel implements Disposable {
 
     public void createWalls(World world) {
         TiledMapTileLayer wallLayer = (TiledMapTileLayer) map.getLayers().get("walls");
-        BodyFactory.createBodiesOnLayer(world, wallLayer, FixtureFactory.getWallFixture(), BodyDef.BodyType.StaticBody);
+        BodyFactory.createBodiesOnLayer(world, wallLayer, Category.WALL, BodyDef.BodyType.StaticBody);
     }
 
     public void createDoors(World world) {
         TiledMapTileLayer doorLayer = (TiledMapTileLayer) map.getLayers().get("doors");
-        BodyFactory.createBodiesOnLayer(world, doorLayer, FixtureFactory.getDoorFixture(), BodyDef.BodyType.StaticBody);
+        BodyFactory.createBodiesOnLayer(world, doorLayer, Category.DOOR, BodyDef.BodyType.StaticBody);
     }
 
     public void createDynamites(World world) {
         TiledMapTileLayer dynamiteLayer = (TiledMapTileLayer) map.getLayers().get("dynamite");
-        BodyFactory.createBodiesOnLayer(world, dynamiteLayer, FixtureFactory.getDynamiteFixture(), BodyDef.BodyType.StaticBody);
+        BodyFactory.createBodiesOnLayer(world, dynamiteLayer, Category.DYNAMITE, BodyDef.BodyType.StaticBody);
     }
 
     public void createAll(World world) {

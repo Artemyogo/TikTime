@@ -1,5 +1,6 @@
 package com.tiktime.view.world;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -69,6 +70,9 @@ public class WorldView implements Pausable, Renderable, Disposable {
 
     public void setPlayerIsAttacked(boolean isAttacked) {
         playerView.setIsAttacked(isAttacked);
+    }
+    public void setPlayerIsAttacking(boolean isAttacking) {
+        playerView.setIsAttacking(isAttacking);
     }
 
     public void setEnemyIsAttacked(int id, boolean isAttacked) {
@@ -141,7 +145,6 @@ public class WorldView implements Pausable, Renderable, Disposable {
         enemyView.setPosition(x, y);
     }
 
-
     public void setEnemyState(LivingEntityState state, int id) {
         EnemyView enemyView = enemyViews.get(Integer.valueOf(id));
         enemyView.setState(state);
@@ -175,11 +178,19 @@ public class WorldView implements Pausable, Renderable, Disposable {
     }
 
     public void updatePlayerWeaponRotation(Vector3 screenCoords, Vector3 weaponCoords) {
+        float rotationDeg = getWeaponRotation(screenCoords, weaponCoords);
+//        Gdx.app.log("WordlView",  "rotationDeg: " + rotationDeg);
+//        Gdx.app.log("WorldView", String.valueOf(rotationDeg));
+        playerView.updateWeaponRotationDeg(rotationDeg);
+    }
+
+    public float getWeaponRotation(Vector3 screenCoords, Vector3 weaponCoords) {
         Vector3 worldCoords = worldCamera.unproject(screenCoords);
+//        Gdx.app.log("WorldView", String.valueOf(worldCoords));
+//        Gdx.app.log("WorldView", String.valueOf(weaponCoords));
         float dx = worldCoords.x - weaponCoords.x;
         float dy = worldCoords.y - weaponCoords.y;
-        float rotationDeg = (float) Math.toDegrees(Math.atan2(dy, dx));
-        playerView.updateWeaponRotationDeg(rotationDeg);
+        return (float) Math.toDegrees(Math.atan2(dy, dx));
     }
 
     public void clearEnemies() {

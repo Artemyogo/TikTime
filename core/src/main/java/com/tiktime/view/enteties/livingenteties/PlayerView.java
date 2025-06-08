@@ -9,14 +9,14 @@ import com.tiktime.view.enteties.weapons.WeaponView;
 
 public class PlayerView extends LivingEntityView {
     public static final String atlasPath = "animations/player_1.atlas";
-    private WeaponView weapon;
+    private WeaponView weaponView;
     private int coins;
 
     public PlayerView(float x, float y, float width, float height, int curHealth, int maxHealth, int coins,
                       Direction direction, LivingEntityState state, WeaponType weapon,
                       SpriteBatch batch) {
         super(x, y, width, height, curHealth, maxHealth, direction, state, atlasPath, batch);
-        this.weapon = WeaponFactory.createWeapon(weapon, x, y, batch);
+        this.weaponView = WeaponFactory.createWeapon(weapon, x, y, batch);
         this.coins = coins;
         loadAnimations();
         updateAnimation();
@@ -33,26 +33,30 @@ public class PlayerView extends LivingEntityView {
     @Override
     public void render(float delta) {
         super.render(delta);
-        weapon.render(delta);
+        weaponView.render(delta);
     }
 
     @Override
     public void setPosition(float x, float y) {
         super.setPosition(x, y);
-        weapon.setPosition(x, y);
+        weaponView.setPosition(x, y);
     }
 
     @Override
     public void update(float delta) {
         super.update(delta);
-        weapon.update(delta);
+        weaponView.update(delta);
     }
 
     public void updateWeaponRotationDeg(float rotationDeg) {
         if (pause)
             return;
 
-        weapon.setRotationDeg(rotationDeg);
+        weaponView.setRotationDeg(rotationDeg);
+    }
+
+    public void setIsAttacking(boolean isAttacking) {
+        weaponView.setIsAttacking(isAttacking);
     }
 
     @Override
