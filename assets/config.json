@@ -32,8 +32,8 @@
     "height": 0.7,
     "offsetX": 0,
     "offsetY": 0.22,
-    "offsetAttackX": 0,
-    "offsetAttackY": 0,
+    "offsetAttackX": 0.65,
+    "offsetAttackY": -0.1,
     "attackRange": 10
   },
   "entity": {

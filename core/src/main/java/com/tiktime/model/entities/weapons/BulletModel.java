@@ -62,6 +62,8 @@ public class BulletModel extends EntityModel implements GunshotAttackable {
 
     @Override
     public void deleteBody() {
+        if (isDelete)
+            return;
         super.deleteBody();
         isDelete = true;
         EventManager.fireEvent(new GameEvent(GameEventType.BULLET_DESTROYED, this));

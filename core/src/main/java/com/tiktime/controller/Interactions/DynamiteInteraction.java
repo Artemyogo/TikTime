@@ -22,7 +22,7 @@ public class DynamiteInteraction extends Interaction{
         ContactMasks masks = new ContactMasks(contact);
         Fixture dynamiteFixture = masks.getFixture(Category.DYNAMITE);
         // TODO: magic constants
-        explosion.explosion(dynamiteFixture.getBody(), 10, 100f);
+        explosion.explosion(dynamiteFixture.getBody(), 5f, 100f);
         // TODO: i think there should be dynamite model in which we should call method delete, and Body manager should be only in model part
         bodyManager.setToDelete(dynamiteFixture.getBody());
         if (Category.BULLET.is(contact.getFixtureA().getFilterData().categoryBits)) {

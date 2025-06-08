@@ -98,8 +98,8 @@ public class WorldView implements Pausable, Renderable, Disposable {
             return e1.getY() > e2.getY() ? -1 : 1;
         });
 
-        ArrayList<Renderable> renderables = new ArrayList<>(allLivingEntities);
-        renderables.addAll(bulletViews.values());
+        ArrayList<Renderable> renderables = new ArrayList<>(bulletViews.values());
+        renderables.addAll(allLivingEntities);
         renderables.forEach(r -> r.render(delta));
         worldBatch.end();
 

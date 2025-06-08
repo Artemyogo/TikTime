@@ -121,7 +121,8 @@ public class WorldModel implements EventListener, Disposable {
         entities.forEach(entity -> {
             InPathRaycast callback = new InPathRaycast(entity.getBody().getUserData());
             world.rayCast(callback, new Vector2(position), entity.getBody().getPosition());
-            if (callback.isInPath()) {
+            Vector2 entityPosition = entity.getBody().getPosition();
+            if (callback.isInPath() && entityPosition.dst(position) <= radius) {
                 entity.applyForce(x, y, radius, force);
             }
         });
