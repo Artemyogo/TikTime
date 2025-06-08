@@ -22,8 +22,8 @@ public class CollisionController implements ContactListener {
 
     @Override
     public void beginContact(Contact contact) {
-        Gdx.app.log("Contact", contact.getFixtureA().getFilterData().categoryBits + " " +
-            contact.getFixtureB().getFilterData().categoryBits);
+//        Gdx.app.log("Contact", contact.getFixtureA().getFilterData().categoryBits + " " +
+//            contact.getFixtureB().getFilterData().categoryBits);
         for(Interaction interaction : interactions)
             interaction.beginContact(contact);
     }

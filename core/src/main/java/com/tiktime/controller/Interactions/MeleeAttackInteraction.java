@@ -12,7 +12,7 @@ import com.tiktime.model.entities.weapons.Attackable;
 public class MeleeAttackInteraction extends Interaction {
     public MeleeAttackInteraction() {
         super(Category.combine(Category.PLAYER), Category.combine(Category.ENEMY_ATTACK));
-        Gdx.app.log("MeleeAt", "I MADE");
+//        Gdx.app.log("MeleeAt", "I MADE");
     }
 
     @Override
@@ -20,7 +20,7 @@ public class MeleeAttackInteraction extends Interaction {
         Damagable damagable;
         Attackable attackable;
 
-        Gdx.app.log("Interactions", "AAAAAAAAAAA");
+//        Gdx.app.log("Interactions", "AAAAAAAAAAA");
 
         Object dataA = contact.getFixtureA().getBody().getUserData();
         Object dataB = contact.getFixtureB().getBody().getUserData();

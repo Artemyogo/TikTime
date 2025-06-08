@@ -6,10 +6,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.tiktime.view.enteties.livingenteties.AnimatedEntityView;
 
 public abstract class WeaponView extends AnimatedEntityView {
+    protected boolean isAttacking = false;
     protected float rotationDeg;
-    protected final float baseAttackTicks = 100;
-    protected float curAttackTicks = 0;
-    protected boolean isAttack = false;
     protected float offsetX;
     protected float offsetY;
 
@@ -44,22 +42,12 @@ public abstract class WeaponView extends AnimatedEntityView {
             return;
         }
 
+        updateAnimation();
         animManager.update(delta);
-
-        curAttackTicks -= delta;
-        if (curAttackTicks <= 0) {
-            this.isAttack = false;
-            curAttackTicks = 0;
-        }
     }
 
-    public void setIsAttack(boolean isAttack) {
-        this.isAttack = isAttack;
-        if (isAttack) {
-            curAttackTicks = baseAttackTicks;
-        } else {
-            curAttackTicks = 0;
-        }
+    public void setIsAttacking(boolean isAttacking) {
+        this.isAttacking = isAttacking;
     }
 
     public void setRotationDeg(float rotationDeg) {

@@ -21,7 +21,7 @@ public class MeleeAttackComponent extends AttackComponent implements MeleeAttack
         if (direction == Direction.WEST) {
             x -= width;
         }
-//        BodyFactory.createFistAttackBody(world, x, y, width, height, this);
+
         bodyManager.setToDelete(BodyFactory.createFistAttackBody(world, x, y, width, height, this));
         return true;
     }

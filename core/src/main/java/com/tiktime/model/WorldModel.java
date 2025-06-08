@@ -50,6 +50,7 @@ public class WorldModel implements EventListener, Disposable {
         });
         world.step(delta, velocityIterations, positionIterations);
         bodyManager.flush();
+//        Gdx.app.log("Physics", "Bodies count: " + world.getBodyCount());
     }
 
     public WorldModel(MapModel mapModel) {

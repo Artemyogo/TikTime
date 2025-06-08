@@ -4,11 +4,12 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 public class BodyManager {
     private final World world;
-    private final List<Body> toDelete = new ArrayList<>();
+    private final HashSet<Body> toDelete = new HashSet<>();
     public BodyManager(World world){
         this.world = world;
     }

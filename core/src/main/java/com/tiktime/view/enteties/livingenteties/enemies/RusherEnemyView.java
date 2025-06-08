@@ -36,6 +36,6 @@ public class RusherEnemyView extends EnemyView {
     protected void updateAnimation() {
         String animName = String.format("%s-%s", "rusher", state.name().toLowerCase());
         animManager.set(animName);
-        Gdx.app.log("RusherEnemyView", state.name().toLowerCase());
+//        Gdx.app.log("RusherEnemyView", state.name().toLowerCase());
     }
 }

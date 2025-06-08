@@ -62,6 +62,7 @@ public abstract class AttackComponent implements Attackable {
         }
 
         attackCooldownTimer = attackCooldown;
+        readyToAttack = (attackCooldownTimer == 0);
         return true;
     }
 }

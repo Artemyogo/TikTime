@@ -1,5 +1,6 @@
 package com.tiktime.controller.world.enteties;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Disposable;
 import com.tiktime.common.configs.GameConfig;
@@ -21,6 +22,7 @@ public class PlayerController implements EventListener, Disposable {
     // TODO: magic constants
     private final float baseDamageTime = 0.1f;
     private float damageTimeLeft = 0f;
+    private boolean attacking = false;
 
     public PlayerController(PlayerModel playerModel, WorldView worldView) {
         this.playerModel = playerModel;
@@ -42,6 +44,11 @@ public class PlayerController implements EventListener, Disposable {
         subscribeOnEvents();
     }
 
+    public void setAttacking(boolean attacking) {
+        this.attacking = attacking;
+        Gdx.app.log("PlayerController", "setAttacking: " + attacking);
+    }
+
     private void subscribeOnEvents() {
         EventManager.subscribe(GameEventType.PLAYER_ATTACKED, this);
         EventManager.subscribe(GameEventType.PLAYER_DEATH, this);
@@ -54,9 +61,19 @@ public class PlayerController implements EventListener, Disposable {
         EventManager.unsubscribe(GameEventType.ENEMY_DEATH, this);
     }
 
+    public void updateWeaponRotation(float rotationDeg) {
+        playerModel.updateWeaponRotation(rotationDeg);
+    }
+
     public void update(float delta, Vector2 direction) {
         damageTimeLeft = Math.max(0, damageTimeLeft - delta);
         worldView.setPlayerIsAttacked(damageTimeLeft != 0);
+
+        playerModel.updateAttackCooldownTimer(delta);
+        if (attacking) {
+            playerModel.tryAttack();
+        }
+        worldView.setPlayerIsAttacking(attacking);
 
         playerModel.setDirectionAndMove(direction, delta);
 
