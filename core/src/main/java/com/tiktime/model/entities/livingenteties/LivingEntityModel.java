@@ -19,8 +19,8 @@ public abstract class LivingEntityModel extends EntityModel implements Movable, 
     protected boolean isExplosionApplied = false;
 
     public LivingEntityModel(MovementComponent movementComponent, HealthComponent healthComponent,
-                             Body body, BodyManager bodyManager, int id) {
-        super(body, bodyManager, id);
+                             Body body, BodyManager bodyManager) {
+        super(body, bodyManager);
         this.movementComponent = movementComponent;
         this.healthComponent = healthComponent;
     }

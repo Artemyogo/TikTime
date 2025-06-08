@@ -63,6 +63,12 @@ public class PlayerModel extends WeaponableLivingEntityModel implements Categori
     }
 
     @Override
+    public float getRotationDeg() {
+        GunshotAttackable gunshotAttackable = (GunshotAttackable) weaponModel;
+        return gunshotAttackable.getRotationDeg();
+    }
+
+    @Override
     public void applyDamage(int damage){
         super.applyDamage(damage);
         EventManager.fireEvent(new GameEvent( GameEventType.PLAYER_ATTACKED, this));
@@ -87,8 +93,8 @@ public class PlayerModel extends WeaponableLivingEntityModel implements Categori
     }
 
     public PlayerModel(Category category, WeaponModel weaponModel, MovementComponent movementComponent,
-                       HealthComponent healthComponent, Body body, BodyManager bodyManager, int id) {
-        super(movementComponent, healthComponent, weaponModel, body, bodyManager, id);
+                       HealthComponent healthComponent, Body body, BodyManager bodyManager) {
+        super(movementComponent, healthComponent, weaponModel, body, bodyManager);
         if (!Category.PLAYER.is(category.getBits()))
             throw new IllegalArgumentException("Category is not Player");
 

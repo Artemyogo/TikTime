@@ -6,6 +6,7 @@ import com.tiktime.controller.world.ContactMasks;
 import com.tiktime.controller.world.IExplosive;
 import com.tiktime.model.BodyManager;
 import com.tiktime.model.entities.Category;
+import com.tiktime.model.entities.weapons.BulletModel;
 
 public class DynamiteInteraction extends Interaction{
     IExplosive explosion;
@@ -28,7 +29,9 @@ public class DynamiteInteraction extends Interaction{
             bodyManager.setToDelete(contact.getFixtureA().getBody());
         }
         if (Category.BULLET.is(contact.getFixtureB().getFilterData().categoryBits)) {
-            bodyManager.setToDelete(contact.getFixtureB().getBody());
+            BulletModel bulletModel = (BulletModel) contact.getFixtureB().getBody().getUserData();
+            bulletModel.deleteBody();
+//            bodyManager.setToDelete(contact.getFixtureB().getBody());
         }
     }
 

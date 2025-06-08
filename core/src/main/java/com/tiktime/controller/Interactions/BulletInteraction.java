@@ -8,12 +8,11 @@ import com.tiktime.model.entities.livingenteties.Damagable;
 import com.tiktime.model.entities.livingenteties.EnemyModel;
 import com.tiktime.model.entities.livingenteties.PlayerModel;
 import com.tiktime.model.entities.weapons.Attackable;
+import com.tiktime.model.entities.weapons.BulletModel;
 
 public class BulletInteraction extends Interaction {
-    private BodyManager bodyManager;
-    public BulletInteraction(BodyManager bodyManager) {
+    public BulletInteraction() {
         super(Category.combine(Category.BULLET), Category.combine(Category.OBSTACLE, Category.ENEMY));
-        this.bodyManager = bodyManager;
     }
 
     @Override
@@ -26,12 +25,14 @@ public class BulletInteraction extends Interaction {
         Object dataB = contact.getFixtureB().getBody().getUserData();
 
         if (categoryA.intercept(Category.OBSTACLE.getBits())) {
-            bodyManager.setToDelete(contact.getFixtureB().getBody());
+            BulletModel bulletModel = (BulletModel) dataB;
+            bulletModel.deleteBody();
             return;
         }
 
         if (categoryB.intercept(Category.OBSTACLE.getBits())) {
-            bodyManager.setToDelete(contact.getFixtureA().getBody());
+            BulletModel bulletModel = (BulletModel) dataA;
+            bulletModel.deleteBody();
             return;
         }
 
@@ -41,15 +42,18 @@ public class BulletInteraction extends Interaction {
         if (categoryA.intercept(Category.ENEMY.getBits())) {
             damagable = (Damagable) dataA;
             attackable = (Attackable) dataB;
-            bodyManager.setToDelete(contact.getFixtureB().getBody());
+            BulletModel bulletModel = (BulletModel) dataB;
+            bulletModel.deleteBody();
         }
 
         if (categoryB.intercept(Category.ENEMY.getBits())) {
             damagable = (Damagable) dataB;
             attackable = (Attackable) dataA;
-            bodyManager.setToDelete(contact.getFixtureA().getBody());
+            BulletModel bulletModel = (BulletModel) dataA;
+            bulletModel.deleteBody();
         }
 
+        assert damagable != null;
         damagable.applyDamage(attackable.getAttackDamage());
     }
 

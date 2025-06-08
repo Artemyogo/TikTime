@@ -22,7 +22,7 @@ public abstract class EnemyModel extends WeaponableLivingEntityModel implements 
 
     public EnemyModel(Category category, MovementComponent movementComponent, HealthComponent healthComponent, WeaponModel weaponModel,
                       int reward, Body body, BodyManager bodyManager)  {
-        super(movementComponent, healthComponent, weaponModel, body, bodyManager, idNext++);
+        super(movementComponent, healthComponent, weaponModel, body, bodyManager);
         if (!Category.ENEMY.intercept(category.getBits())) {
             throw new IllegalArgumentException("Invalid category");
         }

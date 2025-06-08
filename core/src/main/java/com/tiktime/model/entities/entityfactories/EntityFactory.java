@@ -32,8 +32,7 @@ public class EntityFactory {
             movementComponent,
             healthComponent,
             BodyFactory.createPlayerBody(world, x, y),
-            bodyManager,
-            0
+            bodyManager
         );
     }
 
@@ -50,8 +49,7 @@ public class EntityFactory {
             movementComponent,
             healthComponent,
             BodyFactory.createPlayerBody(world, x, y),
-            bodyManager,
-            0
+            bodyManager
         );
     }
 
@@ -106,7 +104,8 @@ public class EntityFactory {
 
         return new Ak47WeaponModel(attackComponent);
     }
-    public static BulletModel createBulletModel(World world, BodyManager bodyManager, float x, float y, Vector2 direction) {
-        return new BulletModel(BodyFactory.createBulletBody(world, x, y, direction), bodyManager);
+    public static BulletModel createBulletModel(World world, BodyManager bodyManager, Attackable attackable,
+                                                float x, float y, float rotationDeg, Vector2 direction) {
+        return new BulletModel(BodyFactory.createBulletBody(world, x, y, direction), bodyManager, attackable, rotationDeg);
     }
 }
