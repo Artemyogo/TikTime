@@ -51,7 +51,6 @@ public class PlayerModel extends WeaponableLivingEntityModel implements Categori
     @Override
     public boolean tryAttack(float x, float y) {
         GunshotAttackable gunshotAttackable = (GunshotAttackable) weaponModel;
-        // TODO: magic constants
         WeaponData weaponData = GameConfig.getWeaponConfig(WeaponType.AK47);
 
         float centerX = x + weaponData.getOffsetX();

@@ -120,5 +120,16 @@
     "width": 0.2,
     "height": 0.1,
     "baseSpeed": 40
-  }
+  },
+  "timeStep": 0.0166666667,
+  "velocityIterations": 6,
+  "positionIterations": 2,
+  "explosionRadius": 5,
+  "explosionForce": 100,
+  "ak47AttackFrameDuration": 0.04,
+  "ak47IdleFrameDuration": 0.1,
+  "enemyDeathTime": 0.5,
+  "enemyBaseDamageTime": 0.1,
+  "playerBaseDamageTime": 0.1,
+  "playerDamageTimeLeft": 0
 }

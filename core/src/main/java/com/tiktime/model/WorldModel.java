@@ -19,6 +19,7 @@ import com.tiktime.model.events.EventListener;
 import com.tiktime.model.events.EventManager;
 import com.tiktime.model.events.GameEvent;
 import com.tiktime.model.events.GameEventType;
+import com.tiktime.common.configs.GameConfig;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -29,10 +30,9 @@ import static com.tiktime.view.consts.ScreenConstants.PPM;
 
 public class WorldModel implements EventListener, Disposable {
     private final World world;
-    // TODO: magic constants
-    private final float timeStep = 1 / 60f;
-    private final int velocityIterations = 6;
-    private final int positionIterations = 2;
+    private final float timeStep = GameConfig.getTimeStep();
+    private final int velocityIterations = GameConfig.getVelocityIterations();
+    private final int positionIterations = GameConfig.getPositionIterations();
 
     private final MapModel mapModel;
     private final BodyManager bodyManager;
