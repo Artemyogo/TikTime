@@ -58,8 +58,8 @@ public class BulletController implements EventListener, Disposable {
             }
             case BULLET_DESTROYED: {
                 BulletModel bulletModel = (BulletModel) event.data;
-                bulletModels.remove(bulletModel);
                 worldView.deleteBullet(bulletModel.getId());
+                bulletModels.remove(bulletModel);
                 break;
             }
             default:

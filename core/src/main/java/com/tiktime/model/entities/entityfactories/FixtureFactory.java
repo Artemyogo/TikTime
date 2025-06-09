@@ -45,8 +45,8 @@ public class FixtureFactory {
     }
 
     public static void setBulletFixture(Body body) {
-        setFixture(GameConfig.getBulletConfig(), Category.BULLET.getBits(),
-            Category.combine(Category.ENEMY, Category.OBSTACLE, Category.DYNAMITE), false, body);
+        setSensorFixture(GameConfig.getBulletConfig().getWidth(), GameConfig.getBulletConfig().getHeight(), Category.BULLET.getBits(),
+            Category.combine(Category.ENEMY, Category.OBSTACLE, Category.DYNAMITE), body);
     }
     public static void setDoorFixture(Body body) {
         setFixture(GameConfig.getFloorConfig(), Category.DOOR.getBits(), Category.PLAYER.getBits(), true, body);

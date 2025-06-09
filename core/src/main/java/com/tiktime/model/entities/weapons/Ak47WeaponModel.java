@@ -17,10 +17,9 @@ public class Ak47WeaponModel extends WeaponModel implements GunshotAttackable {
     @Override
     public boolean tryAttack(float x, float y) {
         GunshotAttackable gunshotAttackable = (GunshotAttackable) attackComponent;
-
-        // TODO: make bullet from end of weapon
         return gunshotAttackable.tryAttack(x, y);
     }
+
 
     @Override
     public void updateWeaponRotation(float rotationDeg) {

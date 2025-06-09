@@ -48,6 +48,12 @@ public class PlayerView extends LivingEntityView {
         weaponView.update(delta);
     }
 
+    @Override
+    public void setPaused(boolean paused) {
+        super.setPaused(paused);
+        weaponView.setPaused(paused);
+    }
+
     public void updateWeaponRotationDeg(float rotationDeg) {
         if (pause)
             return;

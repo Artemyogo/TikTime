@@ -26,12 +26,12 @@ public class DynamiteInteraction extends Interaction{
         // TODO: i think there should be dynamite model in which we should call method delete, and Body manager should be only in model part
         bodyManager.setToDelete(dynamiteFixture.getBody());
         if (Category.BULLET.is(contact.getFixtureA().getFilterData().categoryBits)) {
-            bodyManager.setToDelete(contact.getFixtureA().getBody());
+            BulletModel bulletModel = (BulletModel) contact.getFixtureA().getBody().getUserData();
+            bulletModel.deleteBody();
         }
         if (Category.BULLET.is(contact.getFixtureB().getFilterData().categoryBits)) {
             BulletModel bulletModel = (BulletModel) contact.getFixtureB().getBody().getUserData();
             bulletModel.deleteBody();
-//            bodyManager.setToDelete(contact.getFixtureB().getBody());
         }
     }
 
