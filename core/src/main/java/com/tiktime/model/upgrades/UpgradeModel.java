@@ -15,6 +15,7 @@ public final class UpgradeModel {
         preferencesUpgradeStorage = new PreferencesUpgradeStorage("com.tiktime.upgrades");
         money = preferencesUpgradeStorage.loadMoney();
         preferencesUpgradeStorage.loadUpgrades(manager.getUpgrades());
+//        preferencesUpgradeStorage.clearUpgrades(manager.getUpgrades());
     }
 
     private static UpgradeModel upgradeModel;
