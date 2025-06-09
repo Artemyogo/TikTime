@@ -35,7 +35,7 @@
     "height": 1.5,
     "baseHp": 40,
     "baseSpeed": 2,
-    "baseDamage": 30,
+    "baseDamage": 10,
     "runFrameDuration": 0.1,
     "attackRange": 1,
     "reward": 30
@@ -47,7 +47,7 @@
     "acceleration": 5.0,
     "width": 5,
     "height": 8,
-    "baseHp": 7000,
+    "baseHp": 800,
     "baseSpeed": 0.5,
     "baseDamage": 1000,
     "runFrameDuration": 0.3,
