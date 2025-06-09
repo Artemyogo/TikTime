@@ -3,8 +3,10 @@ package com.tiktime.model.entities.livingenteties;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.tiktime.common.Direction;
+import com.tiktime.common.WeaponType;
 import com.tiktime.common.configs.GameConfig;
 import com.tiktime.common.configs.configdata.PlayerData;
+import com.tiktime.common.configs.configdata.WeaponData;
 import com.tiktime.model.BodyManager;
 import com.tiktime.model.entities.Categoriable;
 import com.tiktime.model.entities.Category;
@@ -49,7 +51,31 @@ public class PlayerModel extends WeaponableLivingEntityModel implements Categori
     @Override
     public boolean tryAttack(float x, float y) {
         GunshotAttackable gunshotAttackable = (GunshotAttackable) weaponModel;
-        return gunshotAttackable.tryAttack(x, y);
+        // TODO: magic constants
+        WeaponData weaponData = GameConfig.getWeaponConfig(WeaponType.AK47);
+
+        float centerX = x + weaponData.getOffsetX();
+        float centerY = y + weaponData.getOffsetY();
+
+        float width = GameConfig.getBulletConfig().getWidth();
+        float height = GameConfig.getBulletConfig().getHeight();
+
+        float localOffsetX = weaponData.getOffsetAttackX();
+        float localOffsetY = weaponData.getOffsetAttackY();
+
+        if (gunshotAttackable.getRotationDeg() > 90 || getRotationDeg() < -90) {
+            localOffsetY = -localOffsetY;
+        }
+
+        float rotationRad = (float) Math.toRadians(getRotationDeg());
+
+        float rotatedOffsetX = (float) (Math.cos(rotationRad) * localOffsetX - Math.sin(rotationRad) * localOffsetY);
+        float rotatedOffsetY = (float) (Math.sin(rotationRad) * localOffsetX + Math.cos(rotationRad) * localOffsetY);
+
+        float barrelX = centerX + rotatedOffsetX;
+        float barrelY = centerY + rotatedOffsetY;
+
+        return gunshotAttackable.tryAttack(barrelX - width / 2f, barrelY);
     }
 
     public boolean tryAttack() {

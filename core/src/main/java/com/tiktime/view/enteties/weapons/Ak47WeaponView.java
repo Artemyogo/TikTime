@@ -22,6 +22,7 @@ public class Ak47WeaponView extends WeaponView {
     @Override
     protected void loadAnimations() {
 //        float attackFrameDuration = baseAttackTicks / getRegions("ak47-attacking").size;
+        // TODO: magic constants
         float attackFrameDuration = 0.04f;
         animManager.add("ak47-attacking", getAnimation("ak47-attacking", attackFrameDuration, Animation.PlayMode.LOOP));
         float idleFrameDuration = 0.1f;
@@ -30,7 +31,7 @@ public class Ak47WeaponView extends WeaponView {
 
     @Override
     protected void updateAnimation() {
-        Gdx.app.log("Ak47WepanoVIw", isAttacking ? "attacking" : "idle");
+//        Gdx.app.log("Ak47WepanoVIw", isAttacking ? "attacking" : "idle");
         /// TODO BEWARE animName should be translated to the correct one
         String animName;
         if (isAttacking)
