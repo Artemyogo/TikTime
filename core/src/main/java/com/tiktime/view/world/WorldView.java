@@ -93,11 +93,11 @@ public class WorldView implements Pausable, Renderable, Disposable {
         worldBatch.begin();
         ArrayList<LivingEntityView> allLivingEntities = getLivingEntities();
         allLivingEntities.sort((e1, e2) -> {
-            if (e1.getY() ==  e2.getY()) {
+            if (e1.getY() - e1.getHeight() / 2f ==  e2.getY() - e2.getHeight() / 2f) {
                 return 0;
             }
 
-            return e1.getY() > e2.getY() ? -1 : 1;
+            return e1.getY() - e1.getHeight() / 2f > e2.getY() - e2.getHeight() / 2f ? -1 : 1;
         });
 
         // TODO: BACK THIS

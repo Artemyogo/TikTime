@@ -19,6 +19,14 @@ public abstract class EntityView implements Pausable, Renderable {
         this.y = y;
     }
 
+    public float getWidth() {
+        return width;
+    }
+
+    public float getHeight() {
+        return height;
+    }
+
     public void setSize(float width, float height) {
         this.width = width;
         this.height = height;

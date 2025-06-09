@@ -8,7 +8,7 @@
     "height": 1.5,
     "baseHp": 100,
     "baseSpeed": 15 ,
-    "baseDamage": 10,
+    "baseDamage": 17,
     "baseRegen": 10
   },
   "marksman": {},
@@ -47,9 +47,9 @@
     "acceleration": 5.0,
     "width": 5,
     "height": 8,
-    "baseHp": 800,
+    "baseHp": 1600,
     "baseSpeed": 0.5,
-    "baseDamage": 1000,
+    "baseDamage": 175,
     "runFrameDuration": 0.3,
     "attackRange": 5,
     "reward": 500
