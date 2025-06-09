@@ -46,9 +46,9 @@ public class WorldController implements Pausable, Disposable, IExplosive {
 
     private boolean paused = false;
     private boolean debug = false;
-//    private boolean debug = true;
 
     public WorldController(ScreenHandler screenHandler, GameView gameView) {
+        MapModel.reset();
         this.screenHandler = screenHandler;
         this.gameView = gameView;
         worldView = gameView.getWorldView();
@@ -156,6 +156,7 @@ public class WorldController implements Pausable, Disposable, IExplosive {
         playerController = new PlayerController(playerModel, worldView, screenHandler);
         enemyController = new EnemyController(worldView, worldModel.getEnemies());
         bulletController = new BulletController(worldView);
+
         worldModel.setCollisionController(new CollisionController(this).
             addInteraction(new DynamiteInteraction(this, worldModel.getBodyManager())). // TODO: this is bad, BM only in model sh be
                 addInteraction(new DoorInteraction(doorSensorModel)).

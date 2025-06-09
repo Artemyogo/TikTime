@@ -24,7 +24,7 @@
     "baseDamage": 1,
     "runFrameDuration": 0.04,
     "attackRange": 0.8,
-    "reward": 20
+    "reward": 2
   },
   "rusher": {
     "density": 1,
@@ -38,7 +38,7 @@
     "baseDamage": 10,
     "runFrameDuration": 0.1,
     "attackRange": 1,
-    "reward": 30
+    "reward": 3
   },
   "boss": {
     "density": 1,

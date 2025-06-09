@@ -20,6 +20,9 @@ public class MapModel implements Disposable {
     private final TiledMap map;
     // TODO: magic constants
     private static int counter = 0;
+    public static void reset() {
+        counter = 0;
+    }
     public MapModel(TiledMap map) {
         counter++;
         this.map = map;
