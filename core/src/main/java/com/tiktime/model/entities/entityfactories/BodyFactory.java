@@ -43,6 +43,12 @@ public class BodyFactory {
         return body;
     }
 
+    public static Body createAnimanEnemyBody(World world, float x, float y) {
+        Body body = createBody(world, BodyDefFactory.getAnimanEnemyBodyDef(x, y));
+        FixtureFactory.setAnimanEnemyFixture(body);
+        return body;
+    }
+
     public static Body createBulletBody(World world, float x, float y, Vector2 direction) {
         Body body = createBody(world, BodyDefFactory.getBulletBodyDef(x, y));
         body.setBullet(true);

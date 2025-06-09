@@ -12,7 +12,19 @@
     "baseRegen": 10
   },
   "marksman": {},
-  "animan": {},
+  "animan": {
+    "density": 1,
+    "restitution": 0.01,
+    "friction": 0.2,
+    "acceleration": 5.0,
+    "width": 1,
+    "height": 1.5,
+    "baseHp": 10,
+    "baseSpeed": 15,
+    "baseDamage": 1,
+    "reward": 50
+
+  },
   "rusher": {
     "density": 1,
     "restitution": 0.01,
@@ -21,13 +33,13 @@
     "width": 1,
     "height": 1.5,
     "baseHp": 15,
-    "baseSpeed": 3,
-    "baseDamage": 10,
+    "baseSpeed": 7,
+    "baseDamage": 2,
     "reward": 100
   },
   "ak47": {
     "damage": 10,
-    "attackCooldown": 0.01,
+    "attackCooldown": 0.1,
     "width": 1.3,
     "height": 0.7,
     "offsetX": 0,

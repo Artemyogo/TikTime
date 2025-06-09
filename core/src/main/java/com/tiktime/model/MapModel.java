@@ -19,9 +19,14 @@ import static com.tiktime.view.consts.ScreenConstants.PPM;
 public class MapModel implements Disposable {
     private final TiledMap map;
     // TODO: magic constants
-
+    private static int counter = 0;
     public MapModel(TiledMap map) {
+        counter++;
         this.map = map;
+    }
+
+    public int getCounter() {
+        return counter;
     }
 
     Vector2 getPlayerSpawnPosition() {
@@ -46,6 +51,25 @@ public class MapModel implements Disposable {
         }
 
         return enemiesSpawnPositions;
+    }
+
+    ArrayList<Vector2> getAnimanEnemiesSpawnPositions() {
+        if (map.getLayers().get("animanEnemies") == null) {
+            return new ArrayList<>(0);
+        }
+        ArrayList<Vector2> enemiesSpawnPositions = new ArrayList<>();
+        for (MapObject object : map.getLayers().get("enemies").getObjects()) {
+
+            Vector2 enemyPosition =
+                new Vector2(object.getProperties().get("x", Float.class) / PPM,
+                    object.getProperties().get("y", Float.class) / PPM);
+
+            enemiesSpawnPositions.add(enemyPosition);
+        }
+
+        return enemiesSpawnPositions;
+
+
     }
 
     public void createWalls(World world) {

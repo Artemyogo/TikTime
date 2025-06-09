@@ -1,9 +1,11 @@
 package com.tiktime.model.entities.entityfactories;
 
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.tiktime.common.WeaponType;
 import com.tiktime.common.configs.GameConfig;
+import com.tiktime.common.configs.configdata.EnemyData;
 
 public class BodyDefFactory {
     public static BodyDef getBodyDef(float x, float y, BodyDef.BodyType bodyType, float width, float height){
@@ -36,12 +38,20 @@ public class BodyDefFactory {
         return bodyDef;
     }
 
-    public static BodyDef getRusherEnemyBodyDef(float x, float y){
+    private static BodyDef getEnemyBodyDef(float x, float y, EnemyData data){
         BodyDef bodyDef = getBodyDef(x, y, BodyDef.BodyType.DynamicBody,
-            GameConfig.getRusherEnemyConfig().getWidth(),
-            GameConfig.getRusherEnemyConfig().getHeight());
+            data.getWidth(),
+            data.getHeight());
         bodyDef.linearDamping = 4f;
         return bodyDef;
+    }
+
+    public static BodyDef getRusherEnemyBodyDef(float x, float y){
+        return getEnemyBodyDef(x, y, GameConfig.getRusherEnemyConfig());
+    }
+
+    public static BodyDef getAnimanEnemyBodyDef(float x, float y){
+        return getEnemyBodyDef(x, y, GameConfig.getAnimanEnemyConfig());
     }
 
     public static BodyDef getFistAttackBodyDef(float x, float y, float width, float height){

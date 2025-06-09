@@ -35,6 +35,8 @@ public final class GameConfig {
         return data.getRusher();
     }
 
+    public static AnimanEnemyData getAnimanEnemyConfig() { return data.getAniman();}
+
     public static WeaponData getAk47WeaponConfig() {
         return data.getWeapon(); // currently weapon == ak47
     }
