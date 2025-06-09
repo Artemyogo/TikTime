@@ -16,10 +16,7 @@ import com.tiktime.controller.utils.RandomSelectorStrategy;
 import com.tiktime.controller.world.enteties.BulletController;
 import com.tiktime.controller.world.enteties.EnemyController;
 import com.tiktime.controller.world.enteties.PlayerController;
-import com.tiktime.model.BodyManager;
-import com.tiktime.model.DoorSensorModel;
-import com.tiktime.model.MapModel;
-import com.tiktime.model.WorldModel;
+import com.tiktime.model.*;
 import com.tiktime.common.configs.GameConfig;
 import com.tiktime.common.configs.configdata.WeaponData;
 import com.tiktime.model.entities.livingenteties.PlayerModel;
@@ -45,6 +42,7 @@ public class WorldController implements Pausable, Disposable, IExplosive {
     private PlayerController playerController;
     private EnemyController enemyController;
     private BulletController bulletController;
+    private TimerModel timer;
 
     private boolean paused = false;
     private boolean debug = false;
@@ -76,6 +74,7 @@ public class WorldController implements Pausable, Disposable, IExplosive {
             addInteraction(new BulletInteraction()).
             addInteraction(new EnemyWallInteraction()));
 
+        timer = new TimerModel(30);
 
         worldView.setWorld(worldModel.getWorld());
         worldView.setMapRenderer(map);
@@ -130,6 +129,11 @@ public class WorldController implements Pausable, Disposable, IExplosive {
         enemyController.update(delta);
         bulletController.update(delta);
         worldModel.update(delta);
+        timer.pass(delta);
+        if (timer.stopped()) {
+            screenHandler.setScreen(Screen.DEATH_SCREEN);
+        }
+
     }
 
     public void changeMap(){
@@ -140,6 +144,7 @@ public class WorldController implements Pausable, Disposable, IExplosive {
         else
             map = mapSelector.getMap(new DebugSelectorStrategy());
 
+        timer = new TimerModel(30);
         PlayerModel playerModel = worldModel.getPlayerModel();
         worldModel.dispose();
         playerController.dispose();

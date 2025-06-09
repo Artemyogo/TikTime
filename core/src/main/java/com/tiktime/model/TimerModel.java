@@ -13,11 +13,11 @@ public class TimerModel {
         this.time = 60 * minutes + second;
     }
 
-    boolean stopped(){
+    public boolean stopped(){
         return this.time == 0;
     }
 
-    void pass(float dt){
+    public void pass(float dt){
         this.time = Math.max(0, this.time - dt);
     }
 
