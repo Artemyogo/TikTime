@@ -34,7 +34,7 @@ import static com.tiktime.view.consts.ScreenConstants.PPM;
 
 public class WorldView implements Pausable, Renderable, Disposable {
 //    private final boolean debug = true;
-    private final boolean debug = false;
+    private final boolean debug = true;
     private boolean paused = true;
     private final OrthographicCamera worldCamera;
     private final SpriteBatch worldBatch;

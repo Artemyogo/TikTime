@@ -13,7 +13,12 @@ public class ConfigData {
     private DynamiteData dynamite;
     private BulletData bullet;
     private FistsWeaponData fists;
+    private AnimanEnemyData animan;
 
+
+    public AnimanEnemyData getAniman() {
+        return animan;
+    }
     public PlayerData getPlayer() {
         return player;
     }

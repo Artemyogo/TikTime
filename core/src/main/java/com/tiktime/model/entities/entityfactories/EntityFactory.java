@@ -4,15 +4,19 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.tiktime.common.configs.GameConfig;
+import com.tiktime.common.configs.configdata.AnimanEnemyData;
 import com.tiktime.common.configs.configdata.RusherEnemyData;
 import com.tiktime.common.configs.configdata.WeaponData;
 import com.tiktime.model.BodyManager;
 import com.tiktime.model.entities.Category;
 import com.tiktime.model.entities.components.*;
+import com.tiktime.model.entities.livingenteties.AnimanEnemyModel;
 import com.tiktime.model.entities.livingenteties.PlayerModel;
 import com.tiktime.model.entities.livingenteties.RusherEnemyModel;
 import com.tiktime.model.entities.weapons.*;
 import com.tiktime.common.WeaponType;
+
+import static com.badlogic.gdx.math.MathUtils.ceil;
 
 public class EntityFactory {
     public static PlayerModel createPlayerModel(World world, BodyManager bodyManager, float x, float y) {
@@ -53,35 +57,58 @@ public class EntityFactory {
         );
     }
 
-    public static RusherEnemyModel createRusherEnemyModel(World world, BodyManager bodyManager, float x, float y) {
+    public static RusherEnemyModel createRusherEnemyModel(World world, BodyManager bodyManager, float x, float y, int level) {
         RusherEnemyData rusherConfig = GameConfig.getRusherEnemyConfig();
         MovementComponent movementComponent = new MovementComponent(
             rusherConfig.getBaseSpeed(),
             Vector2.Zero
         );
         HealthComponent healthComponent = new HealthComponent(
-            rusherConfig.getBaseHp(),
-            rusherConfig.getBaseHp()
+            rusherConfig.getBaseHp()*level,
+            rusherConfig.getBaseHp()*level
         );
 
         return new RusherEnemyModel(
             Category.ENEMY_RUSHER,
             movementComponent,
             healthComponent,
-            createFistsWeaponModel(world, bodyManager),
-            rusherConfig.getReward(),
+            createFistsWeaponModel(world, bodyManager, rusherConfig.getBaseDamage()*level),
+            ceil(rusherConfig.getReward()*level),
             BodyFactory.createRusherEnemyBody(world, x, y),
             bodyManager,
             rusherConfig.getWidth(),
             rusherConfig.getHeight()
         );
     }
+    public static AnimanEnemyModel createAnimanEnemyModel(World world, BodyManager bodyManager, float x, float y, int level) {
+        AnimanEnemyData animanConfig = GameConfig.getAnimanEnemyConfig();
+        MovementComponent movementComponent = new MovementComponent(
+            animanConfig.getBaseSpeed(),
+            Vector2.Zero
+        );
+        HealthComponent healthComponent = new HealthComponent(
+            animanConfig.getBaseHp()*level,
+            animanConfig.getBaseHp()*level
+        );
+        AnimanEnemyModel res = new AnimanEnemyModel(
+            Category.ENEMY_ANIMAN,
+            movementComponent,
+            healthComponent,
+            createFistsWeaponModel(world, bodyManager, animanConfig.getBaseDamage()*level),
+            animanConfig.getReward(),
+            BodyFactory.createAnimanEnemyBody(world, x, y),
+            bodyManager,
+            animanConfig.getWidth(),
+            animanConfig.getHeight()
+        );
+        return res;
+    }
 
-    public static FistsWeaponModel createFistsWeaponModel(World world, BodyManager bodyManager) {
+    public static FistsWeaponModel createFistsWeaponModel(World world, BodyManager bodyManager, float damageMultiplier) {
         WeaponData weaponConfig = GameConfig.getWeaponConfig(WeaponType.FISTS);
         assert weaponConfig != null;
         MeleeAttackComponent attackComponent = new MeleeAttackComponent(
-            weaponConfig.getDamage(),
+            ceil(weaponConfig.getDamage()*damageMultiplier),
             weaponConfig.getAttackCooldown(),
             weaponConfig.getAttackRange(),
             world,

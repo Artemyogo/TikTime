@@ -111,6 +111,6 @@ public abstract class LivingEntityModel extends EntityModel implements Movable, 
         Vector2 impulseVec = directionAwayFromExplosion.scl(impulseMagnitude);
 
         getBody().applyLinearImpulse(impulseVec, getBody().getWorldCenter(), true);
-        applyDamage(ceil(force/10));
+        applyDamage(ceil(effect*30));
     }
 }

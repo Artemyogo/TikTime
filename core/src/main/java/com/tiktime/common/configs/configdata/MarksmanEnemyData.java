@@ -1,5 +1,5 @@
 package com.tiktime.common.configs.configdata;
 
-public class MarksmanEnemyData extends EntityData {
+public class MarksmanEnemyData extends EnemyData {
 
 }

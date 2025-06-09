@@ -120,8 +120,8 @@ public class WorldController implements Pausable, Disposable, IExplosive {
             return;
         }
 
-        inputProcessor.setInDoor(doorSensorModel.isInDoor());
-        gameView.setIsInDoor(doorSensorModel.isInDoor());
+        inputProcessor.setInDoor(doorSensorModel.isInDoor()&&worldModel.killedAll());
+        gameView.setIsInDoor(doorSensorModel.isInDoor()&&worldModel.killedAll());
         Vector2 direction = inputProcessor.getDirection();
 
         playerController.update(delta, direction);
@@ -154,7 +154,8 @@ public class WorldController implements Pausable, Disposable, IExplosive {
                 addInteraction(new DoorInteraction(doorSensorModel)).
             addInteraction(new EntityInteraction()).
             addInteraction(new MeleeAttackInteraction()).
-            addInteraction(new BulletInteraction()));
+            addInteraction(new BulletInteraction()).
+            addInteraction(new EnemyWallInteraction()));
 
         worldView.setWorld(worldModel.getWorld());
         worldView.setMapRenderer(map);

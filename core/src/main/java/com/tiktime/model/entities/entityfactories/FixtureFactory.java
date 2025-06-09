@@ -68,6 +68,13 @@ public class FixtureFactory {
             false, body);
     }
 
+    public static void setAnimanEnemyFixture(Body body) {
+        setFixture(GameConfig.getAnimanEnemyConfig(),
+            Category.ENEMY_ANIMAN.getBits(),
+            Category.combine(Category.BULLET, Category.WALL, Category.DYNAMITE, Category.LIVING_ENTITY),
+            false, body);
+    }
+
     public static void setPlayerFixtureDef(Body body) {
         setFixture(GameConfig.getPlayerConfig(), Category.PLAYER.getBits(),
             Category.combine(Category.BULLET, Category.DOOR, Category.DYNAMITE, Category.ENEMY, Category.WALL, Category.ENEMY_ATTACK),

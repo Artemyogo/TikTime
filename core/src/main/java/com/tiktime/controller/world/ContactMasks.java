@@ -17,9 +17,9 @@ public class ContactMasks {
         B = fixtureB.getFilterData().categoryBits;
     }
     public Fixture getFixture(Category cat){
-        if(cat.is(A))
+        if(cat.intercept(A))
             return fixtureA;
-        else if(cat.is(B))
+        else if(cat.intercept(B))
             return fixtureB;
         else
             throw new IllegalArgumentException("Category " + cat + " is not in this mask");

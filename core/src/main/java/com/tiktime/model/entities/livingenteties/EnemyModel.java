@@ -1,5 +1,6 @@
 package com.tiktime.model.entities.livingenteties;
 
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
@@ -19,6 +20,12 @@ public abstract class EnemyModel extends WeaponableLivingEntityModel implements 
     protected int reward;
     protected Category category;
     protected boolean isChasing = false;
+    Vector2 movingDirection;
+
+    public void updateDirection(){
+        float angle = MathUtils.random(0f, MathUtils.PI2); // Random angle between 0-2π radians
+        movingDirection = new Vector2(MathUtils.cos(angle), MathUtils.sin(angle));
+    }
 
     public EnemyModel(Category category, MovementComponent movementComponent, HealthComponent healthComponent, WeaponModel weaponModel,
                       int reward, Body body, BodyManager bodyManager)  {
@@ -27,6 +34,7 @@ public abstract class EnemyModel extends WeaponableLivingEntityModel implements 
             throw new IllegalArgumentException("Invalid category");
         }
 
+        updateDirection();
         this.category = category;
         this.reward = reward;
     }
@@ -48,7 +56,7 @@ public abstract class EnemyModel extends WeaponableLivingEntityModel implements 
             Vector2 vec = new Vector2(player.getPosition()).sub(getPosition()).nor().scl(delta);
             setDirectionAndMove(vec, delta);
         } else {
-            setDirectionAndMove(Vector2.Zero, delta);
+            setDirectionAndMove(movingDirection, delta);
         }
     }
 

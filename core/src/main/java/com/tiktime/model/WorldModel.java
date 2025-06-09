@@ -10,10 +10,7 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Disposable;
 import com.tiktime.controller.world.CollisionController;
 import com.tiktime.model.entities.entityfactories.EntityFactory;
-import com.tiktime.model.entities.livingenteties.EnemyModel;
-import com.tiktime.model.entities.livingenteties.LivingEntityModel;
-import com.tiktime.model.entities.livingenteties.PlayerModel;
-import com.tiktime.model.entities.livingenteties.RusherEnemyModel;
+import com.tiktime.model.entities.livingenteties.*;
 import com.tiktime.model.entities.entityfactories.BodyFactory;
 import com.tiktime.model.entities.entityfactories.FixtureFactory;
 
@@ -73,13 +70,24 @@ public class WorldModel implements EventListener, Disposable {
         ArrayList<Vector2> enemiesPositions = mapModel.getEnemiesSpawnPositions();
         for (Vector2 p : enemiesPositions) {
             RusherEnemyModel rusherEnemyModel = EntityFactory.createRusherEnemyModel(world, bodyManager,
-                p.x, p.y);
+                p.x, p.y, mapModel.getCounter());
+
+            enemies.add(rusherEnemyModel);
+        }
+        ArrayList<Vector2> animanEnemiesPositions = mapModel.getAnimanEnemiesSpawnPositions();
+        for (Vector2 p : animanEnemiesPositions) {
+            AnimanEnemyModel rusherEnemyModel = EntityFactory.createAnimanEnemyModel(world, bodyManager,
+                p.x, p.y, mapModel.getCounter());
 
             enemies.add(rusherEnemyModel);
         }
 
         mapModel.createAll(world);
         subscribeOnEvents();
+    }
+
+    public boolean killedAll(){
+        return enemies.isEmpty();
     }
 
     private void subscribeOnEvents() {
