@@ -70,14 +70,14 @@ public class WorldModel implements EventListener, Disposable {
         ArrayList<Vector2> enemiesPositions = mapModel.getEnemiesSpawnPositions();
         for (Vector2 p : enemiesPositions) {
             RusherEnemyModel rusherEnemyModel = EntityFactory.createRusherEnemyModel(world, bodyManager,
-                p.x, p.y, mapModel.getCounter());
+                p.x, p.y, MapModel.getCounter());
 
             enemies.add(rusherEnemyModel);
         }
         ArrayList<Vector2> animanEnemiesPositions = mapModel.getAnimanEnemiesSpawnPositions();
         for (Vector2 p : animanEnemiesPositions) {
             AnimanEnemyModel rusherEnemyModel = EntityFactory.createAnimanEnemyModel(world, bodyManager,
-                p.x, p.y, mapModel.getCounter());
+                p.x, p.y, MapModel.getCounter());
 
             enemies.add(rusherEnemyModel);
         }
@@ -156,5 +156,6 @@ public class WorldModel implements EventListener, Disposable {
     public void dispose() {
         unsubscribeOnEvents();
         mapModel.dispose();
+        bodyManager.flush();
     }
 }

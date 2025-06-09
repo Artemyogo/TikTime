@@ -37,8 +37,8 @@ public class PlayerModel extends WeaponableLivingEntityModel implements Categori
             return upgradeModel.getUpgrade(UpgradeType.SPEED).getLevel() * 0.3f + playerConfig.getBaseSpeed();
         }
 
-        public static float getDamage() {
-            return upgradeModel.getUpgrade(UpgradeType.DAMAGE).getLevel() * 10 + playerConfig.getBaseDamage();
+        public static int getDamage() {
+            return upgradeModel.getUpgrade(UpgradeType.DAMAGE).getLevel() * 7 + playerConfig.getBaseDamage();
         }
 
         public static int getCoins() {
@@ -97,20 +97,15 @@ public class PlayerModel extends WeaponableLivingEntityModel implements Categori
     @Override
     public void applyDamage(int damage){
         super.applyDamage(damage);
-        EventManager.fireEvent(new GameEvent( GameEventType.PLAYER_ATTACKED, this));
+        EventManager.fireEvent(new GameEvent(GameEventType.PLAYER_ATTACKED, this));
+        if (getCurrentHealth() == 0) {
+            death();
+        }
     }
-
-
-
-//    @Override
-//    public boolean tryAttack(float x, float y, float width, float height, Direction direction) {
-//        MeleeAttackable meleeAttackable = (MeleeAttackable) weaponModel;
-//        return meleeAttackable.tryAttack(x, y, width, height, direction);
-//    }
 
     @Override
     public void death() {
-
+        EventManager.fireEvent(new GameEvent(GameEventType.PLAYER_DEATH, this));
     }
 
     @Override

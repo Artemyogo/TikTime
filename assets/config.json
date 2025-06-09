@@ -15,27 +15,26 @@
   "animan": {
     "density": 1,
     "restitution": 0.01,
-    "friction": 0.2,
+    "friction": 0,
     "acceleration": 5.0,
     "width": 1,
     "height": 1.5,
     "baseHp": 10,
     "baseSpeed": 15,
     "baseDamage": 1,
-    "reward": 50
-
+    "reward": 20
   },
   "rusher": {
     "density": 1,
     "restitution": 0.01,
-    "friction": 0.2,
+    "friction": 0,
     "acceleration": 5.0,
     "width": 1,
     "height": 1.5,
-    "baseHp": 15,
-    "baseSpeed": 7,
-    "baseDamage": 2,
-    "reward": 100
+    "baseHp": 40,
+    "baseSpeed": 2,
+    "baseDamage": 30,
+    "reward": 30
   },
   "ak47": {
     "damage": 10,

@@ -2,8 +2,8 @@ package com.tiktime.common.configs.configdata;
 
 public class EntityData extends PhysicsData {
     protected int baseHp;
+    protected int baseDamage;
     protected float baseSpeed;
-    protected float baseDamage;
     protected float baseAttackRange;
 
     public int getBaseHp() {
@@ -14,7 +14,7 @@ public class EntityData extends PhysicsData {
         return baseSpeed;
     }
 
-    public float getBaseDamage() {
+    public int getBaseDamage() {
         return baseDamage;
     }
     public float getBaseAttackRange() { return baseAttackRange; }

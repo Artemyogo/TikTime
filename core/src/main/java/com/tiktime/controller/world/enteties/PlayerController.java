@@ -1,9 +1,11 @@
 package com.tiktime.controller.world.enteties;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Disposable;
 import com.tiktime.common.configs.GameConfig;
+import com.tiktime.model.WorldModel;
 import com.tiktime.model.entities.livingenteties.EnemyModel;
 import com.tiktime.model.entities.livingenteties.PlayerModel;
 import com.tiktime.model.events.EventListener;
@@ -14,19 +16,25 @@ import com.tiktime.common.Direction;
 import com.tiktime.common.LivingEntityState;
 import com.tiktime.common.WeaponType;
 import com.tiktime.model.upgrades.UpgradeModel;
+import com.tiktime.screens.DeathScreen;
+import com.tiktime.screens.Screen;
+import com.tiktime.screens.ScreenHandler;
 import com.tiktime.view.world.WorldView;
 
 public class PlayerController implements EventListener, Disposable {
     private final PlayerModel playerModel;
     private final WorldView worldView;
+    private final ScreenHandler screenHandler;
     // TODO: magic constants
     private final float baseDamageTime = 0.1f;
     private float damageTimeLeft = 0f;
     private boolean attacking = false;
+    private boolean dead = false;
 
-    public PlayerController(PlayerModel playerModel, WorldView worldView) {
+    public PlayerController(PlayerModel playerModel, WorldView worldView, ScreenHandler screenHandler) {
         this.playerModel = playerModel;
         this.worldView = worldView;
+        this.screenHandler = screenHandler;
 
         worldView.setPlayer(
             playerModel.getPosition().x,
@@ -46,7 +54,7 @@ public class PlayerController implements EventListener, Disposable {
 
     public void setAttacking(boolean attacking) {
         this.attacking = attacking;
-        Gdx.app.log("PlayerController", "setAttacking: " + attacking);
+//        Gdx.app.log("PlayerController", "setAttacking: " + attacking);
     }
 
     private void subscribeOnEvents() {
@@ -66,6 +74,9 @@ public class PlayerController implements EventListener, Disposable {
     }
 
     public void update(float delta, Vector2 direction) {
+        if (dead) {
+            screenHandler.setScreen(Screen.DEATH_SCREEN);
+        }
         damageTimeLeft = Math.max(0, damageTimeLeft - delta);
         worldView.setPlayerIsAttacked(damageTimeLeft != 0);
 
@@ -120,7 +131,7 @@ public class PlayerController implements EventListener, Disposable {
             }
 
             case PLAYER_DEATH: {
-                // TODO: to do)
+                dead = true;
                 break;
             }
 

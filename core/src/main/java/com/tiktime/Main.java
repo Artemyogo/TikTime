@@ -1,6 +1,7 @@
 package com.tiktime;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import com.tiktime.screens.*;
 
 public class Main extends Game implements ScreenHandler {
@@ -21,6 +22,9 @@ public class Main extends Game implements ScreenHandler {
             setScreen(new UpgradeScreen(this));
         } else if (screen == Screen.SETTINGS_MENU) {
             setScreen(new SettingsScreen(this));
+        } else if (screen == Screen.DEATH_SCREEN) {
+            Gdx.app.log("Game", "Death Screen");
+            setScreen(new DeathScreen(this));
         } else {
             throw new IllegalArgumentException("Unknown screen: " + screen);
         }

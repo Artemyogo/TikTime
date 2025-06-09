@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 public enum LivingEntityState {
     IDLE(Animation.PlayMode.LOOP),
     RUNNING(Animation.PlayMode.LOOP),
-    ATTACKING(Animation.PlayMode.NORMAL),
+    ATTACKING(Animation.PlayMode.LOOP),
     DYING(Animation.PlayMode.NORMAL);
 
     public final Animation.PlayMode playMode;

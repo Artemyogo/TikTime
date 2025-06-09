@@ -7,11 +7,13 @@ import com.tiktime.common.EnemyType;
 import com.tiktime.common.LivingEntityState;
 
 public class RusherEnemyView extends EnemyView {
+    private final float runFrameDuration;
     public static final String atlasPath = "animations/rusher.atlas";
     public RusherEnemyView(float x, float y, float width, float height, int curHealth, int maxHealth,
                            int id, Direction direction, LivingEntityState livingEntityState,
-                           SpriteBatch batch) {
+                           SpriteBatch batch, float runFrameDuration) {
         super(x, y, width, height, curHealth, maxHealth, id, direction, livingEntityState, EnemyType.RUSHER, atlasPath, batch);
+        this.runFrameDuration = runFrameDuration;
         loadAnimations();
         updateAnimation();
     }
@@ -19,7 +21,7 @@ public class RusherEnemyView extends EnemyView {
     @Override
     protected void loadAnimations() {
         // TODO magic constants
-        float runFrameDuration  = 0.1f;
+//        float runFrameDuration  = 0.1f;
         animManager.add("rusher-running", getAnimation("running-e", runFrameDuration, LivingEntityState.RUNNING.playMode));
         animManager.add("rusher-idle", getAnimation("idle-e", runFrameDuration, LivingEntityState.IDLE.playMode));
 
