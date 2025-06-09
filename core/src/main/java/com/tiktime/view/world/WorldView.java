@@ -35,8 +35,8 @@ import java.util.Map;
 import static com.tiktime.view.consts.ScreenConstants.PPM;
 
 public class WorldView implements Pausable, Renderable, Disposable {
+    private final boolean debug = false;
 //    private final boolean debug = true;
-    private final boolean debug = true;
     private boolean paused = true;
     private final OrthographicCamera worldCamera;
     private final SpriteBatch worldBatch;
@@ -136,10 +136,10 @@ public class WorldView implements Pausable, Renderable, Disposable {
     }
 
     public void addEnemy(float x, float y, float width, float height, int curHealth, int maxHealth, int id, Direction direction,
-                         LivingEntityState state, EnemyType enemyType) {
+                         LivingEntityState state, EnemyType enemyType, float runFrameDuration) {
         switch (enemyType) {
             case RUSHER: {
-                enemyViews.put(id, new RusherEnemyView(x, y, width, height, curHealth, maxHealth, id, direction, state, worldBatch));
+                enemyViews.put(id, new RusherEnemyView(x, y, width, height, curHealth, maxHealth, id, direction, state, worldBatch, runFrameDuration));
                 break;
             }
 

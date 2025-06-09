@@ -98,7 +98,7 @@ public class WorldInputProcessor implements InputProcessor, Pausable {
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         mouseMoved(screenX, screenY);
         worldController.setPlayerAttacking(true);
-        Gdx.app.log("InputProcessor", "touchDown");
+//        Gdx.app.log("InputProcessor", "touchDown");
         return false;
     }
 

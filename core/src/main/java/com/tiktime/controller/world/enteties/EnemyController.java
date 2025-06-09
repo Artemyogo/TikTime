@@ -3,6 +3,7 @@ package com.tiktime.controller.world.enteties;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Disposable;
 import com.tiktime.common.configs.GameConfig;
+import com.tiktime.model.entities.livingenteties.AnimanEnemyModel;
 import com.tiktime.model.entities.livingenteties.EnemyModel;
 import com.tiktime.model.events.EventListener;
 import com.tiktime.model.events.EventManager;
@@ -40,7 +41,8 @@ public class EnemyController implements EventListener, Disposable {
                 e.getCurrentHealth(), e.getMaxHealth(),
                 e.getId(),
                 (Math.random() < 0.5 ? Direction.EAST : Direction.WEST),
-                LivingEntityState.IDLE, EnemyType.RUSHER);
+                LivingEntityState.IDLE, EnemyType.RUSHER,
+                (e instanceof AnimanEnemyModel ? 0.04f : 0.1f));
         }
         subscribeOnEvents();
     }
@@ -85,7 +87,7 @@ public class EnemyController implements EventListener, Disposable {
 
                 if (e.isAttacking())
                     worldView.setEnemyState(LivingEntityState.ATTACKING, e.getId());
-                else if (e.isChasing())
+                else if (e.isRunning())
                     worldView.setEnemyState(LivingEntityState.RUNNING, e.getId());
                 else
                     worldView.setEnemyState(LivingEntityState.IDLE, e.getId());

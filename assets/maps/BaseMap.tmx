@@ -7,12 +7,12 @@
  <objectgroup id="2" name="objects" locked="1">
   <object id="24" name="playerSpawn" x="73" y="540" width="16" height="16"/>
  </objectgroup>
- <objectgroup id="9" name="enemies" locked="1">
-  <object id="33" name="rusherEnemy" x="66" y="388"/>
-  <object id="34" name="rusherEnemy" x="227.333" y="62.6667"/>
-  <object id="35" name="rusherEnemy" x="306" y="414.667"/>
-  <object id="36" name="rusherEnemy" x="436.667" y="440.667"/>
-  <object id="37" name="rusherEnemy" x="407.333" y="63.3333"/>
+ <objectgroup id="9" name="animanEnemies" locked="1">
+  <object id="33" x="66" y="388"/>
+  <object id="34" x="227.333" y="62.6667"/>
+  <object id="35" x="306" y="414.667"/>
+  <object id="36" x="436.667" y="440.667"/>
+  <object id="37" x="407.333" y="63.3333"/>
  </objectgroup>
  <layer id="6" name="ground" width="20" height="20" locked="1">
   <data encoding="csv">
@@ -38,7 +38,7 @@
 71,71,71,71,71,71,71,71,71,71,71,71,71,71,71,71,71,71,71,71
 </data>
  </layer>
- <layer id="7" name="doors" width="20" height="20">
+ <layer id="7" name="doors" width="20" height="20" locked="1">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,4,0,0,
@@ -62,7 +62,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <layer id="5" name="walls" width="20" height="20">
+ <layer id="5" name="walls" width="20" height="20" locked="1">
   <data encoding="csv">
 77,77,77,77,77,77,77,77,77,77,77,77,77,77,77,77,9,9,77,77,
 77,0,0,0,0,0,0,0,0,0,0,0,0,0,77,0,0,0,0,77,
@@ -86,7 +86,7 @@
 77,77,77,77,77,77,77,77,77,77,77,77,77,77,77,77,77,77,77,77
 </data>
  </layer>
- <layer id="8" name="dynamite" width="20" height="20">
+ <layer id="8" name="dynamite" width="20" height="20" locked="1">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,

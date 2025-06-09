@@ -19,7 +19,7 @@ import com.tiktime.model.upgrades.UpgradeModel;
 public abstract class EnemyModel extends WeaponableLivingEntityModel implements Categoriable {
     protected int reward;
     protected Category category;
-    protected boolean isChasing = false;
+    protected boolean isRunning = false;
     Vector2 movingDirection;
 
     public void updateDirection(){
@@ -50,13 +50,17 @@ public abstract class EnemyModel extends WeaponableLivingEntityModel implements 
 
         Vector2 playerPosition = new Vector2(player.getBody().getPosition()).sub(body.getPosition());
         // TODO magic constant
-        isChasing = (callback.isInPath() || Math.abs(playerPosition.x) <= 0.6f
+        isRunning = (callback.isInPath() || Math.abs(playerPosition.x) <= 0.6f
             || Math.abs(playerPosition.y) <= 0.6f);
         if(callback.isInPath() && !weaponModel.isAttacking()){
             Vector2 vec = new Vector2(player.getPosition()).sub(getPosition()).nor().scl(delta);
             setDirectionAndMove(vec, delta);
-        } else {
+        } else if (!weaponModel.isAttacking()) {
             setDirectionAndMove(movingDirection, delta);
+            isRunning = true;
+//            setDirectionAndMove(Vector2.Zero, delta);
+        } else {
+            setDirectionAndMove(Vector2.Zero, delta);
         }
     }
 
@@ -89,7 +93,7 @@ public abstract class EnemyModel extends WeaponableLivingEntityModel implements 
         EventManager.fireEvent(new GameEvent(GameEventType.ENEMY_DEATH, this));
     }
 
-    public boolean isChasing() {
-        return isChasing;
+    public boolean isRunning() {
+        return isRunning;
     }
 }

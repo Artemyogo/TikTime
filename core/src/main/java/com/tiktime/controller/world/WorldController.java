@@ -64,7 +64,7 @@ public class WorldController implements Pausable, Disposable, IExplosive {
         worldModel = new WorldModel(new MapModel(map));
 
         PlayerModel playerModel = worldModel.getPlayerModel();
-        playerController = new PlayerController(playerModel, worldView);
+        playerController = new PlayerController(playerModel, worldView, screenHandler);
         enemyController = new EnemyController(worldView, worldModel.getEnemies());
         bulletController = new BulletController(worldView);
 
@@ -73,7 +73,9 @@ public class WorldController implements Pausable, Disposable, IExplosive {
             addInteraction(new DoorInteraction(doorSensorModel)).
             addInteraction(new EntityInteraction()).
             addInteraction(new MeleeAttackInteraction()).
-            addInteraction(new BulletInteraction()));
+            addInteraction(new BulletInteraction()).
+            addInteraction(new EnemyWallInteraction()));
+
 
         worldView.setWorld(worldModel.getWorld());
         worldView.setMapRenderer(map);
@@ -146,7 +148,7 @@ public class WorldController implements Pausable, Disposable, IExplosive {
         worldView.clearAll();
         worldModel = new WorldModel(new MapModel(map), playerModel);
         playerModel = worldModel.getPlayerModel();
-        playerController = new PlayerController(playerModel, worldView);
+        playerController = new PlayerController(playerModel, worldView, screenHandler);
         enemyController = new EnemyController(worldView, worldModel.getEnemies());
         bulletController = new BulletController(worldView);
         worldModel.setCollisionController(new CollisionController(this).
@@ -188,6 +190,7 @@ public class WorldController implements Pausable, Disposable, IExplosive {
     }
 
     public void goToMenu() {
+        MapModel.resetCounter();
         screenHandler.setScreen(Screen.MAIN_MENU);
     }
 

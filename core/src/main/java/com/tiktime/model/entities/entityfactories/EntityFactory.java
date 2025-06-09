@@ -19,6 +19,8 @@ import com.tiktime.common.WeaponType;
 import static com.badlogic.gdx.math.MathUtils.ceil;
 
 public class EntityFactory {
+    // TODO: A LOT OF OH MYYYYYYYYYYYYYYYYYY MAGIIIIIIIIIIC COOOOOONSTAAAAAAAAAANTSSSSSSSSSSSSS
+    private static final float mlt = 0.1f;
     public static PlayerModel createPlayerModel(World world, BodyManager bodyManager, float x, float y) {
         WeaponModel weaponModel = createAk47WeaponModel(world, bodyManager);
         MovementComponent movementComponent = new MovementComponent(
@@ -60,12 +62,12 @@ public class EntityFactory {
     public static RusherEnemyModel createRusherEnemyModel(World world, BodyManager bodyManager, float x, float y, int level) {
         RusherEnemyData rusherConfig = GameConfig.getRusherEnemyConfig();
         MovementComponent movementComponent = new MovementComponent(
-            rusherConfig.getBaseSpeed(),
+            rusherConfig.getBaseSpeed()*(1 + level*mlt),
             Vector2.Zero
         );
         HealthComponent healthComponent = new HealthComponent(
-            rusherConfig.getBaseHp()*level,
-            rusherConfig.getBaseHp()*level
+            ceil(rusherConfig.getBaseHp()*(1 + level*mlt)),
+            ceil(rusherConfig.getBaseHp()*(1 + level*mlt))
         );
 
         return new RusherEnemyModel(
@@ -73,7 +75,7 @@ public class EntityFactory {
             movementComponent,
             healthComponent,
             createFistsWeaponModel(world, bodyManager, rusherConfig.getBaseDamage()*level),
-            ceil(rusherConfig.getReward()*level),
+            ceil(rusherConfig.getReward()*(1 + level*mlt)),
             BodyFactory.createRusherEnemyBody(world, x, y),
             bodyManager,
             rusherConfig.getWidth(),
@@ -83,19 +85,19 @@ public class EntityFactory {
     public static AnimanEnemyModel createAnimanEnemyModel(World world, BodyManager bodyManager, float x, float y, int level) {
         AnimanEnemyData animanConfig = GameConfig.getAnimanEnemyConfig();
         MovementComponent movementComponent = new MovementComponent(
-            animanConfig.getBaseSpeed(),
+            animanConfig.getBaseSpeed()*(1 + level*mlt),
             Vector2.Zero
         );
         HealthComponent healthComponent = new HealthComponent(
-            animanConfig.getBaseHp()*level,
-            animanConfig.getBaseHp()*level
+            ceil(animanConfig.getBaseHp()*(1 + level*mlt)),
+            ceil(animanConfig.getBaseHp()*(1 + level*mlt))
         );
         AnimanEnemyModel res = new AnimanEnemyModel(
             Category.ENEMY_ANIMAN,
             movementComponent,
             healthComponent,
             createFistsWeaponModel(world, bodyManager, animanConfig.getBaseDamage()*level),
-            animanConfig.getReward(),
+            ceil(animanConfig.getReward()*(1 + level*mlt)),
             BodyFactory.createAnimanEnemyBody(world, x, y),
             bodyManager,
             animanConfig.getWidth(),
@@ -108,7 +110,7 @@ public class EntityFactory {
         WeaponData weaponConfig = GameConfig.getWeaponConfig(WeaponType.FISTS);
         assert weaponConfig != null;
         MeleeAttackComponent attackComponent = new MeleeAttackComponent(
-            ceil(weaponConfig.getDamage()*damageMultiplier),
+            ceil(damageMultiplier),
             weaponConfig.getAttackCooldown(),
             weaponConfig.getAttackRange(),
             world,
@@ -121,7 +123,7 @@ public class EntityFactory {
         WeaponData weaponConfig = GameConfig.getWeaponConfig(WeaponType.AK47);
         assert weaponConfig != null;
         GunshotAttackComponent attackComponent = new GunshotAttackComponent(
-            weaponConfig.getDamage(),
+            PlayerModel.CurrentStats.getDamage(),
             weaponConfig.getAttackCooldown(),
             weaponConfig.getAttackRange(),
             0,

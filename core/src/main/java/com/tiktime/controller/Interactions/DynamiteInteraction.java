@@ -12,7 +12,7 @@ public class DynamiteInteraction extends Interaction{
     IExplosive explosion;
     BodyManager bodyManager;
     public DynamiteInteraction(IExplosive explosion, BodyManager bodyManager) {
-        super(Category.combine(Category.PLAYER, Category.ENEMY_RUSHER, Category.BULLET), Category.DYNAMITE.getBits());
+        super(Category.combine(Category.PLAYER, Category.ENEMY, Category.BULLET), Category.DYNAMITE.getBits());
         this.explosion = explosion;
         this.bodyManager = bodyManager;
     }

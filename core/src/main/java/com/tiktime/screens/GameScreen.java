@@ -21,8 +21,9 @@ public class GameScreen extends ScreenAdapter {
 
     @Override
     public void render(float v) {
-        worldController.update(v);
+        // TODO: ORDER IS IMPORTANT
         gameView.render(v);
+        worldController.update(v);
     }
 
     @Override

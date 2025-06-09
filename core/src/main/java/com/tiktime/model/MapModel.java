@@ -25,8 +25,12 @@ public class MapModel implements Disposable {
         this.map = map;
     }
 
-    public int getCounter() {
+    public static int getCounter() {
         return counter;
+    }
+
+    public static void resetCounter() {
+        counter = 0;
     }
 
     Vector2 getPlayerSpawnPosition() {
@@ -58,7 +62,7 @@ public class MapModel implements Disposable {
             return new ArrayList<>(0);
         }
         ArrayList<Vector2> enemiesSpawnPositions = new ArrayList<>();
-        for (MapObject object : map.getLayers().get("enemies").getObjects()) {
+        for (MapObject object : map.getLayers().get("animanEnemies").getObjects()) {
 
             Vector2 enemyPosition =
                 new Vector2(object.getProperties().get("x", Float.class) / PPM,

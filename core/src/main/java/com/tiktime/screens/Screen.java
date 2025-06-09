@@ -5,4 +5,5 @@ public enum Screen {
     UPGRADE_MENU,
     SETTINGS_MENU,
     GAME_SCREEN,
+    DEATH_SCREEN
 }

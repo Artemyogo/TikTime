@@ -64,14 +64,14 @@ public class FixtureFactory {
     public static void setRusherEnemyFixture(Body body) {
         setFixture(GameConfig.getRusherEnemyConfig(),
             Category.ENEMY_RUSHER.getBits(),
-            Category.combine(Category.BULLET, Category.WALL, Category.DYNAMITE, Category.LIVING_ENTITY),
+            Category.combine(Category.BULLET, Category.OBSTACLE, Category.DYNAMITE, Category.LIVING_ENTITY),
             false, body);
     }
 
     public static void setAnimanEnemyFixture(Body body) {
         setFixture(GameConfig.getAnimanEnemyConfig(),
             Category.ENEMY_ANIMAN.getBits(),
-            Category.combine(Category.BULLET, Category.WALL, Category.DYNAMITE, Category.LIVING_ENTITY),
+            Category.combine(Category.BULLET, Category.OBSTACLE, Category.DYNAMITE, Category.LIVING_ENTITY),
             false, body);
     }
 
