@@ -106,12 +106,12 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <objectgroup id="4" name="objects">
+ <objectgroup id="4" name="objects" locked="1">
   <object id="1" name="playerSpawn" x="1562.67" y="1546.67">
    <ellipse/>
   </object>
  </objectgroup>
- <objectgroup id="5" name="bossEnemies">
+ <objectgroup id="5" name="bossEnemies" locked="1">
   <object id="4" x="1885.33" y="1432">
    <ellipse/>
   </object>
