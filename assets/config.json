@@ -27,13 +27,13 @@
   },
   "ak47": {
     "damage": 10,
-    "attackCooldown": 0.01,
+    "attackCooldown": 0.1,
     "width": 1.3,
     "height": 0.7,
     "offsetX": 0,
     "offsetY": 0.22,
-    "offsetAttackX": 0.65,
-    "offsetAttackY": -0.1,
+    "offsetAttackX": 0.7,
+    "offsetAttackY": -0.08,
     "attackRange": 10
   },
   "entity": {

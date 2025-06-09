@@ -1,9 +1,11 @@
 package com.tiktime.view.world;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileSet;
@@ -98,10 +100,30 @@ public class WorldView implements Pausable, Renderable, Disposable {
             return e1.getY() > e2.getY() ? -1 : 1;
         });
 
-        ArrayList<Renderable> renderables = new ArrayList<>(bulletViews.values());
+        // TODO: BACK THIS
+//        ArrayList<Renderable> renderables = new ArrayList<>(bulletViews.values());
+        ArrayList<Renderable> renderables = new ArrayList<>();
         renderables.addAll(allLivingEntities);
+        renderables.addAll(bulletViews.values());
         renderables.forEach(r -> r.render(delta));
         worldBatch.end();
+
+//        if (weaponCoords != null && screenCoords != null) {
+        if (debug && weaponCoords != null && screenCoords != null) {
+            // Пример: координаты начала и конца линии
+//            float x1 = weaponCoords.x / PPM, y1 = weaponCoords.y / PPM;
+            float x1 = weaponCoords.x, y1 = weaponCoords.y;
+            float x2 = screenCoords.x, y2 = screenCoords.y;
+//            float x2 = screenCoords.x / PPM, y2 = screenCoords.y / PPM;
+            ShapeRenderer shapeRenderer = new ShapeRenderer();
+            shapeRenderer.setProjectionMatrix(worldCamera.combined);
+            // Включаем отрисовку
+            Gdx.gl.glLineWidth(2); // Толщина линии
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+            shapeRenderer.setColor(Color.YELLOW);
+            shapeRenderer.line(x1, y1, x2, y2);
+            shapeRenderer.end();
+        }
 
         if (debug) {
             debugRenderer.render(world, worldCamera.combined);
@@ -189,10 +211,16 @@ public class WorldView implements Pausable, Renderable, Disposable {
         playerView.setMaxHealth(maxHealth);
     }
 
+    // TODO: DELETE THIS
+    Vector3 screenCoords;
+    Vector3 weaponCoords;
     public void updatePlayerWeaponRotation(Vector3 screenCoords, Vector3 weaponCoords) {
         float rotationDeg = getWeaponRotation(screenCoords, weaponCoords);
 //        Gdx.app.log("WordlView",  "rotationDeg: " + rotationDeg);
 //        Gdx.app.log("WorldView", String.valueOf(rotationDeg));
+
+        this.screenCoords = screenCoords;
+        this.weaponCoords = weaponCoords;
         playerView.updateWeaponRotationDeg(rotationDeg);
     }
 
