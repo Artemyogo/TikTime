@@ -8,6 +8,7 @@ public class PreferencesUpgradeStorage implements UpgradeStorageReader, UpgradeS
 
     public PreferencesUpgradeStorage(String preferencesName) {
         preferences = Gdx.app.getPreferences(preferencesName);
+        preferences.clear();
     }
 
     @Override
