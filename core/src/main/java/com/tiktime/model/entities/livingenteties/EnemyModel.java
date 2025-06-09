@@ -1,10 +1,10 @@
 package com.tiktime.model.entities.livingenteties;
 
-import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
-import com.tiktime.common.WeaponType;
+import com.tiktime.model.BodyManager;
 import com.tiktime.model.entities.Categoriable;
 import com.tiktime.model.entities.Category;
 import com.tiktime.model.entities.components.HealthComponent;
@@ -16,45 +16,69 @@ import com.tiktime.model.events.GameEvent;
 import com.tiktime.model.events.GameEventType;
 import com.tiktime.model.upgrades.UpgradeModel;
 
-public abstract class EnemyModel extends LivingEntityModel implements Categoriable, Weaponable {
-    public static int idNext = 0;
+public abstract class EnemyModel extends WeaponableLivingEntityModel implements Categoriable {
     protected int reward;
-    Category category;
-    WeaponModel weapon;
+    protected Category category;
+    protected boolean isRunning = false;
+    Vector2 movingDirection;
 
-    public EnemyModel(Category category, MovementComponent movementComponent, HealthComponent healthComponent, int reward, Body body,
-                    float width, float height, WeaponModel weapon)  {
-        super(movementComponent, healthComponent, body, width, height, idNext++);
+    public void updateDirection(){
+        float angle = MathUtils.random(0f, MathUtils.PI2); // Random angle between 0-2π radians
+        movingDirection = new Vector2(MathUtils.cos(angle), MathUtils.sin(angle));
+    }
+
+    public EnemyModel(Category category, MovementComponent movementComponent, HealthComponent healthComponent, WeaponModel weaponModel,
+                      int reward, Body body, BodyManager bodyManager)  {
+        super(movementComponent, healthComponent, weaponModel, body, bodyManager);
         if (!Category.ENEMY.intercept(category.getBits())) {
             throw new IllegalArgumentException("Invalid category");
         }
 
+        updateDirection();
         this.category = category;
         this.reward = reward;
-        this.weapon = weapon;
-    }
-    @Override
-    public WeaponModel getWeaponModel(){
-        return weapon;
-    }
-    @Override
-    public void setWeaponModel(WeaponModel weaponModel){
-        weapon = weaponModel;
     }
 
     @Override
     public Category getCategory() {
         return category;
     }
-    public void chasePlayer(float delta, PlayerModel player, World world){
+
+    protected void chasePlayer(float delta, PlayerModel player, World world){
         InPathRaycast callback = new InPathRaycast(player.getBody().getUserData());
-        world.rayCast(callback, getBody().getPosition(), player.getBody().getPosition());
-        if(callback.isInPath()){
+        world.rayCast(callback, body.getPosition(), player.getBody().getPosition());
+
+        Vector2 playerPosition = new Vector2(player.getBody().getPosition()).sub(body.getPosition());
+        // TODO magic constant
+        isRunning = (callback.isInPath() || Math.abs(playerPosition.x) <= 0.6f
+            || Math.abs(playerPosition.y) <= 0.6f);
+        if(callback.isInPath() && !weaponModel.isAttacking()){
             Vector2 vec = new Vector2(player.getPosition()).sub(getPosition()).nor().scl(delta);
             setDirectionAndMove(vec, delta);
+        } else if (!weaponModel.isAttacking()) {
+            setDirectionAndMove(movingDirection, delta);
+            isRunning = true;
+//            setDirectionAndMove(Vector2.Zero, delta);
         } else {
             setDirectionAndMove(Vector2.Zero, delta);
         }
+    }
+
+    public void update(float delta, PlayerModel player, World world){
+        updateAttackCooldownTimer(delta);
+        tryAttack(player.getBody().getPosition().x, player.getBody().getPosition().y);
+        chasePlayer(delta, player, world);
+    }
+
+    public abstract boolean tryAttack(float playerX, float playerY);
+
+    protected float getDist(Vector2 v1) {
+        Vector2 v2 = new Vector2(body.getPosition());
+        return Vector2.dst(v1.x, v1.y, v2.x, v2.y);
+    }
+
+    protected float getDist(float x, float y) {
+        return getDist(new Vector2(x, y));
     }
 
     @Override
@@ -69,5 +93,7 @@ public abstract class EnemyModel extends LivingEntityModel implements Categoriab
         EventManager.fireEvent(new GameEvent(GameEventType.ENEMY_DEATH, this));
     }
 
-
+    public boolean isRunning() {
+        return isRunning;
+    }
 }

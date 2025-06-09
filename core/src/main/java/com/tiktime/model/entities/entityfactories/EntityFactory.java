@@ -1,25 +1,30 @@
 package com.tiktime.model.entities.entityfactories;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
-import com.tiktime.model.configs.GameConfig;
-import com.tiktime.model.configs.configdata.*;
+import com.tiktime.common.configs.GameConfig;
+import com.tiktime.common.configs.configdata.AnimanEnemyData;
+import com.tiktime.common.configs.configdata.BossEnemyData;
+import com.tiktime.common.configs.configdata.RusherEnemyData;
+import com.tiktime.common.configs.configdata.WeaponData;
+import com.tiktime.model.BodyManager;
 import com.tiktime.model.entities.Category;
-import com.tiktime.model.entities.components.AttackComponent;
-import com.tiktime.model.entities.components.HealthComponent;
-import com.tiktime.model.entities.components.MovementComponent;
+import com.tiktime.model.entities.components.*;
+import com.tiktime.model.entities.livingenteties.AnimanEnemyModel;
+import com.tiktime.model.entities.livingenteties.BossEnemyModel;
 import com.tiktime.model.entities.livingenteties.PlayerModel;
 import com.tiktime.model.entities.livingenteties.RusherEnemyModel;
-import com.tiktime.model.entities.weapons.Ak47WeaponModel;
-import com.tiktime.model.entities.weapons.BulletModel;
-import com.tiktime.model.entities.weapons.FistsWeaponModel;
-import com.tiktime.model.entities.weapons.WeaponModel;
+import com.tiktime.model.entities.weapons.*;
 import com.tiktime.common.WeaponType;
 
+import static com.badlogic.gdx.math.MathUtils.ceil;
+
 public class EntityFactory {
-    public static PlayerModel createPlayerModel(World world, float x, float y) {
-        WeaponModel weaponModel = createAk47WeaponModel();
-        PlayerData playerConfig = GameConfig.getPlayerConfig();
+    // TODO: A LOT OF OH MYYYYYYYYYYYYYYYYYY MAGIIIIIIIIIIC COOOOOONSTAAAAAAAAAANTSSSSSSSSSSSSS
+    private static final float mlt = 0.1f;
+    public static PlayerModel createPlayerModel(World world, BodyManager bodyManager, float x, float y) {
+        WeaponModel weaponModel = createAk47WeaponModel(world, bodyManager);
         MovementComponent movementComponent = new MovementComponent(
                 PlayerModel.CurrentStats.getSpeed(),
                 Vector2.Zero
@@ -35,16 +40,36 @@ public class EntityFactory {
             movementComponent,
             healthComponent,
             BodyFactory.createPlayerBody(world, x, y),
-            playerConfig.getWidth(),
-            playerConfig.getHeight(),
-            0
+            bodyManager
         );
     }
 
-    public static PlayerModel createPlayerModelAtNextMap(World world, float x, float y, PlayerModel playerModel) {
-        PlayerData playerConfig = GameConfig.getPlayerConfig();
+    public static BossEnemyModel createBossEnemyModel(World world, BodyManager bodyManager, float x, float y, int level) {
+        BossEnemyData bossConfig = GameConfig.getBossEnemyConfig();
+        MovementComponent movementComponent = new MovementComponent(
+            bossConfig.getBaseSpeed()*(1 + level*mlt),
+            Vector2.Zero
+        );
+        HealthComponent healthComponent = new HealthComponent(
+            ceil(bossConfig.getBaseHp()*(1 + level*mlt)),
+            ceil(bossConfig.getBaseHp()*(1 + level*mlt))
+        );
 
-        WeaponModel weaponModel = playerModel.getWeaponModel();
+        return new BossEnemyModel(
+            Category.ENEMY_BOSS,
+            movementComponent,
+            healthComponent,
+            createFistsWeaponModel(world, bodyManager, bossConfig.getBaseDamage()*level, bossConfig.getAttackRange()),
+            ceil(bossConfig.getReward()*(1 + level*mlt)),
+            BodyFactory.createBossEnemyBody(world, x, y),
+            bodyManager,
+            bossConfig.getWidth(),
+            bossConfig.getHeight());
+    }
+
+    public static PlayerModel createPlayerModelAtNextMap(World world, BodyManager bodyManager, float x, float y, PlayerModel playerModel) {
+        // TODO: redo this
+        WeaponModel weaponModel = createAk47WeaponModel(world, bodyManager);
         MovementComponent movementComponent = playerModel.getMovementComponent();
         HealthComponent healthComponent = playerModel.getHealthComponent();
         healthComponent.regenerateHealth(PlayerModel.CurrentStats.getRegenHealth());
@@ -55,57 +80,86 @@ public class EntityFactory {
             movementComponent,
             healthComponent,
             BodyFactory.createPlayerBody(world, x, y),
-            playerConfig.getWidth(),
-            playerConfig.getHeight(),
-            0
+            bodyManager
         );
     }
 
-
-    public static RusherEnemyModel createRusherEnemyModel(World world, float x, float y) {
+    public static RusherEnemyModel createRusherEnemyModel(World world, BodyManager bodyManager, float x, float y, int level) {
         RusherEnemyData rusherConfig = GameConfig.getRusherEnemyConfig();
         MovementComponent movementComponent = new MovementComponent(
-            rusherConfig.getBaseSpeed(),
+            rusherConfig.getBaseSpeed()*(1 + level*mlt),
             Vector2.Zero
         );
         HealthComponent healthComponent = new HealthComponent(
-            rusherConfig.getBaseHp(),
-            rusherConfig.getBaseHp()
+            ceil(rusherConfig.getBaseHp()*(1 + level*mlt)),
+            ceil(rusherConfig.getBaseHp()*(1 + level*mlt))
         );
+
         return new RusherEnemyModel(
-                    Category.ENEMY_RUSHER,
-                    movementComponent,
-                    healthComponent,
-            createFistsWeaponModel(),
-            rusherConfig.getReward(),
+            Category.ENEMY_RUSHER,
+            movementComponent,
+            healthComponent,
+            createFistsWeaponModel(world, bodyManager, rusherConfig.getBaseDamage()*level, rusherConfig.getAttackRange()),
+            ceil(rusherConfig.getReward()*(1 + level*mlt)),
             BodyFactory.createRusherEnemyBody(world, x, y),
+            bodyManager,
             rusherConfig.getWidth(),
             rusherConfig.getHeight()
-                );
+        );
+    }
+    public static AnimanEnemyModel createAnimanEnemyModel(World world, BodyManager bodyManager, float x, float y, int level) {
+        AnimanEnemyData animanConfig = GameConfig.getAnimanEnemyConfig();
+        MovementComponent movementComponent = new MovementComponent(
+            animanConfig.getBaseSpeed()*(1 + level*mlt),
+            Vector2.Zero
+        );
+        HealthComponent healthComponent = new HealthComponent(
+            ceil(animanConfig.getBaseHp()*(1 + level*mlt)),
+            ceil(animanConfig.getBaseHp()*(1 + level*mlt))
+        );
+        AnimanEnemyModel res = new AnimanEnemyModel(
+            Category.ENEMY_ANIMAN,
+            movementComponent,
+            healthComponent,
+            createFistsWeaponModel(world, bodyManager, animanConfig.getBaseDamage()*level, animanConfig.getAttackRange()),
+            ceil(animanConfig.getReward()*(1 + level*mlt)),
+            BodyFactory.createAnimanEnemyBody(world, x, y),
+            bodyManager,
+            animanConfig.getWidth(),
+            animanConfig.getHeight()
+        );
+        return res;
     }
 
-    public static FistsWeaponModel createFistsWeaponModel(){
+    public static FistsWeaponModel createFistsWeaponModel(World world, BodyManager bodyManager, float damage, float attackRange) {
         WeaponData weaponConfig = GameConfig.getWeaponConfig(WeaponType.FISTS);
-        AttackComponent attackComponent = new AttackComponent(
-            weaponConfig.getDamage(),
+        assert weaponConfig != null;
+        MeleeAttackComponent attackComponent = new MeleeAttackComponent(
+            ceil(damage),
             weaponConfig.getAttackCooldown(),
-            weaponConfig.getAttackRange()
+            attackRange,
+            world,
+            bodyManager
         );
 
         return new FistsWeaponModel(attackComponent);
     }
-    public static Ak47WeaponModel createAk47WeaponModel() {
+    public static Ak47WeaponModel createAk47WeaponModel(World world, BodyManager bodyManager) {
         WeaponData weaponConfig = GameConfig.getWeaponConfig(WeaponType.AK47);
         assert weaponConfig != null;
-        AttackComponent attackComponent = new AttackComponent(
-            weaponConfig.getDamage(),
+        GunshotAttackComponent attackComponent = new GunshotAttackComponent(
+            PlayerModel.CurrentStats.getDamage(),
             weaponConfig.getAttackCooldown(),
-            weaponConfig.getAttackRange()
+            weaponConfig.getAttackRange(),
+            0,
+            world,
+            bodyManager
         );
 
         return new Ak47WeaponModel(attackComponent);
     }
-    public static BulletModel createBuleltModel(World world, float x, float y) {
-        return new BulletModel(BodyFactory.createBulletBody(world, x, y));
+    public static BulletModel createBulletModel(World world, BodyManager bodyManager, Attackable attackable,
+                                                float x, float y, float rotationDeg, Vector2 direction) {
+        return new BulletModel(BodyFactory.createBulletBody(world, x, y, direction), bodyManager, attackable, rotationDeg);
     }
 }

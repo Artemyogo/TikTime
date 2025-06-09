@@ -1,4 +1,4 @@
-package com.tiktime.controller;
+package com.tiktime.controller.world;
 
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -6,153 +6,215 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.utils.Array;
-import com.tiktime.Main;
+import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Disposable;
+import com.tiktime.controller.Interactions.*;
+import com.tiktime.controller.inputprocessors.WorldInputProcessor;
+import com.tiktime.controller.utils.DebugSelectorStrategy;
 import com.tiktime.controller.utils.MapSelector;
-import com.tiktime.controller.utils.MapSelectorStrategy;
 import com.tiktime.controller.utils.RandomSelectorStrategy;
-import com.tiktime.model.WorldModel;
-import com.tiktime.model.configs.GameConfig;
-import com.tiktime.model.gameobjects.EnemyModel;
-import com.tiktime.model.gameobjects.EntityData;
-import com.tiktime.model.gameobjects.PlayerModel;
-import com.tiktime.screens.MenuScreen;
-import com.tiktime.view.enteties.Direction;
-import com.tiktime.view.enteties.livingenteties.LivingEntityState;
-import com.tiktime.view.enteties.livingenteties.enemies.EnemyType;
-import com.tiktime.view.enteties.weapons.WeaponType;
+import com.tiktime.controller.world.enteties.BulletController;
+import com.tiktime.controller.world.enteties.EnemyController;
+import com.tiktime.controller.world.enteties.PlayerController;
+import com.tiktime.model.*;
+import com.tiktime.common.configs.GameConfig;
+import com.tiktime.common.configs.configdata.WeaponData;
+import com.tiktime.model.entities.livingenteties.PlayerModel;
+import com.tiktime.common.WeaponType;
+import com.tiktime.screens.Screen;
+import com.tiktime.screens.ScreenHandler;
 import com.tiktime.view.world.GameView;
+import com.tiktime.common.Pausable;
+import com.tiktime.view.world.WorldView;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class WorldController {
-    private final Main game;
+public class WorldController implements Pausable, Disposable, IExplosive {
+    private final ScreenHandler screenHandler;
     private final GameView gameView;
-    private WorldModel worldModel;
+    private final WorldView worldView;
+
+    private final DoorSensorModel doorSensorModel = new DoorSensorModel();
     private final MapSelector mapSelector;
-    private final MapSelectorStrategy selectorStrategy = new RandomSelectorStrategy();
-    private boolean paused = false;
-    private int isInDoor = 0;
-    private final List<Body> toDelete = new ArrayList<>();
+    private WorldModel worldModel;
+
     private final WorldInputProcessor inputProcessor = new WorldInputProcessor(this);
-    private final PlayerController playerController;
-    private final EnemyController enemyController;
+    private final InputMultiplexer inputMultiplexer = new InputMultiplexer();
 
-    public WorldController(Main game, GameView gameView) {
-        this.game = game;
+    private PlayerController playerController;
+    private EnemyController enemyController;
+    private BulletController bulletController;
+    private TimerModel timer;
+
+    private boolean paused = false;
+    private boolean debug = false;
+//    private boolean debug = true;
+
+    public WorldController(ScreenHandler screenHandler, GameView gameView) {
+        this.screenHandler = screenHandler;
         this.gameView = gameView;
-        this.mapSelector = new MapSelector();
-        TiledMap map = mapSelector.getMap(selectorStrategy);
-        this.worldModel = new WorldModel(map, new CollisionController(this));
+        worldView = gameView.getWorldView();
+
+        mapSelector = new MapSelector();
+        TiledMap map;
+        if (!debug)
+            map = mapSelector.getMap(new RandomSelectorStrategy());
+        else
+            map = mapSelector.getMap(new DebugSelectorStrategy());
+        worldModel = new WorldModel(new MapModel(map));
+
+        PlayerModel playerModel = worldModel.getPlayerModel();
+        playerController = new PlayerController(playerModel, worldView, screenHandler);
+        enemyController = new EnemyController(worldView, worldModel.getEnemies());
+        bulletController = new BulletController(worldView);
+
+        worldModel.setCollisionController(new CollisionController(this).
+            addInteraction(new DynamiteInteraction(this, worldModel.getBodyManager())). // TODO: this is bad, BM only in model sh be
+            addInteraction(new DoorInteraction(doorSensorModel)).
+            addInteraction(new EntityInteraction()).
+            addInteraction(new MeleeAttackInteraction()).
+            addInteraction(new BulletInteraction()).
+            addInteraction(new EnemyWallInteraction()));
+
+        timer = new TimerModel(30);
+
+        worldView.setWorld(worldModel.getWorld());
+        worldView.setMapRenderer(map);
+        gameView.setHud(PlayerModel.CurrentStats.getCoins());
+        setInputProcessor();
+    }
+
+    public void setPlayerAttacking(boolean playerAttacking) {
+        playerController.setAttacking(playerAttacking);
+    }
+
+    private void setInputProcessor() {
+        inputMultiplexer.addProcessor(inputProcessor);
         gameView.setController(this);
+        activateInputProcessor();
+    }
 
-        gameView.setWorld(worldModel.getWorld());
-        gameView.setMapRenderer(map);
-
-        EntityData entityData = worldModel.getPlayerData();
-
-        playerController = new PlayerController(worldModel.getPlayer(), gameView);
-
-        gameView.setHud(entityData.getCurrentHealth(), entityData.getMaxHealth(), PlayerModel.CurrentStats.getCoins());
-        enemyController = new EnemyController(worldModel, gameView);
+    // TODO: BEWARE idk this is good or not maybe with 'stage' it is acceptable
+    public InputMultiplexer getInputMultiplexer() {
+        return inputMultiplexer;
     }
 
     public void activateInputProcessor() {
-        Gdx.input.setInputProcessor(inputProcessor);
+        Gdx.input.setInputProcessor(inputMultiplexer);
     }
 
     public void updateMousePosition(int x, int y) {
-        Vector3 mousePosition = new Vector3(x, y, 0);
+        if (paused) {
+            return;
+        }
 
-        gameView.updatePlayerWeaponRotation(mousePosition,
-            getWeaponPosition(
-                worldModel.getPlayer().getBody().getPosition(),
-                WeaponType.AK47));
+        Vector3 mousePosition = new Vector3(x, y, 0);
+        worldView.updatePlayerWeaponRotation(mousePosition, getWeaponPosition(worldModel.getPlayerPosition(), WeaponType.AK47));
+
+        mousePosition = new Vector3(x, y, 0);
+        float rotationDeg = worldView.getWeaponRotation(mousePosition,
+            getWeaponPosition(worldModel.getPlayerPosition(), WeaponType.AK47));
+//        Gdx.app.log("WorldController", "Rotation deg: " + rotationDeg);
+        playerController.updateWeaponRotation(rotationDeg);
     }
 
     public void update(float delta) {
         if (paused) {
             return;
         }
-        inputProcessor.setInDoor(isInDoor > 0);
-        gameView.setIsInDoor(isInDoor > 0);
+
+        inputProcessor.setInDoor(doorSensorModel.isInDoor()&&worldModel.killedAll());
+        gameView.setIsInDoor(doorSensorModel.isInDoor()&&worldModel.killedAll());
         Vector2 direction = inputProcessor.getDirection();
 
         playerController.update(delta, direction);
-        worldModel.update(delta);
         enemyController.update(delta);
-
-        for(Body i : toDelete)
-            worldModel.getWorld().destroyBody(i);
-        toDelete.clear();
+        bulletController.update(delta);
+        worldModel.update(delta);
+        timer.pass(delta);
+        if (timer.stopped()) {
+            screenHandler.setScreen(Screen.DEATH_SCREEN);
+        }
 
     }
 
     public void changeMap(){
-        isInDoor = 0;
-        TiledMap map = mapSelector.getMap(selectorStrategy);
-        EntityData playerData = worldModel.getPlayerData();
-        this.worldModel = new WorldModel(map, new CollisionController(this), playerData);
+        doorSensorModel.reset();
+        TiledMap map;
+        if (!debug)
+            map = mapSelector.getMap(new RandomSelectorStrategy());
+        else
+            map = mapSelector.getMap(new DebugSelectorStrategy());
 
-        gameView.setWorld(worldModel.getWorld());
-        gameView.setMapRenderer(map);
-        playerController.setPlayer(worldModel.getPlayer());
-        enemyController.setEnemies(worldModel.getEnemies());
+        timer = new TimerModel(30);
+        PlayerModel playerModel = worldModel.getPlayerModel();
+        worldModel.dispose();
+        playerController.dispose();
+        enemyController.dispose();
+        bulletController.dispose();
+        worldView.clearAll();
+        worldModel = new WorldModel(new MapModel(map), playerModel);
+        playerModel = worldModel.getPlayerModel();
+        playerController = new PlayerController(playerModel, worldView, screenHandler);
+        enemyController = new EnemyController(worldView, worldModel.getEnemies());
+        bulletController = new BulletController(worldView);
+        worldModel.setCollisionController(new CollisionController(this).
+            addInteraction(new DynamiteInteraction(this, worldModel.getBodyManager())). // TODO: this is bad, BM only in model sh be
+                addInteraction(new DoorInteraction(doorSensorModel)).
+            addInteraction(new EntityInteraction()).
+            addInteraction(new MeleeAttackInteraction()).
+            addInteraction(new BulletInteraction()).
+            addInteraction(new EnemyWallInteraction()));
+
+        worldView.setWorld(worldModel.getWorld());
+        worldView.setMapRenderer(map);
+        gameView.setHud(PlayerModel.CurrentStats.getCoins());
+        setInputProcessor();
     }
 
-    Vector3 getWeaponPosition(Vector2 playerPosition, WeaponType weapon) {
-        GameConfig.WeaponConfig weaponConfig = GameConfig.getInstance().getWeaponConfig(weapon);
+    Vector3 getWeaponPosition(Vector2 playerPosition, WeaponType weaponType) {
+        WeaponData weaponConfig = GameConfig.getWeaponConfig(weaponType);
+//        WeaponData weaponConfig = GameConfig.getAk47WeaponConfig();
+
         if (weaponConfig == null) {
             throw new RuntimeException("WeaponConfig is null");
         }
 
-        return new Vector3(playerPosition.x, playerPosition.y + 0.2f, 0f);
+//        return new Vector3(playerPosition.x + weaponConfig.getOffsetX(), playerPosition.y + weaponConfig.getOffsetX(), 0f);
+        return new Vector3(playerPosition.x + weaponConfig.getOffsetX(), playerPosition.y + weaponConfig.getOffsetY(), 0f);
+//        return new Vector3(playerPosition.x, playerPosition.y, 0f);
     }
 
-    public void onDoorEntry(){
-        isInDoor++;
-    }
-
-    public void onDoorExit(){
-        isInDoor--;
-    }
-
+    @Override
     public void explosion(Body body, float radius, float force) {
         TiledMapTileLayer.Cell cell = (TiledMapTileLayer.Cell) body.getUserData();
         cell.setTile(null);
         worldModel.explosion(body.getPosition().x, body.getPosition().y, radius, force);
     }
 
-    public void deleteBody(Body body){
-        toDelete.add(body);
-    }
-
-    public void setPaused(boolean paused) {
-        this.paused = paused;
-        gameView.setPause(paused);
-        if(!paused){
-            activateInputProcessor();
-        }
-    }
-
     public void changePausedStatus() {
         setPaused(!paused);
     }
 
-
     public void goToMenu() {
-        game.setScreen(new MenuScreen(game));
+        MapModel.resetCounter();
+        screenHandler.setScreen(Screen.MAIN_MENU);
     }
 
-    public void pushApart(Body A, Body B) {
-        float pushMagnitude = 0.3f;
-        Vector2 directionAtoB = B.getPosition().cpy().sub(A.getPosition()).nor();
-        Vector2 impulseForA = directionAtoB.cpy().scl(-pushMagnitude);
-        A.applyLinearImpulse(impulseForA, A.getWorldCenter(), true);
-        Vector2 impulseForB = directionAtoB.cpy().scl(pushMagnitude);
-        B.applyLinearImpulse(impulseForB, B.getWorldCenter(), true);
+    // TODO: same here, mb getter for controller is not good idea, but it is for inputProcessor, so idk
+    public boolean getPaused() {
+        return paused;
     }
 
+    @Override
+    public void setPaused(boolean paused) {
+        this.paused = paused;
+        gameView.setPaused(paused);
+    }
 
+    @Override
+    public void dispose() {
+        bulletController.dispose();
+        enemyController.dispose();
+        playerController.dispose();
+        worldModel.dispose();
+    }
 }
