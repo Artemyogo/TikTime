@@ -1,6 +1,5 @@
 package com.tiktime.view.enteties.weapons;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.tiktime.common.WeaponType;
@@ -23,9 +22,9 @@ public class Ak47WeaponView extends WeaponView {
     protected void loadAnimations() {
 //        float attackFrameDuration = baseAttackTicks / getRegions("ak47-attacking").size;
         // TODO: magic constants
-        float attackFrameDuration = 0.04f;
+        float attackFrameDuration = GameConfig.getAk47AttackFrameDuration();
         animManager.add("ak47-attacking", getAnimation("ak47-attacking", attackFrameDuration, Animation.PlayMode.LOOP));
-        float idleFrameDuration = 0.1f;
+        float idleFrameDuration = GameConfig.getAk47IdleFrameDuration();
         animManager.add("ak47-idle", getAnimation("ak47-idle", idleFrameDuration, Animation.PlayMode.LOOP));
     }
 

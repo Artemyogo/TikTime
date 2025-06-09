@@ -25,9 +25,8 @@ public class PlayerController implements EventListener, Disposable {
     private final PlayerModel playerModel;
     private final WorldView worldView;
     private final ScreenHandler screenHandler;
-    // TODO: magic constants
-    private final float baseDamageTime = 0.1f;
-    private float damageTimeLeft = 0f;
+    private final float baseDamageTime = GameConfig.getPlayerBaseDamageTime();
+    private float damageTimeLeft = GameConfig.getPlayerDamageTimeLeft();
     private boolean attacking = false;
     private boolean dead = false;
 

@@ -25,9 +25,8 @@ public class EnemyController implements EventListener, Disposable {
     private final Map<EnemyModel, Float> enemyTimeLeft = new HashMap<>();
     private final Map<EnemyModel, Float> curDamageTime = new HashMap<>();
     private final WorldView worldView;
-    // TODO: magic constants
-    private final float deathTime = 0.5f;
-    private final float baseDamageTime = 0.1f;
+    private final float deathTime = GameConfig.getEnemyDeathTime();
+    private final float baseDamageTime = GameConfig.getEnemyBaseDamageTime();
 
     public EnemyController(WorldView worldView, Set<EnemyModel> enemies) {
         this.worldView = worldView;
