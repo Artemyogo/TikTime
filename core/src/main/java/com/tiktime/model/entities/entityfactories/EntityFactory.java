@@ -5,12 +5,14 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.tiktime.common.configs.GameConfig;
 import com.tiktime.common.configs.configdata.AnimanEnemyData;
+import com.tiktime.common.configs.configdata.BossEnemyData;
 import com.tiktime.common.configs.configdata.RusherEnemyData;
 import com.tiktime.common.configs.configdata.WeaponData;
 import com.tiktime.model.BodyManager;
 import com.tiktime.model.entities.Category;
 import com.tiktime.model.entities.components.*;
 import com.tiktime.model.entities.livingenteties.AnimanEnemyModel;
+import com.tiktime.model.entities.livingenteties.BossEnemyModel;
 import com.tiktime.model.entities.livingenteties.PlayerModel;
 import com.tiktime.model.entities.livingenteties.RusherEnemyModel;
 import com.tiktime.model.entities.weapons.*;
@@ -40,6 +42,29 @@ public class EntityFactory {
             BodyFactory.createPlayerBody(world, x, y),
             bodyManager
         );
+    }
+
+    public static BossEnemyModel createBossEnemyModel(World world, BodyManager bodyManager, float x, float y, int level) {
+        BossEnemyData bossConfig = GameConfig.getBossEnemyConfig();
+        MovementComponent movementComponent = new MovementComponent(
+            bossConfig.getBaseSpeed()*(1 + level*mlt),
+            Vector2.Zero
+        );
+        HealthComponent healthComponent = new HealthComponent(
+            ceil(bossConfig.getBaseHp()*(1 + level*mlt)),
+            ceil(bossConfig.getBaseHp()*(1 + level*mlt))
+        );
+
+        return new BossEnemyModel(
+            Category.ENEMY_BOSS,
+            movementComponent,
+            healthComponent,
+            createFistsWeaponModel(world, bodyManager, bossConfig.getBaseDamage()*level, bossConfig.getAttackRange()),
+            ceil(bossConfig.getReward()*(1 + level*mlt)),
+            BodyFactory.createBossEnemyBody(world, x, y),
+            bodyManager,
+            bossConfig.getWidth(),
+            bossConfig.getHeight());
     }
 
     public static PlayerModel createPlayerModelAtNextMap(World world, BodyManager bodyManager, float x, float y, PlayerModel playerModel) {
@@ -74,7 +99,7 @@ public class EntityFactory {
             Category.ENEMY_RUSHER,
             movementComponent,
             healthComponent,
-            createFistsWeaponModel(world, bodyManager, rusherConfig.getBaseDamage()*level),
+            createFistsWeaponModel(world, bodyManager, rusherConfig.getBaseDamage()*level, rusherConfig.getAttackRange()),
             ceil(rusherConfig.getReward()*(1 + level*mlt)),
             BodyFactory.createRusherEnemyBody(world, x, y),
             bodyManager,
@@ -96,7 +121,7 @@ public class EntityFactory {
             Category.ENEMY_ANIMAN,
             movementComponent,
             healthComponent,
-            createFistsWeaponModel(world, bodyManager, animanConfig.getBaseDamage()*level),
+            createFistsWeaponModel(world, bodyManager, animanConfig.getBaseDamage()*level, animanConfig.getAttackRange()),
             ceil(animanConfig.getReward()*(1 + level*mlt)),
             BodyFactory.createAnimanEnemyBody(world, x, y),
             bodyManager,
@@ -106,13 +131,13 @@ public class EntityFactory {
         return res;
     }
 
-    public static FistsWeaponModel createFistsWeaponModel(World world, BodyManager bodyManager, float damageMultiplier) {
+    public static FistsWeaponModel createFistsWeaponModel(World world, BodyManager bodyManager, float damage, float attackRange) {
         WeaponData weaponConfig = GameConfig.getWeaponConfig(WeaponType.FISTS);
         assert weaponConfig != null;
         MeleeAttackComponent attackComponent = new MeleeAttackComponent(
-            ceil(damageMultiplier),
+            ceil(damage),
             weaponConfig.getAttackCooldown(),
-            weaponConfig.getAttackRange(),
+            attackRange,
             world,
             bodyManager
         );

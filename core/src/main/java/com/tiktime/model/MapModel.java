@@ -72,8 +72,23 @@ public class MapModel implements Disposable {
         }
 
         return enemiesSpawnPositions;
+    }
 
+    ArrayList<Vector2> getBossEnemiesSpawnPositions() {
+        if (map.getLayers().get("bossEnemies") == null) {
+            return new ArrayList<>(0);
+        }
+        ArrayList<Vector2> enemiesSpawnPositions = new ArrayList<>();
+        for (MapObject object : map.getLayers().get("bossEnemies").getObjects()) {
 
+            Vector2 enemyPosition =
+                new Vector2(object.getProperties().get("x", Float.class) / PPM,
+                    object.getProperties().get("y", Float.class) / PPM);
+
+            enemiesSpawnPositions.add(enemyPosition);
+        }
+
+        return enemiesSpawnPositions;
     }
 
     public void createWalls(World world) {

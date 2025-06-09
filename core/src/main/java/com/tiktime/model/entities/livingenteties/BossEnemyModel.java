@@ -7,8 +7,8 @@ import com.tiktime.model.entities.components.HealthComponent;
 import com.tiktime.model.entities.components.MovementComponent;
 import com.tiktime.model.entities.weapons.WeaponModel;
 
-public class AnimanEnemyModel extends MeleeWeaponableEnemyModel{
-    public AnimanEnemyModel(Category category, MovementComponent movementComponent, HealthComponent healthComponent, WeaponModel weaponModel, int reward, Body body, BodyManager bodyManager, float width, float height) {
+public class BossEnemyModel extends MeleeWeaponableEnemyModel {
+    public BossEnemyModel(Category category, MovementComponent movementComponent, HealthComponent healthComponent, WeaponModel weaponModel, int reward, Body body, BodyManager bodyManager, float width, float height) {
         super(category, movementComponent, healthComponent, weaponModel, reward, body, bodyManager, width, height);
     }
 }
