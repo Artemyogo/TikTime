@@ -14,10 +14,14 @@ public class ConfigData {
     private BulletData bullet;
     private FistsWeaponData fists;
     private AnimanEnemyData animan;
+    private BossEnemyData boss;
 
 
     public AnimanEnemyData getAniman() {
         return animan;
+    }
+    public BossEnemyData getBoss() {
+        return boss;
     }
     public PlayerData getPlayer() {
         return player;

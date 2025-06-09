@@ -50,6 +50,10 @@ public class BodyDefFactory {
         return getEnemyBodyDef(x, y, GameConfig.getRusherEnemyConfig());
     }
 
+    public static BodyDef getBossEnemyBodyDef(float x, float y){
+        return getEnemyBodyDef(x, y, GameConfig.getBossEnemyConfig());
+    }
+
     public static BodyDef getAnimanEnemyBodyDef(float x, float y){
         return getEnemyBodyDef(x, y, GameConfig.getAnimanEnemyConfig());
     }

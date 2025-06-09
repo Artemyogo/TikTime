@@ -82,6 +82,14 @@ public class WorldModel implements EventListener, Disposable {
             enemies.add(rusherEnemyModel);
         }
 
+        ArrayList<Vector2> bossEnemiesPositions = mapModel.getBossEnemiesSpawnPositions();
+        for (Vector2 p : bossEnemiesPositions) {
+            BossEnemyModel bossEnemyModel = EntityFactory.createBossEnemyModel(world, bodyManager,
+                p.x, p.y, MapModel.getCounter());
+
+            enemies.add(bossEnemyModel);
+        }
+
         mapModel.createAll(world);
         subscribeOnEvents();
     }

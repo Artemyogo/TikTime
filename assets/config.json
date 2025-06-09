@@ -17,11 +17,13 @@
     "restitution": 0.01,
     "friction": 0,
     "acceleration": 5.0,
-    "width": 1,
-    "height": 1.5,
+    "width": 0.8,
+    "height": 1.3,
     "baseHp": 10,
     "baseSpeed": 15,
     "baseDamage": 1,
+    "runFrameDuration": 0.04,
+    "attackRange": 0.8,
     "reward": 20
   },
   "rusher": {
@@ -34,7 +36,23 @@
     "baseHp": 40,
     "baseSpeed": 2,
     "baseDamage": 30,
+    "runFrameDuration": 0.1,
+    "attackRange": 1,
     "reward": 30
+  },
+  "boss": {
+    "density": 1,
+    "restitution": 0.01,
+    "friction": 0,
+    "acceleration": 5.0,
+    "width": 5,
+    "height": 8,
+    "baseHp": 7000,
+    "baseSpeed": 0.5,
+    "baseDamage": 1000,
+    "runFrameDuration": 0.3,
+    "attackRange": 5,
+    "reward": 500
   },
   "ak47": {
     "damage": 10,

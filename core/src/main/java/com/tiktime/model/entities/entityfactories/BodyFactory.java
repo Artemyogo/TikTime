@@ -49,6 +49,12 @@ public class BodyFactory {
         return body;
     }
 
+    public static Body createBossEnemyBody(World world, float x, float y) {
+        Body body = createBody(world, BodyDefFactory.getBossEnemyBodyDef(x, y));
+        FixtureFactory.setBossFixture(body);
+        return body;
+    }
+
     public static Body createBulletBody(World world, float x, float y, Vector2 direction) {
         Body body = createBody(world, BodyDefFactory.getBulletBodyDef(x, y));
         body.setBullet(true);

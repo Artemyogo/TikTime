@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Disposable;
 import com.tiktime.common.configs.GameConfig;
 import com.tiktime.model.entities.livingenteties.AnimanEnemyModel;
+import com.tiktime.model.entities.livingenteties.BossEnemyModel;
 import com.tiktime.model.entities.livingenteties.EnemyModel;
 import com.tiktime.model.events.EventListener;
 import com.tiktime.model.events.EventManager;
@@ -34,15 +35,31 @@ public class EnemyController implements EventListener, Disposable {
 //        Gdx.app.log("EnemyController", enemies.toString());
 
         for (EnemyModel e : enemies) {
+            float width, height;
+            float runFrameDuration;
+            if (e instanceof AnimanEnemyModel) {
+                runFrameDuration = GameConfig.getAnimanEnemyConfig().runFrameDuration();
+                width = GameConfig.getAnimanEnemyConfig().getWidth();
+                height = GameConfig.getAnimanEnemyConfig().getHeight();
+            } else if (e instanceof BossEnemyModel) {
+                runFrameDuration = GameConfig.getBossEnemyConfig().runFrameDuration();
+                width = GameConfig.getBossEnemyConfig().getWidth();
+                height = GameConfig.getBossEnemyConfig().getHeight();
+            } else {
+                runFrameDuration = GameConfig.getRusherEnemyConfig().runFrameDuration();
+                width = GameConfig.getRusherEnemyConfig().getWidth();
+                height = GameConfig.getRusherEnemyConfig().getHeight();
+            }
+
             curDamageTime.put(e, 0f);
             worldView.addEnemy(e.getBody().getPosition().x, e.getBody().getPosition().y,
-                GameConfig.getRusherEnemyConfig().getWidth(),
-                GameConfig.getRusherEnemyConfig().getHeight(),
+                width,
+                height,
                 e.getCurrentHealth(), e.getMaxHealth(),
                 e.getId(),
                 (Math.random() < 0.5 ? Direction.EAST : Direction.WEST),
                 LivingEntityState.IDLE, EnemyType.RUSHER,
-                (e instanceof AnimanEnemyModel ? 0.04f : 0.1f));
+                runFrameDuration);
         }
         subscribeOnEvents();
     }
