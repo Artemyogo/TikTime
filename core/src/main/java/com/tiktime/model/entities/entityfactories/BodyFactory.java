@@ -6,6 +6,7 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
+import com.tiktime.common.MagicConstants;
 import com.tiktime.common.configs.GameConfig;
 import com.tiktime.model.entities.Category;
 import com.tiktime.model.entities.weapons.MeleeAttackable;
@@ -76,8 +77,7 @@ public class BodyFactory {
         for (int x = 0; x < layer.getWidth(); x++) {
             for (int y = 0; y < layer.getHeight(); y++) {
                 if (layer.getCell(x, y) == null) continue;
-                // TODO 1f IS BAD, magic constants
-                Body body = createBody(world, BodyDefFactory.getBodyDef(x, y, bodyType, 1f, 1f));
+                Body body = createBody(world, BodyDefFactory.getBodyDef(x, y, bodyType, MagicConstants.BODY_WIDTH, MagicConstants.BODY_HEIGHT));
                 switch (category) {
                     case DOOR:
                         FixtureFactory.setDoorFixture(body);

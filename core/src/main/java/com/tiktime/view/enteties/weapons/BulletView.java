@@ -4,13 +4,13 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.tiktime.common.MagicConstants;
 import com.tiktime.common.Pausable;
 import com.tiktime.view.enteties.livingenteties.EntityView;
 import com.tiktime.view.world.Renderable;
 
 public class BulletView extends EntityView {
-    // TODO: magic constant
-    private final String texturePath = "bullet.png";
+    private final String texturePath = MagicConstants.BULLET_TEXTURE_PATH;
     private final TextureRegion texture = new TextureRegion(new Texture(texturePath));
     private final SpriteBatch batch;
     private final float rotationDeg;

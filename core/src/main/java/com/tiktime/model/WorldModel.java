@@ -8,6 +8,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Disposable;
+import com.tiktime.common.MagicConstants;
 import com.tiktime.controller.world.CollisionController;
 import com.tiktime.model.entities.entityfactories.EntityFactory;
 import com.tiktime.model.entities.livingenteties.*;
@@ -30,9 +31,9 @@ import static com.tiktime.view.consts.ScreenConstants.PPM;
 
 public class WorldModel implements EventListener, Disposable {
     private final World world;
-    private final float timeStep = GameConfig.getTimeStep();
-    private final int velocityIterations = GameConfig.getVelocityIterations();
-    private final int positionIterations = GameConfig.getPositionIterations();
+    private final float timeStep = MagicConstants.TIME_STEP;
+    private final int velocityIterations = MagicConstants.VELOCITY_ITERATIONS;
+    private final int positionIterations = MagicConstants.POSITION_ITERATIONS;
 
     private final MapModel mapModel;
     private final BodyManager bodyManager;

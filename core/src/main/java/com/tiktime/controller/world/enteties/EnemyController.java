@@ -2,6 +2,7 @@ package com.tiktime.controller.world.enteties;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Disposable;
+import com.tiktime.common.MagicConstants;
 import com.tiktime.common.configs.GameConfig;
 import com.tiktime.model.entities.livingenteties.AnimanEnemyModel;
 import com.tiktime.model.entities.livingenteties.BossEnemyModel;
@@ -25,8 +26,8 @@ public class EnemyController implements EventListener, Disposable {
     private final Map<EnemyModel, Float> enemyTimeLeft = new HashMap<>();
     private final Map<EnemyModel, Float> curDamageTime = new HashMap<>();
     private final WorldView worldView;
-    private final float deathTime = GameConfig.getEnemyDeathTime();
-    private final float baseDamageTime = GameConfig.getEnemyBaseDamageTime();
+    private final float deathTime = MagicConstants.ENEMY_DEATH_TIME;
+    private final float baseDamageTime = MagicConstants.ENEMY_BASE_DAMAGE_TIME;
 
     public EnemyController(WorldView worldView, Set<EnemyModel> enemies) {
         this.worldView = worldView;

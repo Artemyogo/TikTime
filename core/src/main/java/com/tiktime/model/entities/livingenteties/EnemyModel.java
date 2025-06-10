@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
+import com.tiktime.common.MagicConstants;
 import com.tiktime.model.BodyManager;
 import com.tiktime.model.entities.Categoriable;
 import com.tiktime.model.entities.Category;
@@ -49,9 +50,8 @@ public abstract class EnemyModel extends WeaponableLivingEntityModel implements 
         world.rayCast(callback, body.getPosition(), player.getBody().getPosition());
 
         Vector2 playerPosition = new Vector2(player.getBody().getPosition()).sub(body.getPosition());
-        // TODO magic constant
-        isRunning = (callback.isInPath() || Math.abs(playerPosition.x) <= 0.6f
-            || Math.abs(playerPosition.y) <= 0.6f);
+        isRunning = (callback.isInPath() || Math.abs(playerPosition.x) <= MagicConstants.ENEMY_VISION_X
+            || Math.abs(playerPosition.y) <= MagicConstants.ENEMY_VISION_Y);
         if(callback.isInPath() && !weaponModel.isAttacking()){
             Vector2 vec = new Vector2(player.getPosition()).sub(getPosition()).nor().scl(delta);
             setDirectionAndMove(vec, delta);

@@ -5,10 +5,11 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.tiktime.common.Direction;
 import com.tiktime.common.EnemyType;
 import com.tiktime.common.LivingEntityState;
+import com.tiktime.common.MagicConstants;
 
 public class RusherEnemyView extends EnemyView {
     private final float runFrameDuration;
-    public static final String atlasPath = "animations/rusher.atlas";
+    public static final String atlasPath = MagicConstants.RUSHER_ATLAS_PATH;
     public RusherEnemyView(float x, float y, float width, float height, int curHealth, int maxHealth,
                            int id, Direction direction, LivingEntityState livingEntityState,
                            SpriteBatch batch, float runFrameDuration) {
@@ -20,18 +21,17 @@ public class RusherEnemyView extends EnemyView {
 
     @Override
     protected void loadAnimations() {
-        // TODO magic constants
 //        float runFrameDuration  = 0.1f;
-        animManager.add("rusher-running", getAnimation("running-e", runFrameDuration, LivingEntityState.RUNNING.playMode));
-        animManager.add("rusher-idle", getAnimation("idle-e", runFrameDuration, LivingEntityState.IDLE.playMode));
+        animManager.add(MagicConstants.RUSHER_RUNNING_ANIMATION_NAME, getAnimation("running-e", runFrameDuration, LivingEntityState.RUNNING.playMode));
+        animManager.add(MagicConstants.RUSHER_IDLE_ANIMATION_NAME, getAnimation("idle-e", runFrameDuration, LivingEntityState.IDLE.playMode));
 
         // TODO IDK WHAT TO SET
-        float attackFrameDuration  = 0.1f;
-        animManager.add("rusher-attacking", getAnimation("attacking-e", attackFrameDuration,
+        float attackFrameDuration  = MagicConstants.RUSHER_ATTACK_FRAME_DURATION;
+        animManager.add(MagicConstants.RUSHER_ATTACKING_ANIMATION_NAME, getAnimation("attacking-e", attackFrameDuration,
             LivingEntityState.ATTACKING.playMode));
 
-        float deathFrameDuration = 0.1f;
-        animManager.add("rusher-dying", getAnimation("death-e", deathFrameDuration, LivingEntityState.DYING.playMode));
+        float deathFrameDuration = MagicConstants.RUSHER_DEATH_FRAME_DURATION;
+        animManager.add(MagicConstants.RUSHER_DYING_ANIMATION_NAME, getAnimation("death-e", deathFrameDuration, LivingEntityState.DYING.playMode));
     }
 
     @Override

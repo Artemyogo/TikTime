@@ -1,5 +1,7 @@
 package com.tiktime.model.upgrades;
 
+import com.tiktime.common.MagicConstants;
+
 public final class UpgradeModel {
     private final PreferencesUpgradeStorage preferencesUpgradeStorage;
     private final UpgradeManager manager;
@@ -12,7 +14,7 @@ public final class UpgradeModel {
         manager.addUpgrade(new Upgrade(UpgradeType.DAMAGE));
         manager.addUpgrade(new Upgrade(UpgradeType.REGEN));
 
-        preferencesUpgradeStorage = new PreferencesUpgradeStorage("com.tiktime.upgrades");
+        preferencesUpgradeStorage = new PreferencesUpgradeStorage(MagicConstants.UPGRADES_PREFERENCES_NAME);
         money = preferencesUpgradeStorage.loadMoney();
         preferencesUpgradeStorage.loadUpgrades(manager.getUpgrades());
 //        preferencesUpgradeStorage.clearUpgrades(manager.getUpgrades());
@@ -40,12 +42,14 @@ public final class UpgradeModel {
         if (money < 0) throw new IllegalArgumentException("Money cannot be negative");
 
         this.money = money;
+        save();
     }
 
     public void addMoney(int x) {
         if (money + x < 0) throw new IllegalArgumentException("Money cannot be negative");
 
         money += x;
+        save();
     }
 
     public int getMoney() {

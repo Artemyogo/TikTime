@@ -15,17 +15,6 @@ public class ConfigData {
     private FistsWeaponData fists;
     private AnimanEnemyData animan;
     private BossEnemyData boss;
-    private float timeStep;
-    private int velocityIterations;
-    private int positionIterations;
-    private float explosionRadius;
-    private float explosionForce;
-    private float ak47AttackFrameDuration;
-    private float ak47IdleFrameDuration;
-    private float enemyDeathTime;
-    private float enemyBaseDamageTime;
-    private float playerBaseDamageTime;
-    private float playerDamageTimeLeft;
 
 
     public AnimanEnemyData getAniman() {
@@ -73,49 +62,5 @@ public class ConfigData {
 
     public BulletData getBullet() {
         return bullet;
-    }
-
-    public float getTimeStep() {
-        return timeStep;
-    }
-
-    public int getVelocityIterations() {
-        return velocityIterations;
-    }
-
-    public int getPositionIterations() {
-        return positionIterations;
-    }
-
-    public float getExplosionRadius() {
-        return explosionRadius;
-    }
-
-    public float getExplosionForce() {
-        return explosionForce;
-    }
-
-    public float getAk47AttackFrameDuration() {
-        return ak47AttackFrameDuration;
-    }
-
-    public float getAk47IdleFrameDuration() {
-        return ak47IdleFrameDuration;
-    }
-
-    public float getEnemyDeathTime() {
-        return enemyDeathTime;
-    }
-
-    public float getEnemyBaseDamageTime() {
-        return enemyBaseDamageTime;
-    }
-
-    public float getPlayerBaseDamageTime() {
-        return playerBaseDamageTime;
-    }
-
-    public float getPlayerDamageTimeLeft() {
-        return playerDamageTimeLeft;
     }
 }

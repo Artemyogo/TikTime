@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Disposable;
+import com.tiktime.common.MagicConstants;
 import com.tiktime.common.configs.GameConfig;
 import com.tiktime.model.WorldModel;
 import com.tiktime.model.entities.livingenteties.EnemyModel;
@@ -25,8 +26,8 @@ public class PlayerController implements EventListener, Disposable {
     private final PlayerModel playerModel;
     private final WorldView worldView;
     private final ScreenHandler screenHandler;
-    private final float baseDamageTime = GameConfig.getPlayerBaseDamageTime();
-    private float damageTimeLeft = GameConfig.getPlayerDamageTimeLeft();
+    private final float baseDamageTime = MagicConstants.PLAYER_BASE_DAMAGE_TIME;
+    private float damageTimeLeft = MagicConstants.PLAYER_DAMAGE_TIME_LEFT;
     private boolean attacking = false;
     private boolean dead = false;
 

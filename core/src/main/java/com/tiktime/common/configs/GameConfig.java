@@ -54,50 +54,6 @@ public final class GameConfig {
         return data.getDynamite();
     }
 
-    public static float getTimeStep() {
-        return data.getTimeStep();
-    }
-
-    public static int getVelocityIterations() {
-        return data.getVelocityIterations();
-    }
-
-    public static int getPositionIterations() {
-        return data.getPositionIterations();
-    }
-
-    public static float getExplosionRadius() {
-        return data.getExplosionRadius();
-    }
-
-    public static float getExplosionForce() {
-        return data.getExplosionForce();
-    }
-
-    public static float getAk47AttackFrameDuration() {
-        return data.getAk47AttackFrameDuration();
-    }
-
-    public static float getAk47IdleFrameDuration() {
-        return data.getAk47IdleFrameDuration();
-    }
-
-    public static float getEnemyDeathTime() {
-        return data.getEnemyDeathTime();
-    }
-
-    public static float getEnemyBaseDamageTime() {
-        return data.getEnemyBaseDamageTime();
-    }
-
-    public static float getPlayerBaseDamageTime() {
-        return data.getPlayerBaseDamageTime();
-    }
-
-    public static float getPlayerDamageTimeLeft() {
-        return data.getPlayerDamageTimeLeft();
-    }
-
     /**
      * MARKSMAN(0),
      *     ANIMAN(1),
