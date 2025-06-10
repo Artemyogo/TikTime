@@ -1,9 +1,9 @@
 package com.tiktime.model.entities.entityfactories;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.tiktime.common.configs.GameConfig;
+import com.tiktime.common.MagicConstants;
 import com.tiktime.common.configs.configdata.AnimanEnemyData;
 import com.tiktime.common.configs.configdata.BossEnemyData;
 import com.tiktime.common.configs.configdata.RusherEnemyData;
@@ -21,8 +21,8 @@ import com.tiktime.common.WeaponType;
 import static com.badlogic.gdx.math.MathUtils.ceil;
 
 public class EntityFactory {
-    // TODO: A LOT OF OH MYYYYYYYYYYYYYYYYYY MAGIIIIIIIIIIC COOOOOONSTAAAAAAAAAANTSSSSSSSSSSSSS
-    private static final float mlt = 0.1f;
+    private static final float mlt = MagicConstants.MLT;
+
     public static PlayerModel createPlayerModel(World world, BodyManager bodyManager, float x, float y) {
         WeaponModel weaponModel = createAk47WeaponModel(world, bodyManager);
         MovementComponent movementComponent = new MovementComponent(

@@ -43,6 +43,9 @@ public class BulletInteraction extends Interaction {
             damagable = (Damagable) dataA;
             attackable = (Attackable) dataB;
             BulletModel bulletModel = (BulletModel) dataB;
+            if (bulletModel.isDelete()) {
+                return;
+            }
             bulletModel.deleteBody();
         }
 
@@ -50,6 +53,9 @@ public class BulletInteraction extends Interaction {
             damagable = (Damagable) dataB;
             attackable = (Attackable) dataA;
             BulletModel bulletModel = (BulletModel) dataA;
+            if (bulletModel.isDelete()) {
+                return;
+            }
             bulletModel.deleteBody();
         }
 

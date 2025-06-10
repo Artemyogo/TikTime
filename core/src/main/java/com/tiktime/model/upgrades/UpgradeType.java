@@ -4,9 +4,9 @@ import com.tiktime.common.configs.GameConfig;
 
 public enum UpgradeType {
     HP("health", GameConfig.getPlayerConfig().getBaseHp(), 10),
-    SPEED("speed", GameConfig.getPlayerConfig().getBaseSpeed(), 3),
-    DAMAGE("damage", GameConfig.getPlayerConfig().getBaseDamage(), 10),
-    REGEN("regeneration", GameConfig.getPlayerConfig().getBaseRegen(), 3);
+    SPEED("speed", GameConfig.getPlayerConfig().getBaseSpeed(), 0.3f),
+    DAMAGE("damage", GameConfig.getPlayerConfig().getBaseDamage(), 7),
+    REGEN("regeneration", GameConfig.getPlayerConfig().getBaseRegen(), 2);
 
     private final String displayName;
     private final float baseValue;

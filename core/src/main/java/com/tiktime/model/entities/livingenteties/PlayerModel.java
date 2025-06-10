@@ -25,20 +25,21 @@ public class PlayerModel extends WeaponableLivingEntityModel implements Categori
     public static class CurrentStats {
         private static final PlayerData playerConfig = GameConfig.getPlayerConfig();
         private static final UpgradeModel upgradeModel = UpgradeModel.getInstance();
+
         public static int getHealth() {
-            return upgradeModel.getUpgrade(UpgradeType.HP).getLevel() * 10 + playerConfig.getBaseHp();
+            return upgradeModel.getUpgrade(UpgradeType.HP).getLevel() * (int)UpgradeType.HP.getStep() + playerConfig.getBaseHp();
         }
 
         public static int getRegenHealth() {
-            return upgradeModel.getUpgrade(UpgradeType.REGEN).getLevel() * 2 + playerConfig.getBaseRegen();
+            return upgradeModel.getUpgrade(UpgradeType.REGEN).getLevel() * (int)UpgradeType.REGEN.getStep() + playerConfig.getBaseRegen();
         }
 
         public static float getSpeed() {
-            return upgradeModel.getUpgrade(UpgradeType.SPEED).getLevel() * 0.3f + playerConfig.getBaseSpeed();
+            return upgradeModel.getUpgrade(UpgradeType.SPEED).getLevel() * UpgradeType.SPEED.getStep() + playerConfig.getBaseSpeed();
         }
 
         public static int getDamage() {
-            return upgradeModel.getUpgrade(UpgradeType.DAMAGE).getLevel() * 7 + playerConfig.getBaseDamage();
+            return upgradeModel.getUpgrade(UpgradeType.DAMAGE).getLevel() * (int)UpgradeType.DAMAGE.getStep() + playerConfig.getBaseDamage();
         }
 
         public static int getCoins() {

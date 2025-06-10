@@ -13,6 +13,8 @@ import com.tiktime.model.entities.weapons.WeaponModel;
 public abstract class MeleeWeaponableEnemyModel extends EnemyModel implements MeleeAttackable {
     protected float width;
     protected float height;
+    MeleeAttackable meleeAttackable;
+
     public MeleeWeaponableEnemyModel(Category category, MovementComponent movementComponent, HealthComponent healthComponent, WeaponModel weaponModel,
                                      int reward, Body body, BodyManager bodyManager, float width, float height) {
         super(category, movementComponent, healthComponent, weaponModel, reward, body, bodyManager);
@@ -20,13 +22,14 @@ public abstract class MeleeWeaponableEnemyModel extends EnemyModel implements Me
             throw new RuntimeException("weaponModel is not a MeleeAttackable");
         }
 
+        meleeAttackable = (MeleeAttackable) weaponModel;
+
         this.width = width;
         this.height = height;
     }
 
     @Override
     public boolean tryAttack(float x, float y, float width, float height, Direction direction) {
-        MeleeAttackable meleeAttackable = (MeleeAttackable) weaponModel;
         return meleeAttackable.tryAttack(x, y, width, height, direction);
     }
 

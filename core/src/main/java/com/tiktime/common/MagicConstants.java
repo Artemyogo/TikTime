@@ -50,4 +50,6 @@ public final class MagicConstants {
     public static final String DYNAMITES_LAYER_NAME = "dynamite";
 
     public static final String PLAYER_SPAWN_NAME = "playerSpawn";
+
+    public static final float MLT = 0.1f;
 }
