@@ -4,6 +4,7 @@ public final class MagicConstants {
     private MagicConstants() {}
 
     public static final String UPGRADES_PREFERENCES_NAME = "com.tiktime.upgrades";
+    public static final String SETTINGS_PREFERENCES_NAME = "com.tiktime.settings";
 
     public static final float BODY_WIDTH = 1f;
     public static final float BODY_HEIGHT = 1f;

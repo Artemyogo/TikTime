@@ -1,11 +1,11 @@
-package com.tiktime.model;
+package com.tiktime.model.settings;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
+import com.tiktime.common.MagicConstants;
 
 public class SettingsModel {
-
-    private final Preferences prefs;
+    private final PreferencesSettingsStorage preferencesSettingsStorage;
 
     private boolean shown;
     private float uiScale;
@@ -14,7 +14,7 @@ public class SettingsModel {
     private SettingsModel() {
         shown = false;
 
-        prefs = Gdx.app.getPreferences("com.tiktime.settings");
+        preferencesSettingsStorage = new PreferencesSettingsStorage(MagicConstants.SETTINGS_PREFERENCES_NAME);
         load();
     }
 
@@ -29,8 +29,8 @@ public class SettingsModel {
     }
 
     private void load() {
-        uiScale = prefs.getFloat("uiScale", 1f);
-        volume = prefs.getFloat("volume", 1f);
+        uiScale = preferencesSettingsStorage.loadUIScale();
+        volume = preferencesSettingsStorage.loadVolume();
     }
 
     public boolean isShown() {
@@ -51,6 +51,7 @@ public class SettingsModel {
 
     public void setUiScale(float uiScale) {
         this.uiScale = uiScale;
+        save();
     }
 
     public float getVolume() {
@@ -59,12 +60,11 @@ public class SettingsModel {
 
     public void setVolume(float volume) {
         this.volume = volume;
+        save();
     }
 
     public void save() {
-        prefs.putFloat("uiScale", uiScale);
-        prefs.putFloat("volume", volume);
-        prefs.flush();
+        preferencesSettingsStorage.save(uiScale, volume);
     }
 
 }

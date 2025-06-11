@@ -4,12 +4,14 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.tiktime.model.BodyManager;
 import com.tiktime.model.WorldModel;
+import com.tiktime.model.entities.Categoriable;
+import com.tiktime.model.entities.Category;
 import com.tiktime.model.entities.EntityModel;
 import com.tiktime.model.events.EventManager;
 import com.tiktime.model.events.GameEvent;
 import com.tiktime.model.events.GameEventType;
 
-public class BulletModel extends EntityModel implements GunshotAttackable {
+public class BulletModel extends EntityModel implements GunshotAttackable, Categoriable {
     private final Attackable attackable;
     private final float rotationDeg;
     private boolean isDelete = false;
@@ -18,6 +20,11 @@ public class BulletModel extends EntityModel implements GunshotAttackable {
         super(body, bodyManager);
         this.attackable = attackable;
         this.rotationDeg = rotationDeg;
+    }
+
+    @Override
+    public Category getCategory() {
+        return Category.BULLET;
     }
 
     @Override
