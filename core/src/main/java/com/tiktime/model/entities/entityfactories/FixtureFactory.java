@@ -56,11 +56,20 @@ public class FixtureFactory {
             Category.WALL.getBits(),
             Category.combine(Category.PLAYER, Category.BULLET, Category.ENEMY), false, body);
     }
+
     public static void setDynamiteFixture(Body body) {
         setFixture(GameConfig.getDynamiteConfig(), Category.DYNAMITE.getBits(),
             Category.combine(Category.PLAYER, Category.ENEMY, Category.BULLET), false, body);
     }
 
+    public static void setEnemyFixture(Body body, Category enemy) {
+        setFixture(GameConfig.getEnemyConfig(enemy),
+            enemy.getBits(),
+            Category.combine(Category.BULLET, Category.OBSTACLE, Category.DYNAMITE, Category.LIVING_ENTITY),
+            false, body);
+    }
+
+    /*
     public static void setRusherEnemyFixture(Body body) {
         setFixture(GameConfig.getRusherEnemyConfig(),
             Category.ENEMY_RUSHER.getBits(),
@@ -81,6 +90,7 @@ public class FixtureFactory {
             Category.combine(Category.BULLET, Category.OBSTACLE, Category.DYNAMITE, Category.LIVING_ENTITY),
             false, body);
     }
+    */
 
     public static void setPlayerFixtureDef(Body body) {
         setFixture(GameConfig.getPlayerConfig(), Category.PLAYER.getBits(),

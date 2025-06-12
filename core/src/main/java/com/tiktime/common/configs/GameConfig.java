@@ -2,6 +2,7 @@ package com.tiktime.common.configs;
 
 import com.tiktime.common.configs.configdata.*;
 import com.tiktime.common.WeaponType;
+import com.tiktime.model.entities.Category;
 
 public final class GameConfig {
     private static final ConfigData data = new JsonConfigLoader("config.json").load();
@@ -31,12 +32,24 @@ public final class GameConfig {
         return data.getPlayer();
     }
 
+    /*
     public static RusherEnemyData getRusherEnemyConfig() {
         return data.getRusher();
     }
 
     public static AnimanEnemyData getAnimanEnemyConfig() { return data.getAniman();}
+
     public static BossEnemyData getBossEnemyConfig() { return data.getBoss();}
+    */
+
+    public static EnemyData getEnemyConfig(Category enemy) {
+        switch (enemy) {
+            case ENEMY_RUSHER: return data.getRusher();
+            case ENEMY_ANIMAN: return data.getAniman();
+            case ENEMY_BOSS: return data.getBoss();
+            default: throw new IllegalArgumentException("Unknown enemy");
+        }
+    }
 
     public static WeaponData getAk47WeaponConfig() {
         return data.getWeapon(); // currently weapon == ak47

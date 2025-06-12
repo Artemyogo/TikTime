@@ -38,6 +38,15 @@ public class BodyFactory {
         return body;
     }
 
+    public static Body createEnemyBody(World world, float x, float y, Category enemy) {
+        if (!Category.ENEMY.intercept(enemy.getBits())) throw new IllegalArgumentException("Unknown enemy");
+
+        Body body = createBody(world, BodyDefFactory.getEnemyBodyDef(x, y, enemy));
+        FixtureFactory.setEnemyFixture(body, enemy);
+        return body;
+    }
+
+    /*
     public static Body createRusherEnemyBody(World world, float x, float y) {
         Body body = createBody(world, BodyDefFactory.getRusherEnemyBodyDef(x, y));
         FixtureFactory.setRusherEnemyFixture(body);
@@ -55,6 +64,7 @@ public class BodyFactory {
         FixtureFactory.setBossFixture(body);
         return body;
     }
+    */
 
     public static Body createBulletBody(World world, float x, float y, Vector2 direction) {
         Body body = createBody(world, BodyDefFactory.getBulletBodyDef(x, y));

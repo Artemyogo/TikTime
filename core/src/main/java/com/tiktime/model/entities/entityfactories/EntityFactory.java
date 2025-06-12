@@ -4,17 +4,11 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.tiktime.common.configs.GameConfig;
 import com.tiktime.common.MagicConstants;
-import com.tiktime.common.configs.configdata.AnimanEnemyData;
-import com.tiktime.common.configs.configdata.BossEnemyData;
-import com.tiktime.common.configs.configdata.RusherEnemyData;
-import com.tiktime.common.configs.configdata.WeaponData;
+import com.tiktime.common.configs.configdata.*;
 import com.tiktime.model.BodyManager;
 import com.tiktime.model.entities.Category;
 import com.tiktime.model.entities.components.*;
-import com.tiktime.model.entities.livingenteties.AnimanEnemyModel;
-import com.tiktime.model.entities.livingenteties.BossEnemyModel;
-import com.tiktime.model.entities.livingenteties.PlayerModel;
-import com.tiktime.model.entities.livingenteties.RusherEnemyModel;
+import com.tiktime.model.entities.livingenteties.*;
 import com.tiktime.model.entities.weapons.*;
 import com.tiktime.common.WeaponType;
 
@@ -44,29 +38,6 @@ public class EntityFactory {
         );
     }
 
-    public static BossEnemyModel createBossEnemyModel(World world, BodyManager bodyManager, float x, float y, int level) {
-        BossEnemyData bossConfig = GameConfig.getBossEnemyConfig();
-        MovementComponent movementComponent = new MovementComponent(
-            bossConfig.getBaseSpeed()*(1 + level*mlt),
-            Vector2.Zero
-        );
-        HealthComponent healthComponent = new HealthComponent(
-            ceil(bossConfig.getBaseHp()*(1 + level*mlt)),
-            ceil(bossConfig.getBaseHp()*(1 + level*mlt))
-        );
-
-        return new BossEnemyModel(
-            Category.ENEMY_BOSS,
-            movementComponent,
-            healthComponent,
-            createFistsWeaponModel(world, bodyManager, bossConfig.getBaseDamage()*level, bossConfig.getAttackRange()),
-            ceil(bossConfig.getReward()*(1 + level*mlt)),
-            BodyFactory.createBossEnemyBody(world, x, y),
-            bodyManager,
-            bossConfig.getWidth(),
-            bossConfig.getHeight());
-    }
-
     public static PlayerModel createPlayerModelAtNextMap(World world, BodyManager bodyManager, float x, float y, PlayerModel playerModel) {
         // TODO: redo this
         WeaponModel weaponModel = createAk47WeaponModel(world, bodyManager);
@@ -84,6 +55,61 @@ public class EntityFactory {
         );
     }
 
+    public static EnemyModel createEnemyModel(World world, BodyManager bodyManager, float x, float y, int level, Category enemy) {
+        if (!Category.ENEMY.intercept(enemy.getBits())) throw new IllegalArgumentException("Unknown enemy");
+
+        EnemyData enemyConfig = GameConfig.getEnemyConfig(enemy);
+        MovementComponent movementComponent = new MovementComponent(
+            enemyConfig.getBaseSpeed() * (1 + level * mlt),
+            Vector2.Zero
+        );
+        HealthComponent healthComponent = new HealthComponent(
+            ceil(enemyConfig.getBaseHp() * (1 + level * mlt)),
+            ceil(enemyConfig.getBaseHp() * (1 + level * mlt))
+        );
+
+        switch (enemy) {
+            case ENEMY_RUSHER: return new RusherEnemyModel(
+                enemy,
+                movementComponent,
+                healthComponent,
+                createFistsWeaponModel(world, bodyManager, enemyConfig.getBaseDamage()*level, enemyConfig.getAttackRange()),
+                ceil(enemyConfig.getReward() * (1 + level * mlt)),
+                BodyFactory.createEnemyBody(world, x, y, enemy),
+                bodyManager,
+                enemyConfig.getWidth(),
+                enemyConfig.getHeight()
+            );
+
+            case ENEMY_ANIMAN: return new AnimanEnemyModel(
+                enemy,
+                movementComponent,
+                healthComponent,
+                createFistsWeaponModel(world, bodyManager, enemyConfig.getBaseDamage()*level, enemyConfig.getAttackRange()),
+                ceil(enemyConfig.getReward() * (1 + level * mlt)),
+                BodyFactory.createEnemyBody(world, x, y, enemy),
+                bodyManager,
+                enemyConfig.getWidth(),
+                enemyConfig.getHeight()
+            );
+
+            case ENEMY_BOSS: return new BossEnemyModel(
+                enemy,
+                movementComponent,
+                healthComponent,
+                createFistsWeaponModel(world, bodyManager, enemyConfig.getBaseDamage()*level, enemyConfig.getAttackRange()),
+                ceil(enemyConfig.getReward() * (1 + level * mlt)),
+                BodyFactory.createEnemyBody(world, x, y, enemy),
+                bodyManager,
+                enemyConfig.getWidth(),
+                enemyConfig.getHeight()
+            );
+
+            default: throw new IllegalArgumentException("Unknown enemy");
+        }
+    }
+
+    /*
     public static RusherEnemyModel createRusherEnemyModel(World world, BodyManager bodyManager, float x, float y, int level) {
         RusherEnemyData rusherConfig = GameConfig.getRusherEnemyConfig();
         MovementComponent movementComponent = new MovementComponent(
@@ -130,6 +156,30 @@ public class EntityFactory {
         );
         return res;
     }
+
+    public static BossEnemyModel createBossEnemyModel(World world, BodyManager bodyManager, float x, float y, int level) {
+        BossEnemyData bossConfig = GameConfig.getBossEnemyConfig();
+        MovementComponent movementComponent = new MovementComponent(
+            bossConfig.getBaseSpeed()*(1 + level*mlt),
+            Vector2.Zero
+        );
+        HealthComponent healthComponent = new HealthComponent(
+            ceil(bossConfig.getBaseHp()*(1 + level*mlt)),
+            ceil(bossConfig.getBaseHp()*(1 + level*mlt))
+        );
+
+        return new BossEnemyModel(
+            Category.ENEMY_BOSS,
+            movementComponent,
+            healthComponent,
+            createFistsWeaponModel(world, bodyManager, bossConfig.getBaseDamage()*level, bossConfig.getAttackRange()),
+            ceil(bossConfig.getReward()*(1 + level*mlt)),
+            BodyFactory.createBossEnemyBody(world, x, y),
+            bodyManager,
+            bossConfig.getWidth(),
+            bossConfig.getHeight());
+    }
+    */
 
     public static FistsWeaponModel createFistsWeaponModel(World world, BodyManager bodyManager, float damage, float attackRange) {
         WeaponData weaponConfig = GameConfig.getWeaponConfig(WeaponType.FISTS);

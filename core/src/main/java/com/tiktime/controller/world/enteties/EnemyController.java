@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Disposable;
 import com.tiktime.common.MagicConstants;
 import com.tiktime.common.configs.GameConfig;
+import com.tiktime.model.entities.Category;
 import com.tiktime.model.entities.livingenteties.AnimanEnemyModel;
 import com.tiktime.model.entities.livingenteties.BossEnemyModel;
 import com.tiktime.model.entities.livingenteties.EnemyModel;
@@ -38,17 +39,17 @@ public class EnemyController implements EventListener, Disposable {
             float width, height;
             float runFrameDuration;
             if (e instanceof AnimanEnemyModel) {
-                runFrameDuration = GameConfig.getAnimanEnemyConfig().runFrameDuration();
-                width = GameConfig.getAnimanEnemyConfig().getWidth();
-                height = GameConfig.getAnimanEnemyConfig().getHeight();
+                runFrameDuration = GameConfig.getEnemyConfig(Category.ENEMY_ANIMAN).runFrameDuration();
+                width = GameConfig.getEnemyConfig(Category.ENEMY_ANIMAN).getWidth();
+                height = GameConfig.getEnemyConfig(Category.ENEMY_ANIMAN).getHeight();
             } else if (e instanceof BossEnemyModel) {
-                runFrameDuration = GameConfig.getBossEnemyConfig().runFrameDuration();
-                width = GameConfig.getBossEnemyConfig().getWidth();
-                height = GameConfig.getBossEnemyConfig().getHeight();
+                runFrameDuration = GameConfig.getEnemyConfig(Category.ENEMY_BOSS).runFrameDuration();
+                width = GameConfig.getEnemyConfig(Category.ENEMY_BOSS).getWidth();
+                height = GameConfig.getEnemyConfig(Category.ENEMY_BOSS).getHeight();
             } else {
-                runFrameDuration = GameConfig.getRusherEnemyConfig().runFrameDuration();
-                width = GameConfig.getRusherEnemyConfig().getWidth();
-                height = GameConfig.getRusherEnemyConfig().getHeight();
+                runFrameDuration = GameConfig.getEnemyConfig(Category.ENEMY_RUSHER).runFrameDuration();
+                width = GameConfig.getEnemyConfig(Category.ENEMY_RUSHER).getWidth();
+                height = GameConfig.getEnemyConfig(Category.ENEMY_RUSHER).getHeight();
             }
 
             curDamageTime.put(e, 0f);

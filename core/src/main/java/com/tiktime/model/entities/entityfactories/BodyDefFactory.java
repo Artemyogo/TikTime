@@ -6,6 +6,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.tiktime.common.WeaponType;
 import com.tiktime.common.configs.GameConfig;
 import com.tiktime.common.configs.configdata.EnemyData;
+import com.tiktime.model.entities.Category;
 
 public class BodyDefFactory {
     public static BodyDef getBodyDef(float x, float y, BodyDef.BodyType bodyType, float width, float height){
@@ -38,25 +39,31 @@ public class BodyDefFactory {
         return bodyDef;
     }
 
-    private static BodyDef getEnemyBodyDef(float x, float y, EnemyData data){
+    public static BodyDef getEnemyBodyDef(float x, float y, Category enemy) {
+        if (!Category.ENEMY.intercept(enemy.getBits())) throw new IllegalArgumentException("Unknown enemy");
+
+        EnemyData enemyData = GameConfig.getEnemyConfig(enemy);
+
         BodyDef bodyDef = getBodyDef(x, y, BodyDef.BodyType.DynamicBody,
-            data.getWidth(),
-            data.getHeight());
+            enemyData.getWidth(),
+            enemyData.getHeight());
         bodyDef.linearDamping = 4f;
         return bodyDef;
     }
 
+    /*
     public static BodyDef getRusherEnemyBodyDef(float x, float y){
-        return getEnemyBodyDef(x, y, GameConfig.getRusherEnemyConfig());
+        return getEnemyBodyDef(x, y, GameConfig.getEnemyConfig(Category.ENEMY_RUSHER));
     }
 
     public static BodyDef getBossEnemyBodyDef(float x, float y){
-        return getEnemyBodyDef(x, y, GameConfig.getBossEnemyConfig());
+        return getEnemyBodyDef(x, y, GameConfig.getEnemyConfig(Category.ENEMY_BOSS));
     }
 
     public static BodyDef getAnimanEnemyBodyDef(float x, float y){
-        return getEnemyBodyDef(x, y, GameConfig.getAnimanEnemyConfig());
+        return getEnemyBodyDef(x, y, GameConfig.getEnemyConfig(Category.ENEMY_ANIMAN));
     }
+    */
 
     public static BodyDef getFistAttackBodyDef(float x, float y, float width, float height){
         return getBodyDef(x, y, BodyDef.BodyType.StaticBody, width, height);
