@@ -168,7 +168,7 @@ public class EntityFactory {
     public static Array<HealthPotion> createHealthPotionModels(World world, BodyManager bodyManager, TiledMapTileLayer healthPotionLayer) {
         ArrayList<Body> healthPotionBodies = BodyFactory.createBodiesOnLayer(world, healthPotionLayer, Category.HEALTH_POTION, BodyDef.BodyType.StaticBody);
         Array<HealthPotion> res = new Array<>();
-        healthPotionBodies.forEach(body -> res.add(new HealthPotion(body, bodyManager, (TiledMapTileLayer.Cell) body.getUserData())));
+        healthPotionBodies.forEach(body -> res.add(new HealthPotion(MagicConstants.HEALTH_POTION_ADD, body, bodyManager, (TiledMapTileLayer.Cell) body.getUserData())));
         return res;
     }
 }

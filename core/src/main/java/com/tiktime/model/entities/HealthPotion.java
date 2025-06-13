@@ -16,11 +16,11 @@ public class HealthPotion extends EntityModel implements TouchableByPlayer, Soun
     private final Sound pickupSound;
     private int healthToAdd;
 
-    public HealthPotion(Body body, BodyManager bodyManager, TiledMapTileLayer.Cell cell) {
+    public HealthPotion(int healthToAdd, Body body, BodyManager bodyManager, TiledMapTileLayer.Cell cell) {
         super(body, bodyManager);
         this.cell = cell;
         this.pickupSound = Gdx.audio.newSound(Gdx.files.internal(MagicConstants.HEALTH_POTION_SOUND_PATH));
-        this.healthToAdd = MagicConstants.HEALTH_POTION_ADD;
+        this.healthToAdd = healthToAdd;
     }
 
     @Override
