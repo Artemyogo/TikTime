@@ -1,20 +1,17 @@
-package com.tiktime.controller.world.enteties;
+package com.tiktime.controller.enteties;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Disposable;
-import com.tiktime.common.MagicConstants;
+import com.tiktime.common.*;
 import com.tiktime.common.configs.GameConfig;
 import com.tiktime.model.entities.Category;
-import com.tiktime.model.entities.livingenteties.AnimanEnemyModel;
-import com.tiktime.model.entities.livingenteties.BossEnemyModel;
-import com.tiktime.model.entities.livingenteties.EnemyModel;
+import com.tiktime.model.entities.livingenteties.enemies.AnimanEnemyModel;
+import com.tiktime.model.entities.livingenteties.enemies.BossEnemyModel;
+import com.tiktime.model.entities.livingenteties.enemies.EnemyModel;
 import com.tiktime.model.events.EventListener;
 import com.tiktime.model.events.EventManager;
 import com.tiktime.model.events.GameEvent;
 import com.tiktime.model.events.GameEventType;
-import com.tiktime.common.Direction;
-import com.tiktime.common.LivingEntityState;
-import com.tiktime.common.EnemyType;
+import com.tiktime.view.enteties.livingenteties.enemies.AllEnemyView;
 import com.tiktime.view.world.WorldView;
 
 import java.util.HashMap;
@@ -22,38 +19,47 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public class EnemyController implements EventListener, Disposable {
+public class EnemyController implements Pausable, EventListener, Disposable {
     private final Set<EnemyModel> enemies;
     private final Map<EnemyModel, Float> enemyTimeLeft = new HashMap<>();
     private final Map<EnemyModel, Float> curDamageTime = new HashMap<>();
-    private final WorldView worldView;
+    private final AllEnemyView allEnemyView;
     private final float deathTime = MagicConstants.ENEMY_DEATH_TIME;
     private final float baseDamageTime = MagicConstants.ENEMY_BASE_DAMAGE_TIME;
 
-    public EnemyController(WorldView worldView, Set<EnemyModel> enemies) {
-        this.worldView = worldView;
+    public EnemyController(AllEnemyView allEnemyView, Set<EnemyModel> enemies) {
+        this.allEnemyView = allEnemyView;
         this.enemies = enemies;
-//        Gdx.app.log("EnemyController", enemies.toString());
 
         for (EnemyModel e : enemies) {
             float width, height;
             float runFrameDuration;
-            if (e instanceof AnimanEnemyModel) {
-                runFrameDuration = GameConfig.getEnemyConfig(Category.ENEMY_ANIMAN).runFrameDuration();
-                width = GameConfig.getEnemyConfig(Category.ENEMY_ANIMAN).getWidth();
-                height = GameConfig.getEnemyConfig(Category.ENEMY_ANIMAN).getHeight();
-            } else if (e instanceof BossEnemyModel) {
-                runFrameDuration = GameConfig.getEnemyConfig(Category.ENEMY_BOSS).runFrameDuration();
-                width = GameConfig.getEnemyConfig(Category.ENEMY_BOSS).getWidth();
-                height = GameConfig.getEnemyConfig(Category.ENEMY_BOSS).getHeight();
-            } else {
-                runFrameDuration = GameConfig.getEnemyConfig(Category.ENEMY_RUSHER).runFrameDuration();
-                width = GameConfig.getEnemyConfig(Category.ENEMY_RUSHER).getWidth();
-                height = GameConfig.getEnemyConfig(Category.ENEMY_RUSHER).getHeight();
+            switch (e.getCategory()) {
+                case ENEMY_ANIMAN: {
+                    runFrameDuration = GameConfig.getEnemyConfig(Category.ENEMY_ANIMAN).runFrameDuration();
+                    width = GameConfig.getEnemyConfig(Category.ENEMY_ANIMAN).getWidth();
+                    height = GameConfig.getEnemyConfig(Category.ENEMY_ANIMAN).getHeight();
+                    break;
+                }
+                case ENEMY_BOSS: {
+                    runFrameDuration = GameConfig.getEnemyConfig(Category.ENEMY_BOSS).runFrameDuration();
+                    width = GameConfig.getEnemyConfig(Category.ENEMY_BOSS).getWidth();
+                    height = GameConfig.getEnemyConfig(Category.ENEMY_BOSS).getHeight();
+                    break;
+                }
+                case ENEMY_RUSHER: {
+                    runFrameDuration = GameConfig.getEnemyConfig(Category.ENEMY_RUSHER).runFrameDuration();
+                    width = GameConfig.getEnemyConfig(Category.ENEMY_RUSHER).getWidth();
+                    height = GameConfig.getEnemyConfig(Category.ENEMY_RUSHER).getHeight();
+                    break;
+                }
+                default: {
+                    throw new IllegalStateException("Unexpected value: " + e.getCategory());
+                }
             }
 
             curDamageTime.put(e, 0f);
-            worldView.addEnemy(e.getBody().getPosition().x, e.getBody().getPosition().y,
+            allEnemyView.addEnemy(e.getBody().getPosition().x, e.getBody().getPosition().y,
                 width,
                 height,
                 e.getCurrentHealth(), e.getMaxHealth(),
@@ -88,31 +94,31 @@ public class EnemyController implements EventListener, Disposable {
         });
 
         readyToDie.forEach(e -> {
-            worldView.deleteEnemy(e.getId());
+            allEnemyView.deleteEnemy(e.getId());
             enemies.remove(e);
             curDamageTime.remove(e);
         });
 
         enemies.forEach(e -> {
             if (!enemyTimeLeft.containsKey(e)) {
-                worldView.setEnemyCoordinates(e.getBody().getPosition().x,
+                allEnemyView.setEnemyCoordinates(e.getBody().getPosition().x,
                     e.getBody().getPosition().y,
                     e.getId());
 
                 if (e.getDirection().x != 0) {
-                    worldView.setEnemyDirection(Direction.getDirection(e.getDirection()), e.getId());
+                    allEnemyView.setEnemyDirection(Direction.getDirection(e.getDirection()), e.getId());
                 }
 
                 if (e.isAttacking())
-                    worldView.setEnemyState(LivingEntityState.ATTACKING, e.getId());
+                    allEnemyView.setEnemyState(LivingEntityState.ATTACKING, e.getId());
                 else if (e.isRunning())
-                    worldView.setEnemyState(LivingEntityState.RUNNING, e.getId());
+                    allEnemyView.setEnemyState(LivingEntityState.RUNNING, e.getId());
                 else
-                    worldView.setEnemyState(LivingEntityState.IDLE, e.getId());
+                    allEnemyView.setEnemyState(LivingEntityState.IDLE, e.getId());
             }
 
             curDamageTime.put(e, Math.max(0f, curDamageTime.get(e) - delta));
-            worldView.setEnemyIsAttacked(e.getId(), curDamageTime.get(e) != 0f);
+            allEnemyView.setEnemyIsAttacked(e.getId(), curDamageTime.get(e) != 0f);
         });
 
         readyToDie.forEach(enemyTimeLeft::remove);
@@ -127,8 +133,7 @@ public class EnemyController implements EventListener, Disposable {
                 }
 
                 EnemyModel enemyModel = (EnemyModel) event.data;
-
-                worldView.setEnemyState(LivingEntityState.DYING, enemyModel.getId());
+                allEnemyView.setEnemyState(LivingEntityState.DYING, enemyModel.getId());
                 enemyTimeLeft.put(enemyModel, deathTime);
                 enemyModel.deleteBody();
                 break;
@@ -142,13 +147,19 @@ public class EnemyController implements EventListener, Disposable {
                 curDamageTime.put(enemyModel, baseDamageTime);
                 break;
             }
-
-            default: throw new RuntimeException("Invalid event data");
+            default: {
+                throw new RuntimeException("Invalid event data");
+            }
         }
     }
 
     @Override
     public void dispose() {
         unsubscribeOnEvents();
+    }
+
+    @Override
+    public void setPaused(boolean paused) {
+        allEnemyView.getEnemyViews().forEach(enemyView -> enemyView.setPaused(paused));
     }
 }

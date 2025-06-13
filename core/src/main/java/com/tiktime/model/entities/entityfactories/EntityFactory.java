@@ -9,6 +9,10 @@ import com.tiktime.model.BodyManager;
 import com.tiktime.model.entities.Category;
 import com.tiktime.model.entities.components.*;
 import com.tiktime.model.entities.livingenteties.*;
+import com.tiktime.model.entities.livingenteties.enemies.AnimanEnemyModel;
+import com.tiktime.model.entities.livingenteties.enemies.BossEnemyModel;
+import com.tiktime.model.entities.livingenteties.enemies.EnemyModel;
+import com.tiktime.model.entities.livingenteties.enemies.RusherEnemyModel;
 import com.tiktime.model.entities.weapons.*;
 import com.tiktime.common.WeaponType;
 

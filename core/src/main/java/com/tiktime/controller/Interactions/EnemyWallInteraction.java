@@ -4,7 +4,7 @@ import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.tiktime.controller.world.ContactMasks;
 import com.tiktime.model.entities.Category;
-import com.tiktime.model.entities.livingenteties.EnemyModel;
+import com.tiktime.model.entities.livingenteties.enemies.EnemyModel;
 
 public class EnemyWallInteraction extends Interaction {
     public EnemyWallInteraction() {

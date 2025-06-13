@@ -13,8 +13,4 @@ public enum LivingEntityState {
     LivingEntityState(Animation.PlayMode playMode) {
         this.playMode = playMode;
     }
-
-    public Animation.PlayMode getPlayMode() {
-        return playMode;
-    }
 }

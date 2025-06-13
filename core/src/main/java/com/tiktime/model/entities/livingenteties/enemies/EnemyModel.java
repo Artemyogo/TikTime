@@ -1,4 +1,4 @@
-package com.tiktime.model.entities.livingenteties;
+package com.tiktime.model.entities.livingenteties.enemies;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
@@ -10,6 +10,8 @@ import com.tiktime.model.entities.Categoriable;
 import com.tiktime.model.entities.Category;
 import com.tiktime.model.entities.components.HealthComponent;
 import com.tiktime.model.entities.components.MovementComponent;
+import com.tiktime.model.entities.livingenteties.PlayerModel;
+import com.tiktime.model.entities.livingenteties.WeaponableLivingEntityModel;
 import com.tiktime.model.entities.raycasts.InPathRaycast;
 import com.tiktime.model.entities.weapons.WeaponModel;
 import com.tiktime.model.events.EventManager;

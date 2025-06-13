@@ -16,47 +16,54 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.tiktime.common.Pausable;
+import com.tiktime.common.*;
 import com.tiktime.view.consts.ScreenConstants;
-import com.tiktime.common.Direction;
-import com.tiktime.common.LivingEntityState;
 import com.tiktime.view.enteties.livingenteties.LivingEntityView;
 import com.tiktime.view.enteties.livingenteties.PlayerView;
-import com.tiktime.common.EnemyType;
+import com.tiktime.view.enteties.livingenteties.enemies.AllEnemyView;
 import com.tiktime.view.enteties.livingenteties.enemies.EnemyView;
 import com.tiktime.view.enteties.livingenteties.enemies.RusherEnemyView;
-import com.tiktime.common.WeaponType;
+import com.tiktime.view.enteties.weapons.AllBulletsView;
 import com.tiktime.view.enteties.weapons.BulletView;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
 import static com.tiktime.view.consts.ScreenConstants.PPM;
 
-public class WorldView implements Pausable, Renderable, Disposable {
-    private final boolean debug = false;
-//    private final boolean debug = true;
-    private boolean paused = true;
-    private final OrthographicCamera worldCamera;
-    private final SpriteBatch worldBatch;
-    private final Viewport worldViewport;
+public class WorldView implements Renderable, Disposable {
+    private final boolean debug = MagicConstants.DEBUG_WORLD_VIEW;
+
+    private final OrthographicCamera worldCamera = new OrthographicCamera();
+    private final SpriteBatch worldBatch = new SpriteBatch();
+    private final Viewport worldViewport = new ExtendViewport(
+        ScreenConstants.VIEWPORT_WIDTH,
+        ScreenConstants.VIEWPORT_HEIGHT,
+        worldCamera);
+    private final Box2DDebugRenderer debugRenderer = new Box2DDebugRenderer();
     private OrthogonalTiledMapRenderer mapRenderer;
-    private final Box2DDebugRenderer debugRenderer;
-    private final Map<Integer, EnemyView> enemyViews = new HashMap<>();
-    private final Map<Integer, BulletView> bulletViews = new HashMap<>();
+
+    private final AllEnemyView allEnemyView = new AllEnemyView(worldBatch);
+    private final AllBulletsView allBulletsView = new AllBulletsView(worldBatch);
     private PlayerView playerView;
     private World world;
 
     public WorldView() {
-        worldBatch = new SpriteBatch();
-        debugRenderer = new Box2DDebugRenderer();
-        worldCamera = new OrthographicCamera();
-        worldViewport = new ExtendViewport(
-            ScreenConstants.VIEWPORT_WIDTH,
-            ScreenConstants.VIEWPORT_HEIGHT,
-            worldCamera);
-        worldViewport.update((int) ScreenConstants.VIEWPORT_WIDTH, (int) ScreenConstants.VIEWPORT_HEIGHT, false);
+        worldViewport.update(ScreenConstants.VIEWPORT_WIDTH, ScreenConstants.VIEWPORT_HEIGHT, false);
+    }
+
+    public AllEnemyView getAllEnemyView() {
+        return allEnemyView;
+    }
+
+    public AllBulletsView getAllBulletsView() {
+        return allBulletsView;
+    }
+
+    public OrthographicCamera getWorldCamera() {
+        return worldCamera;
     }
 
     public void setMapRenderer(TiledMap map) {
@@ -70,28 +77,70 @@ public class WorldView implements Pausable, Renderable, Disposable {
         mapRenderer = new OrthogonalTiledMapRenderer(map, 1f / PPM);
     }
 
-    public void setPlayerIsAttacked(boolean isAttacked) {
-        playerView.setIsAttacked(isAttacked);
-    }
-    public void setPlayerIsAttacking(boolean isAttacking) {
-        playerView.setIsAttacking(isAttacking);
-    }
-
-    public void setEnemyIsAttacked(int id, boolean isAttacked) {
-        enemyViews.get(id).setIsAttacked(isAttacked);
-    }
-
     public void setWorld(World world) {
         this.world = world;
     }
 
     @Override
     public void render(float delta) {
+        worldCamera.position.set(playerView.getX(), playerView.getY(), 0);
+        worldCamera.update();
+
         mapRenderer.setView(worldCamera);
         mapRenderer.render();
+
         worldBatch.setProjectionMatrix(worldCamera.combined);
         worldBatch.begin();
         ArrayList<LivingEntityView> allLivingEntities = getLivingEntities();
+        sortByY(allLivingEntities);
+        ArrayList<Renderable> renderables = new ArrayList<>(allLivingEntities);
+        renderables.addAll(allBulletsView.getBulletViews());
+        renderables.forEach(r -> r.render(delta));
+        worldBatch.end();
+
+        if (debug) {
+            if (weaponCoords != null && screenCoords != null) {
+                float x1 = weaponCoords.x, y1 = weaponCoords.y;
+                float x2 = screenCoords.x, y2 = screenCoords.y;
+                ShapeRenderer shapeRenderer = new ShapeRenderer();
+                shapeRenderer.setProjectionMatrix(worldCamera.combined);
+                Gdx.gl.glLineWidth(2);
+                shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+                shapeRenderer.setColor(Color.YELLOW);
+                shapeRenderer.line(x1, y1, x2, y2);
+                shapeRenderer.end();
+            }
+            debugRenderer.render(world, worldCamera.combined);
+        }
+    }
+
+    public PlayerView setAndGetPlayer(float x, float y, float width, float height, int curHealth, int maxHealth, int coins,
+                          Direction direction, LivingEntityState state, WeaponType weapon) {
+        return playerView = new PlayerView(x, y, width, height, curHealth, maxHealth, coins, direction, state, weapon, worldBatch);
+    }
+
+    public PlayerView getPlayerView() {
+        return playerView;
+    }
+
+    // TODO: DELETE THIS
+    // THIS IS FOR DEBUG LOL DONT DELETE THIS
+    Vector3 weaponCoords, screenCoords;
+    public void setWeaponCoords(Vector3 weaponCoords) {
+        this.weaponCoords = weaponCoords;
+    }
+
+    public void setScreenCoords(Vector3 screenCoords) {
+        this.screenCoords = screenCoords;
+    }
+
+    private ArrayList<LivingEntityView> getLivingEntities() {
+        ArrayList<LivingEntityView> allLivingEntities = new ArrayList<>(allEnemyView.getEnemyViews());
+        allLivingEntities.add(playerView);
+        return allLivingEntities;
+    }
+
+    public void sortByY(ArrayList<LivingEntityView> allLivingEntities) {
         allLivingEntities.sort((e1, e2) -> {
             if (e1.getY() - e1.getHeight() / 2f ==  e2.getY() - e2.getHeight() / 2f) {
                 return 0;
@@ -99,164 +148,11 @@ public class WorldView implements Pausable, Renderable, Disposable {
 
             return e1.getY() - e1.getHeight() / 2f > e2.getY() - e2.getHeight() / 2f ? -1 : 1;
         });
-
-        // TODO: BACK THIS
-//        ArrayList<Renderable> renderables = new ArrayList<>(bulletViews.values());
-        ArrayList<Renderable> renderables = new ArrayList<>();
-        renderables.addAll(allLivingEntities);
-        renderables.addAll(bulletViews.values());
-        renderables.forEach(r -> r.render(delta));
-        worldBatch.end();
-
-//        if (weaponCoords != null && screenCoords != null) {
-        if (debug && weaponCoords != null && screenCoords != null) {
-            // Пример: координаты начала и конца линии
-//            float x1 = weaponCoords.x / PPM, y1 = weaponCoords.y / PPM;
-            float x1 = weaponCoords.x, y1 = weaponCoords.y;
-            float x2 = screenCoords.x, y2 = screenCoords.y;
-//            float x2 = screenCoords.x / PPM, y2 = screenCoords.y / PPM;
-            ShapeRenderer shapeRenderer = new ShapeRenderer();
-            shapeRenderer.setProjectionMatrix(worldCamera.combined);
-            // Включаем отрисовку
-            Gdx.gl.glLineWidth(2); // Толщина линии
-            shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-            shapeRenderer.setColor(Color.YELLOW);
-            shapeRenderer.line(x1, y1, x2, y2);
-            shapeRenderer.end();
-        }
-
-        if (debug) {
-            debugRenderer.render(world, worldCamera.combined);
-        }
     }
 
-    public void setPlayer(float x, float y, float width, float height, int curHealth, int maxHealth, int coins,
-                          Direction direction, LivingEntityState state, WeaponType weapon) {
-        playerView = new PlayerView(x, y, width, height, curHealth, maxHealth, coins, direction, state, weapon, worldBatch);
-    }
-
-    public void addEnemy(float x, float y, float width, float height, int curHealth, int maxHealth, int id, Direction direction,
-                         LivingEntityState state, EnemyType enemyType, float runFrameDuration) {
-        switch (enemyType) {
-            case RUSHER: {
-                enemyViews.put(id, new RusherEnemyView(x, y, width, height, curHealth, maxHealth, id, direction, state, worldBatch, runFrameDuration));
-                break;
-            }
-
-            case ANIMAN:
-            case MARKSMAN:
-            default:
-                throw new RuntimeException("Invalid enemyType");
-        }
-    }
-
-    public void deleteEnemy(int id) {
-        enemyViews.remove(id);
-    }
-
-    public void addBullet(float x, float y, float width, float height, float rotationDeg, int id) {
-        bulletViews.put(id, new BulletView(x, y, width, height, rotationDeg, worldBatch));
-    }
-
-    public void setBulletPosition(float x, float y, int id) {
-        bulletViews.get(id).setPosition(x, y);
-    }
-
-    public void deleteBullet(int id) {
-        bulletViews.remove(id);
-    }
-
-    public PlayerView getPlayerView() {
-        return playerView;
-    }
-
-    public EnemyView getEnemyView(int id) {
-        return enemyViews.get(id);
-    }
-
-    public void setEnemyCoordinates(float x, float y, int id) {
-        EnemyView enemyView = enemyViews.get(id);
-        enemyView.setPosition(x, y);
-    }
-
-    public void setEnemyState(LivingEntityState state, int id) {
-        EnemyView enemyView = enemyViews.get(Integer.valueOf(id));
-        enemyView.setState(state);
-    }
-
-    public void setEnemyDirection(Direction direction, int id) {
-        EnemyView enemyView = enemyViews.get(id);
-        enemyView.setDirection(direction);
-    }
-
-    public void setPlayerCoordinates(float x, float y) {
-        playerView.setPosition(x, y);
-        worldCamera.position.set(x, y, 0);
+    public void resize(int width, int height) {
+        worldViewport.update(width, height, false);
         worldCamera.update();
-    }
-
-    public void setPlayerState(LivingEntityState state) {
-        playerView.setState(state);
-    }
-
-    public void setPlayerDirection(Direction direction) {
-        playerView.setDirection(direction);
-    }
-
-    public void setPlayerCurHealth(int curHealth) {
-        playerView.setCurHealth(curHealth);
-    }
-
-    public void setPlayerMaxHealth(int maxHealth) {
-        playerView.setMaxHealth(maxHealth);
-    }
-
-    // TODO: DELETE THIS
-    Vector3 screenCoords;
-    Vector3 weaponCoords;
-    public void updatePlayerWeaponRotation(Vector3 screenCoords, Vector3 weaponCoords) {
-        float rotationDeg = getWeaponRotation(screenCoords, weaponCoords);
-//        Gdx.app.log("WordlView",  "rotationDeg: " + rotationDeg);
-//        Gdx.app.log("WorldView", String.valueOf(rotationDeg));
-
-        this.screenCoords = screenCoords;
-        this.weaponCoords = weaponCoords;
-        playerView.updateWeaponRotationDeg(rotationDeg);
-    }
-
-    public float getWeaponRotation(Vector3 screenCoords, Vector3 weaponCoords) {
-        Vector3 worldCoords = worldCamera.unproject(screenCoords);
-//        Gdx.app.log("WorldView", String.valueOf(worldCoords));
-//        Gdx.app.log("WorldView", String.valueOf(weaponCoords));
-        float dx = worldCoords.x - weaponCoords.x;
-        float dy = worldCoords.y - weaponCoords.y;
-        return (float) Math.toDegrees(Math.atan2(dy, dx));
-    }
-
-    public void clearEnemies() {
-        enemyViews.clear();
-    }
-
-    public void clearBullets() {
-        bulletViews.clear();
-    }
-
-    public void clearAll() {
-        clearEnemies();
-        clearBullets();
-    }
-
-    public ArrayList<LivingEntityView> getLivingEntities() {
-        ArrayList<LivingEntityView> allLivingEntities = new ArrayList<>(enemyViews.values());
-        allLivingEntities.add(playerView);
-        return allLivingEntities;
-    }
-
-    @Override
-    public void setPaused(boolean paused) {
-        this.paused = paused;
-        ArrayList<? extends Pausable> allPausables = getLivingEntities();
-        allPausables.forEach(p -> p.setPaused(paused));
     }
 
     @Override
@@ -264,10 +160,5 @@ public class WorldView implements Pausable, Renderable, Disposable {
         worldBatch.dispose();
         mapRenderer.dispose();
         debugRenderer.dispose();
-    }
-
-    public void resize(int width, int height) {
-        worldViewport.update(width, height, false);
-        worldCamera.update();
     }
 }

@@ -1,10 +1,5 @@
 package com.tiktime.model;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.maps.MapObject;
-import com.badlogic.gdx.maps.MapProperties;
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Disposable;
@@ -13,22 +8,17 @@ import com.tiktime.controller.world.CollisionController;
 import com.tiktime.model.entities.Category;
 import com.tiktime.model.entities.entityfactories.EntityFactory;
 import com.tiktime.model.entities.livingenteties.*;
-import com.tiktime.model.entities.entityfactories.BodyFactory;
-import com.tiktime.model.entities.entityfactories.FixtureFactory;
 
+import com.tiktime.model.entities.livingenteties.enemies.EnemyModel;
 import com.tiktime.model.entities.raycasts.InPathRaycast;
 import com.tiktime.model.events.EventListener;
 import com.tiktime.model.events.EventManager;
 import com.tiktime.model.events.GameEvent;
 import com.tiktime.model.events.GameEventType;
-import com.tiktime.common.configs.GameConfig;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
-
-import static com.tiktime.view.consts.ScreenConstants.PPM;
 
 public class WorldModel implements EventListener, Disposable {
     private final World world;

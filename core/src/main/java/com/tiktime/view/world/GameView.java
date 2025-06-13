@@ -14,9 +14,9 @@ public class GameView implements Pausable, Renderable, Disposable {
     private boolean paused = false;
     private final Viewport screenViewport;
     private final OrthographicCamera screenCamera;
-    private WorldView worldView;
+    private final PauseView pauseView;
+    private final WorldView worldView;
     private HudView hudView;
-    private PauseView pauseView;
 
     public GameView() {
         screenCamera = new OrthographicCamera();
@@ -29,15 +29,6 @@ public class GameView implements Pausable, Renderable, Disposable {
 
     public void setController(WorldController worldController) {
         pauseView.setController(worldController);
-    }
-
-    @Override
-    public void setPaused(boolean paused) {
-        this.paused = paused;
-        ArrayList<Pausable> allPausables = new ArrayList<>();
-        allPausables.add(worldView);
-        allPausables.add(pauseView);
-        allPausables.forEach(p -> p.setPaused(paused));
     }
 
     public void setHud(int coins) {
@@ -62,12 +53,12 @@ public class GameView implements Pausable, Renderable, Disposable {
         allRenderables.forEach(r -> r.render(delta));
     }
 
-    public void setIsInDoor(boolean isInDoor) {
-        hudView.setIsInDoor(isInDoor);
-    }
-
     public WorldView getWorldView() {
         return worldView;
+    }
+
+    public HudView getHudView() {
+        return hudView;
     }
 
     public void resize(int width, int height) {
@@ -82,5 +73,10 @@ public class GameView implements Pausable, Renderable, Disposable {
         worldView.dispose();
         hudView.dispose();
         pauseView.dispose();
+    }
+
+    @Override
+    public void setPaused(boolean paused) {
+        pauseView.setPaused(paused);
     }
 }

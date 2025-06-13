@@ -1,7 +1,13 @@
 package com.tiktime.common;
 
+import com.tiktime.view.world.WorldView;
+
 public final class MagicConstants {
     private MagicConstants() {}
+    public static final boolean DEBUG = false;
+    public static final boolean DEBUG_WORLD_CONTROLLER = DEBUG || false;
+    public static final boolean DEBUG_WORLD_VIEW = DEBUG || false;
+
 
     public static final String UPGRADES_PREFERENCES_NAME = "com.tiktime.upgrades";
     public static final String SETTINGS_PREFERENCES_NAME = "com.tiktime.settings";

@@ -27,8 +27,6 @@ public abstract class LivingEntityView extends HealthEntityView {
 
     public void setState(LivingEntityState state) {
         boolean stateChanged = (this.state != state);
-//        if (this instanceof EnemyView)
-//            Gdx.app.log("LivingEntityView", "state1: " + this.state + ",  state2: " + state);
         this.state = state;
         if (stateChanged) {
             updateAnimation();
@@ -76,8 +74,6 @@ public abstract class LivingEntityView extends HealthEntityView {
     }
 
     protected boolean needFlipTexture() {
-        return direction == Direction.NORTH_WEST ||
-            direction == Direction.WEST ||
-            direction == Direction.SOUTH_WEST;
+        return direction == Direction.WEST;
     }
 }

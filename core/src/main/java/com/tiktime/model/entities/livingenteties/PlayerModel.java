@@ -10,6 +10,7 @@ import com.tiktime.common.configs.configdata.WeaponData;
 import com.tiktime.model.BodyManager;
 import com.tiktime.model.entities.Categoriable;
 import com.tiktime.model.entities.Category;
+import com.tiktime.model.entities.components.GunshotAttackComponent;
 import com.tiktime.model.entities.components.HealthComponent;
 import com.tiktime.model.entities.components.MovementComponent;
 import com.tiktime.model.entities.weapons.GunshotAttackable;
@@ -48,6 +49,17 @@ public class PlayerModel extends WeaponableLivingEntityModel implements Categori
     }
 
     Category category;
+    GunshotAttackable gunshotAttackable;
+
+    public PlayerModel(Category category, WeaponModel weaponModel, MovementComponent movementComponent,
+                       HealthComponent healthComponent, Body body, BodyManager bodyManager) {
+        super(movementComponent, healthComponent, weaponModel, body, bodyManager);
+        if (!Category.PLAYER.is(category.getBits()))
+            throw new IllegalArgumentException("Category is not Player");
+
+        this.category = category;
+        gunshotAttackable = (GunshotAttackable) weaponModel;
+    }
 
     @Override
     public boolean tryAttack(float x, float y) {
@@ -84,13 +96,11 @@ public class PlayerModel extends WeaponableLivingEntityModel implements Categori
 
     @Override
     public void updateWeaponRotation(float rotationDeg) {
-        GunshotAttackable gunshotAttackable = (GunshotAttackable) weaponModel;
         gunshotAttackable.updateWeaponRotation(rotationDeg);
     }
 
     @Override
     public float getRotationDeg() {
-        GunshotAttackable gunshotAttackable = (GunshotAttackable) weaponModel;
         return gunshotAttackable.getRotationDeg();
     }
 
@@ -111,14 +121,5 @@ public class PlayerModel extends WeaponableLivingEntityModel implements Categori
     @Override
     public Category getCategory() {
         return category;
-    }
-
-    public PlayerModel(Category category, WeaponModel weaponModel, MovementComponent movementComponent,
-                       HealthComponent healthComponent, Body body, BodyManager bodyManager) {
-        super(movementComponent, healthComponent, weaponModel, body, bodyManager);
-        if (!Category.PLAYER.is(category.getBits()))
-            throw new IllegalArgumentException("Category is not Player");
-
-        this.category = category;
     }
 }

@@ -1,7 +1,6 @@
-package com.tiktime.model.entities.livingenteties;
+package com.tiktime.model.entities.livingenteties.enemies;
 
 import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.World;
 import com.tiktime.common.Direction;
 import com.tiktime.model.BodyManager;
 import com.tiktime.model.entities.Category;

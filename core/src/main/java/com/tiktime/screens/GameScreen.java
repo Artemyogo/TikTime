@@ -1,5 +1,6 @@
 package com.tiktime.screens;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.tiktime.Main;
 import com.tiktime.controller.world.WorldController;
@@ -16,6 +17,7 @@ public class GameScreen extends ScreenAdapter {
 
     @Override
     public void show() {
+        Gdx.app.log("GameScreen", "Showing");
         worldController.activateInputProcessor();
     }
 

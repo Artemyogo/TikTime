@@ -1,12 +1,8 @@
 package com.tiktime.controller.Interactions;
 
 import com.badlogic.gdx.physics.box2d.Contact;
-import com.tiktime.model.BodyManager;
 import com.tiktime.model.entities.Category;
-import com.tiktime.model.entities.components.AttackComponent;
 import com.tiktime.model.entities.livingenteties.Damagable;
-import com.tiktime.model.entities.livingenteties.EnemyModel;
-import com.tiktime.model.entities.livingenteties.PlayerModel;
 import com.tiktime.model.entities.weapons.Attackable;
 import com.tiktime.model.entities.weapons.BulletModel;
 

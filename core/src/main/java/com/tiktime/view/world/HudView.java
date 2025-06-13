@@ -15,6 +15,7 @@ import com.tiktime.view.enteties.livingenteties.PlayerView;
 import javax.swing.text.View;
 
 public class HudView implements Renderable, Disposable {
+    // TODO: magiiic
     private final String backgroundPath = "Fantasy Minimal Pixel Art GUI by eta-commercial-free/UI/ValueBar_128x16.png";
     private final String fillPath = "Fantasy Minimal Pixel Art GUI by eta-commercial-free/UI/ValueRed_120x8.png";
     private final String fontPath = "flat-earth/skin/font-title-export.fnt";

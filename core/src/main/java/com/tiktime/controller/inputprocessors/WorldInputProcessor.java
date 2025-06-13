@@ -4,19 +4,20 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Vector2;
+import com.tiktime.controller.enteties.BulletController;
+import com.tiktime.controller.enteties.EnemyController;
+import com.tiktime.controller.enteties.PlayerController;
 import com.tiktime.controller.world.WorldController;
-import com.tiktime.model.entities.MovingDirections;
+import com.tiktime.common.Direction;
 import com.tiktime.common.Pausable;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.EnumSet;
 
 public class WorldInputProcessor implements InputProcessor, Pausable {
     private boolean isInDoor = false;
     private boolean paused = false;
     private final WorldController worldController;
-    private final EnumSet<MovingDirections> directions = EnumSet.noneOf(MovingDirections.class);
+    private final EnumSet<Direction> directions = EnumSet.noneOf(Direction.class);
     private int mouseX, mouseY;
 
     public int getMouseX() {
@@ -32,7 +33,7 @@ public class WorldInputProcessor implements InputProcessor, Pausable {
     }
 
     public Vector2 getDirection() {
-        return MovingDirections.combine(directions);
+        return Direction.combine(directions);
     }
 
     public void setInDoor(boolean inDoor) {
@@ -55,19 +56,19 @@ public class WorldInputProcessor implements InputProcessor, Pausable {
                 return false;
             }
             case Input.Keys.W: {
-                directions.add(MovingDirections.UP);
+                directions.add(Direction.UP);
                 return true;
             }
             case Input.Keys.A: {
-                directions.add(MovingDirections.LEFT);
+                directions.add(Direction.LEFT);
                 return true;
             }
             case Input.Keys.S: {
-                directions.add(MovingDirections.DOWN);
+                directions.add(Direction.DOWN);
                 return true;
             }
             case Input.Keys.D: {
-                directions.add(MovingDirections.RIGHT);
+                directions.add(Direction.RIGHT);
                 return true;
             }
             case Input.Keys.ESCAPE: {
@@ -81,10 +82,10 @@ public class WorldInputProcessor implements InputProcessor, Pausable {
     @Override
     public boolean keyUp(int keycode) {
         switch (keycode) {
-            case Input.Keys.W: return directions.remove(MovingDirections.UP);
-            case Input.Keys.A: return directions.remove(MovingDirections.LEFT);
-            case Input.Keys.S: return directions.remove(MovingDirections.DOWN);
-            case Input.Keys.D: return directions.remove(MovingDirections.RIGHT);
+            case Input.Keys.W: return directions.remove(Direction.UP);
+            case Input.Keys.A: return directions.remove(Direction.LEFT);
+            case Input.Keys.S: return directions.remove(Direction.DOWN);
+            case Input.Keys.D: return directions.remove(Direction.RIGHT);
             default: return false;
         }
     }
@@ -97,16 +98,14 @@ public class WorldInputProcessor implements InputProcessor, Pausable {
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         mouseMoved(screenX, screenY);
-        worldController.setPlayerAttacking(true);
-//        Gdx.app.log("InputProcessor", "touchDown");
+        worldController.getPlayerController().setAttacking(true);
         return false;
     }
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
         mouseMoved(screenX, screenY);
-        worldController.setPlayerAttacking(false);
-        Gdx.app.log("InputProcessor", "touchUp");
+        worldController.getPlayerController().setAttacking(false);
         return false;
     }
 
@@ -124,7 +123,7 @@ public class WorldInputProcessor implements InputProcessor, Pausable {
 
     @Override
     public boolean mouseMoved(int screenX, int screenY) {
-        worldController.updateMousePosition(screenX, screenY);
+        worldController.getPlayerController().updateMousePosition(screenX, screenY);
         return true;
     }
 

@@ -1,13 +1,19 @@
 package com.tiktime.view.enteties.livingenteties;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector3;
 import com.tiktime.common.Direction;
 import com.tiktime.common.LivingEntityState;
+import com.tiktime.common.MagicConstants;
 import com.tiktime.view.enteties.weapons.WeaponFactory;
 import com.tiktime.common.WeaponType;
 import com.tiktime.view.enteties.weapons.WeaponView;
 
 public class PlayerView extends LivingEntityView {
+    // TODO magiiiic
     public static final String atlasPath = "animations/player_1.atlas";
     private WeaponView weaponView;
     private int coins;

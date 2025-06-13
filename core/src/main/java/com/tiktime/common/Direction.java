@@ -2,24 +2,30 @@ package com.tiktime.common;
 
 import com.badlogic.gdx.math.Vector2;
 
-public enum Direction {
-    EAST(0),      // →
-    NORTH_EAST(45),  // ↗
-    NORTH(90),     // ↑
-    NORTH_WEST(135), // ↖
-    WEST(180),     // ←
-    SOUTH_WEST(225), // ↙
-    SOUTH(270),    // ↓
-    SOUTH_EAST(315); // ↘
+import java.util.Collection;
 
-    private final int angleDeg;
+public enum Direction implements Comparable<Direction>{
+    UP(new Vector2(0, 1)),
+    NORTH(new Vector2(0, 1)),     // ↑
 
-    Direction(int angleDeg) {
-        this.angleDeg = angleDeg;
+    DOWN(new Vector2(0, -1)),
+    SOUTH(new Vector2(0, -1)),    // ↓
+
+    LEFT(new Vector2(-1, 0)),
+    WEST(new Vector2(-1, 0)),     // ←
+
+    RIGHT(new Vector2(1, 0)),
+    EAST(new Vector2(1, 0));      // →
+
+    private final Vector2 direction;
+    Direction(Vector2 direction){
+        this.direction = direction;
     }
-
-    public boolean isRight() {
-        return angleDeg < 90 || angleDeg > 270; // Все что не влево
+    public static Vector2 combine(Collection<Direction> directions){
+        Vector2 res = new Vector2(0, 0);
+        for(Direction x : directions)
+            res.add(x.direction);
+        return res;
     }
 
     public static Direction getDirection(Vector2 dir) {
@@ -31,9 +37,6 @@ public enum Direction {
             throw new RuntimeException("Invalid direction");
         }
 
-//        if (dir.x == 0)
-//            throw new IllegalArgumentException("Invalid direction, shouldnt change direction");
-
         if (dir.x >= 0) {
             return Direction.EAST;
         }
@@ -41,4 +44,3 @@ public enum Direction {
         return Direction.WEST;
     }
 }
-

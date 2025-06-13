@@ -1,29 +1,26 @@
-package com.tiktime.controller.world.enteties;
+package com.tiktime.controller.enteties;
 
-import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Disposable;
-import com.tiktime.common.MagicConstants;
+import com.tiktime.common.*;
 import com.tiktime.common.configs.GameConfig;
-import com.tiktime.model.WorldModel;
-import com.tiktime.model.entities.livingenteties.EnemyModel;
+import com.tiktime.common.configs.configdata.WeaponData;
+import com.tiktime.model.entities.livingenteties.enemies.EnemyModel;
 import com.tiktime.model.entities.livingenteties.PlayerModel;
 import com.tiktime.model.events.EventListener;
 import com.tiktime.model.events.EventManager;
 import com.tiktime.model.events.GameEvent;
 import com.tiktime.model.events.GameEventType;
-import com.tiktime.common.Direction;
-import com.tiktime.common.LivingEntityState;
-import com.tiktime.common.WeaponType;
 import com.tiktime.model.upgrades.UpgradeModel;
-import com.tiktime.screens.DeathScreen;
 import com.tiktime.screens.Screen;
 import com.tiktime.screens.ScreenHandler;
+import com.tiktime.view.enteties.livingenteties.PlayerView;
 import com.tiktime.view.world.WorldView;
 
-public class PlayerController implements EventListener, Disposable {
+public class PlayerController implements Pausable, EventListener, Disposable {
     private final PlayerModel playerModel;
+    private final PlayerView playerView;
     private final WorldView worldView;
     private final ScreenHandler screenHandler;
     private final float baseDamageTime = MagicConstants.PLAYER_BASE_DAMAGE_TIME;
@@ -33,10 +30,10 @@ public class PlayerController implements EventListener, Disposable {
 
     public PlayerController(PlayerModel playerModel, WorldView worldView, ScreenHandler screenHandler) {
         this.playerModel = playerModel;
-        this.worldView = worldView;
         this.screenHandler = screenHandler;
 
-        worldView.setPlayer(
+        this.worldView = worldView;
+        this.playerView = worldView.setAndGetPlayer(
             playerModel.getPosition().x,
             playerModel.getPosition().y,
             GameConfig.getPlayerConfig().getWidth(),
@@ -44,9 +41,9 @@ public class PlayerController implements EventListener, Disposable {
             playerModel.getCurrentHealth(),
             playerModel.getMaxHealth(),
             PlayerModel.CurrentStats.getCoins(),
-            Direction.EAST,
+            Direction.getDirection(playerModel.getDirection()),
             LivingEntityState.IDLE,
-            WeaponType.AK47
+            playerModel.getWeaponModel().getWeaponType()
         );
 
         subscribeOnEvents();
@@ -54,7 +51,7 @@ public class PlayerController implements EventListener, Disposable {
 
     public void setAttacking(boolean attacking) {
         this.attacking = attacking;
-//        Gdx.app.log("PlayerController", "setAttacking: " + attacking);
+        playerView.setIsAttacking(attacking);
     }
 
     private void subscribeOnEvents() {
@@ -69,8 +66,33 @@ public class PlayerController implements EventListener, Disposable {
         EventManager.unsubscribe(GameEventType.ENEMY_DEATH, this);
     }
 
-    public void updateWeaponRotation(float rotationDeg) {
+    public void updateMousePosition(int screenX, int screenY) {
+        float rotationDeg = getWeaponRotation(new Vector3(screenX, screenY, 0),
+            getWeaponCenterPosition(playerModel.getPosition(), playerModel.getWeaponModel().getWeaponType()));
+
+        playerView.updateWeaponRotationDeg(rotationDeg);
         playerModel.updateWeaponRotation(rotationDeg);
+    }
+
+    private float getWeaponRotation(Vector3 screenCoords, Vector3 weaponCoords) {
+        Vector3 worldCoords = worldView.getWorldCamera().unproject(screenCoords);
+        float dx = worldCoords.x - weaponCoords.x;
+        float dy = worldCoords.y - weaponCoords.y;
+        // FOR DEBUG
+        worldView.setScreenCoords(new Vector3(worldCoords));
+        worldView.setWeaponCoords(new Vector3(weaponCoords));
+
+        return (float) Math.toDegrees(Math.atan2(dy, dx));
+    }
+
+    private Vector3 getWeaponCenterPosition(Vector2 playerPosition, WeaponType weaponType) {
+        WeaponData weaponConfig = GameConfig.getWeaponConfig(weaponType);
+
+        if (weaponConfig == null) {
+            throw new RuntimeException("WeaponConfig is null");
+        }
+
+        return new Vector3(playerPosition.x + weaponConfig.getOffsetX(), playerPosition.y + weaponConfig.getOffsetY(), 0f);
     }
 
     public void update(float delta, Vector2 direction) {
@@ -78,29 +100,29 @@ public class PlayerController implements EventListener, Disposable {
             screenHandler.setScreen(Screen.DEATH_SCREEN);
         }
         damageTimeLeft = Math.max(0, damageTimeLeft - delta);
-        worldView.setPlayerIsAttacked(damageTimeLeft != 0);
+        playerView.setIsAttacked(damageTimeLeft != 0);
 
         playerModel.updateAttackCooldownTimer(delta);
         if (attacking) {
             playerModel.tryAttack();
         }
-        worldView.setPlayerIsAttacking(attacking);
+        playerView.setIsAttacking(attacking);
 
         playerModel.setDirectionAndMove(direction, delta);
 
         Vector2 playerPosition = playerModel.getPosition();
-        worldView.setPlayerCoordinates(playerPosition.x, playerPosition.y);
+        playerView.setPosition(playerPosition.x, playerPosition.y);
 
-        worldView.setPlayerCurHealth(playerModel.getCurrentHealth());
-        worldView.setPlayerMaxHealth(playerModel.getMaxHealth());
+        playerView.setCurHealth(playerModel.getCurrentHealth());
+        playerView.setMaxHealth(playerModel.getMaxHealth());
 
         if (direction.equals(Vector2.Zero)) {
-            worldView.setPlayerState(LivingEntityState.IDLE);
+            playerView.setState(LivingEntityState.IDLE);
         } else {
             if (direction.x != 0) {
-                worldView.setPlayerDirection(Direction.getDirection(direction));
+                playerView.setDirection(Direction.getDirection(direction));
             }
-            worldView.setPlayerState(LivingEntityState.RUNNING);
+            playerView.setState(LivingEntityState.RUNNING);
         }
     }
 
@@ -126,7 +148,7 @@ public class PlayerController implements EventListener, Disposable {
                     throw new RuntimeException("Invalid event data");
                 }
 
-                worldView.getPlayerView().setCoins(UpgradeModel.getInstance().getMoney());
+                playerView.setCoins(UpgradeModel.getInstance().getMoney());
                 break;
             }
 
@@ -142,5 +164,10 @@ public class PlayerController implements EventListener, Disposable {
     @Override
     public void dispose() {
         unsubscribeOnEvents();
+    }
+
+    @Override
+    public void setPaused(boolean paused) {
+        playerView.setPaused(paused);
     }
 }
