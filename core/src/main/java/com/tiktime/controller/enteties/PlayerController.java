@@ -43,7 +43,9 @@ public class PlayerController implements Pausable, EventListener, Disposable {
             PlayerModel.CurrentStats.getCoins(),
             Direction.getDirection(playerModel.getDirection()),
             LivingEntityState.IDLE,
-            playerModel.getWeaponModel().getWeaponType()
+            playerModel.getWeaponModel().getWeaponType(),
+            playerModel.getSpeed() * MagicConstants.MLT_SPEED_PLAYER_FRAME_DURATION,
+            PlayerModel.CurrentStats.getAttackCooldown() * MagicConstants.MLT_ATTACK_FRAME_DURATION
         );
 
         subscribeOnEvents();
@@ -52,6 +54,10 @@ public class PlayerController implements Pausable, EventListener, Disposable {
     public void setAttacking(boolean attacking) {
         this.attacking = attacking;
         playerView.setIsAttacking(attacking);
+    }
+
+    public boolean isDead() {
+        return dead;
     }
 
     private void subscribeOnEvents() {

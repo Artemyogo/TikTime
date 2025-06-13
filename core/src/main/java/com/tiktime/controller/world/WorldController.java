@@ -97,6 +97,8 @@ public class WorldController implements Pausable, Disposable {
         Vector2 direction = inputProcessor.getDirection();
 
         playerController.update(delta, direction);
+        if (playerController.isDead())
+            return;
         enemyController.update(delta);
         bulletController.update(delta);
         worldModel.update(delta);

@@ -1,5 +1,6 @@
 package com.tiktime.controller.enteties;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Disposable;
 import com.tiktime.common.*;
 import com.tiktime.common.configs.GameConfig;
@@ -33,22 +34,20 @@ public class EnemyController implements Pausable, EventListener, Disposable {
 
         for (EnemyModel e : enemies) {
             float width, height;
-            float runFrameDuration;
+            float speedFrameDuration = 1f/e.getSpeed() * MagicConstants.MLT_SPEED_ENEMY_FRAME_DURATION;
+            float attackFrameDuration = MagicConstants.RUSHER_ATTACK_FRAME_DURATION;
             switch (e.getCategory()) {
                 case ENEMY_ANIMAN: {
-                    runFrameDuration = GameConfig.getEnemyConfig(Category.ENEMY_ANIMAN).runFrameDuration();
                     width = GameConfig.getEnemyConfig(Category.ENEMY_ANIMAN).getWidth();
                     height = GameConfig.getEnemyConfig(Category.ENEMY_ANIMAN).getHeight();
                     break;
                 }
                 case ENEMY_BOSS: {
-                    runFrameDuration = GameConfig.getEnemyConfig(Category.ENEMY_BOSS).runFrameDuration();
                     width = GameConfig.getEnemyConfig(Category.ENEMY_BOSS).getWidth();
                     height = GameConfig.getEnemyConfig(Category.ENEMY_BOSS).getHeight();
                     break;
                 }
                 case ENEMY_RUSHER: {
-                    runFrameDuration = GameConfig.getEnemyConfig(Category.ENEMY_RUSHER).runFrameDuration();
                     width = GameConfig.getEnemyConfig(Category.ENEMY_RUSHER).getWidth();
                     height = GameConfig.getEnemyConfig(Category.ENEMY_RUSHER).getHeight();
                     break;
@@ -58,6 +57,8 @@ public class EnemyController implements Pausable, EventListener, Disposable {
                 }
             }
 
+//            Gdx.app.log("EnemyController", speedFrameDuration + " " + e.getCategory());
+
             curDamageTime.put(e, 0f);
             allEnemyView.addEnemy(e.getBody().getPosition().x, e.getBody().getPosition().y,
                 width,
@@ -66,7 +67,8 @@ public class EnemyController implements Pausable, EventListener, Disposable {
                 e.getId(),
                 (Math.random() < 0.5 ? Direction.EAST : Direction.WEST),
                 LivingEntityState.IDLE, EnemyType.RUSHER,
-                runFrameDuration);
+                speedFrameDuration,
+                attackFrameDuration);
         }
         subscribeOnEvents();
     }

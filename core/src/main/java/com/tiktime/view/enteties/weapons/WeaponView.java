@@ -42,8 +42,8 @@ public abstract class WeaponView extends AnimatedEntityView {
             return;
         }
 
-        updateAnimation();
         animManager.update(delta);
+        updateAnimation();
     }
 
     public void setIsAttacking(boolean isAttacking) {

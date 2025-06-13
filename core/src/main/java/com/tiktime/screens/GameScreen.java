@@ -17,13 +17,12 @@ public class GameScreen extends ScreenAdapter {
 
     @Override
     public void show() {
-//        Gdx.app.log("GameScreen", "Showing");
         worldController.activateInputProcessor();
     }
 
     @Override
     public void render(float v) {
-        // TODO: ORDER IS IMPORTANT
+        // ORDER IS IMPORTANT
         gameView.render(v);
         worldController.update(v);
     }

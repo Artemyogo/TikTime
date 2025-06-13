@@ -9,7 +9,8 @@
     "baseHp": 100,
     "baseSpeed": 15 ,
     "baseDamage": 17,
-    "baseRegen": 10
+    "baseRegen": 10,
+    "baseAttackCooldown": 0.2
   },
   "marksman": {},
   "animan": {
@@ -22,8 +23,8 @@
     "baseHp": 10,
     "baseSpeed": 15,
     "baseDamage": 1,
-    "runFrameDuration": 0.04,
     "attackRange": 0.8,
+    "baseAttackCooldown": 0.1,
     "reward": 20
   },
   "rusher": {
@@ -36,8 +37,8 @@
     "baseHp": 40,
     "baseSpeed": 2,
     "baseDamage": 10,
-    "runFrameDuration": 0.1,
     "attackRange": 1,
+    "baseAttackCooldown": 0.1,
     "reward": 30
   },
   "boss": {
@@ -50,13 +51,11 @@
     "baseHp": 1600,
     "baseSpeed": 0.5,
     "baseDamage": 175,
-    "runFrameDuration": 0.3,
     "attackRange": 5,
+    "baseAttackCooldown": 0.1,
     "reward": 500
   },
   "ak47": {
-    "damage": 10,
-    "attackCooldown": 0.1,
     "width": 1.3,
     "height": 0.7,
     "offsetX": 0,

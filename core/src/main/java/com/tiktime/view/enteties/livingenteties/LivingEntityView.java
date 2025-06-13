@@ -12,13 +12,16 @@ public abstract class LivingEntityView extends HealthEntityView {
     protected Direction direction;
     protected LivingEntityState state;
     boolean isAttacked = false;
+    protected float attackFrameDuration, speedFrameDuration;
 
     protected LivingEntityView(float x, float y, float width, float height, int curHealth, int maxHealth,
                                Direction direction, LivingEntityState state, String atlasPath,
-                               SpriteBatch batch) {
+                               SpriteBatch batch, float speedFrameDuration, float attackFrameDuration) {
         super(x, y, width, height, curHealth, maxHealth, atlasPath, batch);
         this.direction = direction;
         this.state = state;
+        this.speedFrameDuration = speedFrameDuration;
+        this.attackFrameDuration = attackFrameDuration;
     }
 
     public void setDirection(Direction direction) {

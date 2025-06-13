@@ -30,7 +30,7 @@ public class EntityFactory {
     private static final float mlt = MagicConstants.MLT;
 
     public static PlayerModel createPlayerModel(World world, BodyManager bodyManager, float x, float y) {
-        WeaponModel weaponModel = createAk47WeaponModel(world, bodyManager);
+        WeaponModel weaponModel = createAk47WeaponModel(world, bodyManager, PlayerModel.CurrentStats.getAttackCooldown());
         MovementComponent movementComponent = new MovementComponent(
                 PlayerModel.CurrentStats.getSpeed(),
                 Vector2.Zero
@@ -51,8 +51,7 @@ public class EntityFactory {
     }
 
     public static PlayerModel createPlayerModelAtNextMap(World world, BodyManager bodyManager, float x, float y, PlayerModel playerModel) {
-        // TODO: redo this
-        WeaponModel weaponModel = createAk47WeaponModel(world, bodyManager);
+        WeaponModel weaponModel = createAk47WeaponModel(world, bodyManager, PlayerModel.CurrentStats.getAttackCooldown());
         MovementComponent movementComponent = playerModel.getMovementComponent();
         HealthComponent healthComponent = playerModel.getHealthComponent();
         healthComponent.regenerateHealth(PlayerModel.CurrentStats.getRegenHealth());
@@ -87,7 +86,8 @@ public class EntityFactory {
                 enemy,
                 movementComponent,
                 healthComponent,
-                createFistsWeaponModel(world, bodyManager, enemyConfig.getBaseDamage()*level, enemyConfig.getAttackRange()),
+                createFistsWeaponModel(world, bodyManager, enemyConfig.getBaseDamage()*level, enemyConfig.getAttackRange(),
+                    enemyConfig.getBaseAttackCooldown()),
                 ceil(enemyConfig.getReward() * (1 + level * mlt)),
                 BodyFactory.createEnemyBody(world, x, y, enemy),
                 bodyManager,
@@ -99,7 +99,8 @@ public class EntityFactory {
                 enemy,
                 movementComponent,
                 healthComponent,
-                createFistsWeaponModel(world, bodyManager, enemyConfig.getBaseDamage()*level, enemyConfig.getAttackRange()),
+                createFistsWeaponModel(world, bodyManager, enemyConfig.getBaseDamage()*level, enemyConfig.getAttackRange(),
+                    enemyConfig.getBaseAttackCooldown()),
                 ceil(enemyConfig.getReward() * (1 + level * mlt)),
                 BodyFactory.createEnemyBody(world, x, y, enemy),
                 bodyManager,
@@ -111,7 +112,8 @@ public class EntityFactory {
                 enemy,
                 movementComponent,
                 healthComponent,
-                createFistsWeaponModel(world, bodyManager, enemyConfig.getBaseDamage()*level, enemyConfig.getAttackRange()),
+                createFistsWeaponModel(world, bodyManager, enemyConfig.getBaseDamage()*level, enemyConfig.getAttackRange(),
+                    enemyConfig.getBaseAttackCooldown()),
                 ceil(enemyConfig.getReward() * (1 + level * mlt)),
                 BodyFactory.createEnemyBody(world, x, y, enemy),
                 bodyManager,
@@ -123,84 +125,14 @@ public class EntityFactory {
         }
     }
 
-    /*
-    public static RusherEnemyModel createRusherEnemyModel(World world, BodyManager bodyManager, float x, float y, int level) {
-        RusherEnemyData rusherConfig = GameConfig.getRusherEnemyConfig();
-        MovementComponent movementComponent = new MovementComponent(
-            rusherConfig.getBaseSpeed()*(1 + level*mlt),
-            Vector2.Zero
-        );
-        HealthComponent healthComponent = new HealthComponent(
-            ceil(rusherConfig.getBaseHp()*(1 + level*mlt)),
-            ceil(rusherConfig.getBaseHp()*(1 + level*mlt))
-        );
 
-        return new RusherEnemyModel(
-            Category.ENEMY_RUSHER,
-            movementComponent,
-            healthComponent,
-            createFistsWeaponModel(world, bodyManager, rusherConfig.getBaseDamage()*level, rusherConfig.getAttackRange()),
-            ceil(rusherConfig.getReward()*(1 + level*mlt)),
-            BodyFactory.createRusherEnemyBody(world, x, y),
-            bodyManager,
-            rusherConfig.getWidth(),
-            rusherConfig.getHeight()
-        );
-    }
-    public static AnimanEnemyModel createAnimanEnemyModel(World world, BodyManager bodyManager, float x, float y, int level) {
-        AnimanEnemyData animanConfig = GameConfig.getAnimanEnemyConfig();
-        MovementComponent movementComponent = new MovementComponent(
-            animanConfig.getBaseSpeed()*(1 + level*mlt),
-            Vector2.Zero
-        );
-        HealthComponent healthComponent = new HealthComponent(
-            ceil(animanConfig.getBaseHp()*(1 + level*mlt)),
-            ceil(animanConfig.getBaseHp()*(1 + level*mlt))
-        );
-        AnimanEnemyModel res = new AnimanEnemyModel(
-            Category.ENEMY_ANIMAN,
-            movementComponent,
-            healthComponent,
-            createFistsWeaponModel(world, bodyManager, animanConfig.getBaseDamage()*level, animanConfig.getAttackRange()),
-            ceil(animanConfig.getReward()*(1 + level*mlt)),
-            BodyFactory.createAnimanEnemyBody(world, x, y),
-            bodyManager,
-            animanConfig.getWidth(),
-            animanConfig.getHeight()
-        );
-        return res;
-    }
-
-    public static BossEnemyModel createBossEnemyModel(World world, BodyManager bodyManager, float x, float y, int level) {
-        BossEnemyData bossConfig = GameConfig.getBossEnemyConfig();
-        MovementComponent movementComponent = new MovementComponent(
-            bossConfig.getBaseSpeed()*(1 + level*mlt),
-            Vector2.Zero
-        );
-        HealthComponent healthComponent = new HealthComponent(
-            ceil(bossConfig.getBaseHp()*(1 + level*mlt)),
-            ceil(bossConfig.getBaseHp()*(1 + level*mlt))
-        );
-
-        return new BossEnemyModel(
-            Category.ENEMY_BOSS,
-            movementComponent,
-            healthComponent,
-            createFistsWeaponModel(world, bodyManager, bossConfig.getBaseDamage()*level, bossConfig.getAttackRange()),
-            ceil(bossConfig.getReward()*(1 + level*mlt)),
-            BodyFactory.createBossEnemyBody(world, x, y),
-            bodyManager,
-            bossConfig.getWidth(),
-            bossConfig.getHeight());
-    }
-    */
-
-    public static FistsWeaponModel createFistsWeaponModel(World world, BodyManager bodyManager, float damage, float attackRange) {
+    public static FistsWeaponModel createFistsWeaponModel(World world, BodyManager bodyManager, float damage, float attackRange,
+                                                          float attackCooldown) {
         WeaponData weaponConfig = GameConfig.getWeaponConfig(WeaponType.FISTS);
         assert weaponConfig != null;
         MeleeAttackComponent attackComponent = new MeleeAttackComponent(
             ceil(damage),
-            weaponConfig.getAttackCooldown(),
+            attackCooldown,
             attackRange,
             world,
             bodyManager
@@ -208,12 +140,12 @@ public class EntityFactory {
 
         return new FistsWeaponModel(attackComponent);
     }
-    public static Ak47WeaponModel createAk47WeaponModel(World world, BodyManager bodyManager) {
+    public static Ak47WeaponModel createAk47WeaponModel(World world, BodyManager bodyManager, float attackCooldown) {
         WeaponData weaponConfig = GameConfig.getWeaponConfig(WeaponType.AK47);
         assert weaponConfig != null;
         GunshotAttackComponent attackComponent = new GunshotAttackComponent(
             PlayerModel.CurrentStats.getDamage(),
-            weaponConfig.getAttackCooldown(),
+            attackCooldown,
             weaponConfig.getAttackRange(),
             0,
             world,

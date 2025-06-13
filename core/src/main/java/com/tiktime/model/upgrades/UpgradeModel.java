@@ -8,11 +8,11 @@ public final class UpgradeModel {
     private int money;
 
     private UpgradeModel() {
-        manager = new UpgradeManager();
-        manager.addUpgrade(new Upgrade(UpgradeType.HP));
-        manager.addUpgrade(new Upgrade(UpgradeType.SPEED));
-        manager.addUpgrade(new Upgrade(UpgradeType.DAMAGE));
-        manager.addUpgrade(new Upgrade(UpgradeType.REGEN));
+        manager = new UpgradeManager().addUpgrade(new Upgrade(UpgradeType.HP))
+            .addUpgrade(new Upgrade(UpgradeType.SPEED))
+            .addUpgrade(new Upgrade(UpgradeType.DAMAGE))
+            .addUpgrade(new Upgrade(UpgradeType.REGEN))
+            .addUpgrade(new Upgrade(UpgradeType.ATTACK_COOLDOWN));
 
         preferencesUpgradeStorage = new PreferencesUpgradeStorage(MagicConstants.UPGRADES_PREFERENCES_NAME);
         money = preferencesUpgradeStorage.loadMoney();

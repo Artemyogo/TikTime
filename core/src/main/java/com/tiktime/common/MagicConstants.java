@@ -22,6 +22,11 @@ public final class MagicConstants {
     public static final float AK47_IDLE_FRAME_DURATION = 0.1f;
     public static final float RUSHER_ATTACK_FRAME_DURATION = 0.1f;
     public static final float RUSHER_DEATH_FRAME_DURATION = 0.1f;
+    public static final float MLT_ATTACK_FRAME_DURATION = 0.45f;
+    public static final float MLT_SPEED_PLAYER_FRAME_DURATION = 0.005f;
+    public static final float MLT_SPEED_ENEMY_FRAME_DURATION = 0.22f;
+
+
 
     public static final float ENEMY_DEATH_TIME = 0.5f;
     public static final float ENEMY_BASE_DAMAGE_TIME = 0.1f;

@@ -1,8 +1,6 @@
 package com.tiktime.common.configs.configdata;
 
 public class WeaponData {
-    protected int damage;
-    protected float attackCooldown;
     protected float width;
     protected float height;
     protected float offsetX;
@@ -10,14 +8,6 @@ public class WeaponData {
     protected float offsetAttackX;
     protected float offsetAttackY;
     protected float attackRange;
-
-    public int getDamage() {
-        return damage;
-    }
-
-    public float getAttackCooldown() {
-        return attackCooldown;
-    }
 
     public float getWidth() {
         return width;

@@ -1,5 +1,6 @@
 package com.tiktime.view.enteties.livingenteties.enemies;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
@@ -20,10 +21,11 @@ public class AllEnemyView {
     }
 
     public void addEnemy(float x, float y, float width, float height, int curHealth, int maxHealth, int id, Direction direction,
-                         LivingEntityState state, EnemyType enemyType, float runFrameDuration) {
+                         LivingEntityState state, EnemyType enemyType, float speedFrameDuration, float attackFrameDuration) {
         switch (enemyType) {
             case RUSHER: {
-                enemyViews.put(id, new RusherEnemyView(x, y, width, height, curHealth, maxHealth, id, direction, state, worldBatch, runFrameDuration));
+                enemyViews.put(id, new RusherEnemyView(x, y, width, height, curHealth, maxHealth, id,
+                    direction, state, worldBatch, speedFrameDuration, attackFrameDuration));
                 break;
             }
 
@@ -40,6 +42,12 @@ public class AllEnemyView {
 
     public void setEnemyCoordinates(float x, float y, int id) {
         EnemyView enemyView = enemyViews.get(id);
+        if (enemyView == null) {
+            Gdx.app.log("AllEnemyView", String.valueOf(id));
+            enemyViews.values().forEach(e -> {
+                Gdx.app.log("AllEnemyView", String.valueOf(e.getId()));
+            });
+        }
         enemyView.setPosition(x, y);
     }
 

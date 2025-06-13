@@ -1,5 +1,6 @@
 package com.tiktime.view.enteties;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
@@ -16,19 +17,30 @@ public class AnimationManager {
     }
 
     public void set(String name) {
-        /// TODO i think that here should just start from the begining frames (stateTime to 0)
-        /// TODO now i dont think so 09.05
         if (!name.equals(currentAnim)) {
             currentAnim = name;
             stateTime = 0;
         }
-//        currentAnim = name;
-//        stateTime = 0;
     }
 
     public TextureRegion getCurrentFrame() {
-//        Gdx.app.log("AnimationManager", "Current frame: " + currentAnim);
         return animations.get(currentAnim).getKeyFrame(stateTime);
+    }
+
+    public String getCurrentAnimation() {
+        return currentAnim;
+    }
+
+    public boolean isAnimationFinished() {
+        if (animations.get(currentAnim) == null) {
+            return true;
+        }
+
+        return animations.get(currentAnim).isAnimationFinished(stateTime);
+    }
+
+    public void resetAnimation() {
+        stateTime = 0;
     }
 
     public void update(float delta) {

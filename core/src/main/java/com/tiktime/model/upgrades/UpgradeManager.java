@@ -16,10 +16,12 @@ public class UpgradeManager {
         return upgrades.size();
     }
 
-    public void addUpgrade(Upgrade upgrade) {
+    public UpgradeManager addUpgrade(Upgrade upgrade) {
         if (upgrade == null) throw new IllegalArgumentException("Upgrade cannot be null");
 
         upgrades.add(upgrade);
+
+        return this;
     }
 
     public Upgrade getUpgrade(UpgradeType type) {

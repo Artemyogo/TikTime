@@ -8,25 +8,21 @@ import com.tiktime.common.LivingEntityState;
 import com.tiktime.common.MagicConstants;
 
 public class RusherEnemyView extends EnemyView {
-    private final float runFrameDuration;
     public static final String atlasPath = MagicConstants.RUSHER_ATLAS_PATH;
     public RusherEnemyView(float x, float y, float width, float height, int curHealth, int maxHealth,
                            int id, Direction direction, LivingEntityState livingEntityState,
-                           SpriteBatch batch, float runFrameDuration) {
-        super(x, y, width, height, curHealth, maxHealth, id, direction, livingEntityState, EnemyType.RUSHER, atlasPath, batch);
-        this.runFrameDuration = runFrameDuration;
+                           SpriteBatch batch, float speedFrameDuration, float attackFrameDuration) {
+        super(x, y, width, height, curHealth, maxHealth, id, direction, livingEntityState, EnemyType.RUSHER, atlasPath, batch,
+            speedFrameDuration, attackFrameDuration);
         loadAnimations();
         updateAnimation();
     }
 
     @Override
     protected void loadAnimations() {
-//        float runFrameDuration  = 0.1f;
-        animManager.add(MagicConstants.RUSHER_RUNNING_ANIMATION_NAME, getAnimation("running-e", runFrameDuration, LivingEntityState.RUNNING.playMode));
-        animManager.add(MagicConstants.RUSHER_IDLE_ANIMATION_NAME, getAnimation("idle-e", runFrameDuration, LivingEntityState.IDLE.playMode));
+        animManager.add(MagicConstants.RUSHER_RUNNING_ANIMATION_NAME, getAnimation("running-e", speedFrameDuration, LivingEntityState.RUNNING.playMode));
+        animManager.add(MagicConstants.RUSHER_IDLE_ANIMATION_NAME, getAnimation("idle-e", speedFrameDuration, LivingEntityState.IDLE.playMode));
 
-        // TODO IDK WHAT TO SET
-        float attackFrameDuration  = MagicConstants.RUSHER_ATTACK_FRAME_DURATION;
         animManager.add(MagicConstants.RUSHER_ATTACKING_ANIMATION_NAME, getAnimation("attacking-e", attackFrameDuration,
             LivingEntityState.ATTACKING.playMode));
 
@@ -38,6 +34,5 @@ public class RusherEnemyView extends EnemyView {
     protected void updateAnimation() {
         String animName = String.format("%s-%s", "rusher", state.name().toLowerCase());
         animManager.set(animName);
-//        Gdx.app.log("RusherEnemyView", state.name().toLowerCase());
     }
 }

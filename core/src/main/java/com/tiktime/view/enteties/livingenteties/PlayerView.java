@@ -13,16 +13,15 @@ import com.tiktime.common.WeaponType;
 import com.tiktime.view.enteties.weapons.WeaponView;
 
 public class PlayerView extends LivingEntityView {
-    // TODO magiiiic
     public static final String atlasPath = "animations/player_1.atlas";
     private WeaponView weaponView;
     private int coins;
 
     public PlayerView(float x, float y, float width, float height, int curHealth, int maxHealth, int coins,
                       Direction direction, LivingEntityState state, WeaponType weapon,
-                      SpriteBatch batch) {
-        super(x, y, width, height, curHealth, maxHealth, direction, state, atlasPath, batch);
-        this.weaponView = WeaponFactory.createWeapon(weapon, x, y, batch);
+                      SpriteBatch batch, float speedFrameDuration, float attackFrameDuration) {
+        super(x, y, width, height, curHealth, maxHealth, direction, state, atlasPath, batch, speedFrameDuration, attackFrameDuration);
+        this.weaponView = WeaponFactory.createWeapon(weapon, x, y, batch, attackFrameDuration);
         this.coins = coins;
         loadAnimations();
         updateAnimation();
@@ -73,10 +72,8 @@ public class PlayerView extends LivingEntityView {
 
     @Override
     protected void loadAnimations() {
-        float frameDuration  = 0.1f;
-
-        animManager.add("player-running", getAnimation("player-running", frameDuration, LivingEntityState.RUNNING.playMode));
-        animManager.add("player-idle", getAnimation("player-idle", frameDuration, LivingEntityState.IDLE.playMode));
+        animManager.add("player-running", getAnimation("player-running", speedFrameDuration, LivingEntityState.RUNNING.playMode));
+        animManager.add("player-idle", getAnimation("player-idle", speedFrameDuration, LivingEntityState.IDLE.playMode));
     }
 
     @Override

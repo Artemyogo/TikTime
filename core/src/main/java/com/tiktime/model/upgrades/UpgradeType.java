@@ -6,7 +6,8 @@ public enum UpgradeType {
     HP("health", GameConfig.getPlayerConfig().getBaseHp(), 10),
     SPEED("speed", GameConfig.getPlayerConfig().getBaseSpeed(), 0.3f),
     DAMAGE("damage", GameConfig.getPlayerConfig().getBaseDamage(), 7),
-    REGEN("regeneration", GameConfig.getPlayerConfig().getBaseRegen(), 2);
+    REGEN("regeneration", GameConfig.getPlayerConfig().getBaseRegen(), 2),
+    ATTACK_COOLDOWN("attack cooldown", GameConfig.getPlayerConfig().getBaseAttackCooldown(), 0.98f);
 
     private final String displayName;
     private final float baseValue;

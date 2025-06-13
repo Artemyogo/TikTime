@@ -35,6 +35,10 @@ public class PlayerModel extends WeaponableLivingEntityModel implements Categori
             return upgradeModel.getUpgrade(UpgradeType.SPEED).getLevel() * UpgradeType.SPEED.getStep() + playerConfig.getBaseSpeed();
         }
 
+        public static float getAttackCooldown() {
+            return (float) Math.pow(UpgradeType.ATTACK_COOLDOWN.getStep(), upgradeModel.getUpgrade(UpgradeType.ATTACK_COOLDOWN).getLevel()) * playerConfig.getBaseAttackCooldown();
+        }
+
         public static int getDamage() {
             return upgradeModel.getUpgrade(UpgradeType.DAMAGE).getLevel() * (int)UpgradeType.DAMAGE.getStep() + playerConfig.getBaseDamage();
         }

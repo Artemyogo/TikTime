@@ -115,16 +115,15 @@ public class WorldView implements Renderable, Disposable {
     }
 
     public PlayerView setAndGetPlayer(float x, float y, float width, float height, int curHealth, int maxHealth, int coins,
-                          Direction direction, LivingEntityState state, WeaponType weapon) {
-        return playerView = new PlayerView(x, y, width, height, curHealth, maxHealth, coins, direction, state, weapon, worldBatch);
+                          Direction direction, LivingEntityState state, WeaponType weapon, float speedFrameDuration, float attackFrameDuration) {
+        return playerView = new PlayerView(x, y, width, height, curHealth, maxHealth, coins, direction, state, weapon, worldBatch,
+            speedFrameDuration, attackFrameDuration);
     }
 
     public PlayerView getPlayerView() {
         return playerView;
     }
 
-    // TODO: DELETE THIS
-    // THIS IS FOR DEBUG LOL DONT DELETE THIS
     Vector3 weaponCoords, screenCoords;
     public void setWeaponCoords(Vector3 weaponCoords) {
         this.weaponCoords = weaponCoords;

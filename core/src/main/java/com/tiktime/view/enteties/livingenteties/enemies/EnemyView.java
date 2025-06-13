@@ -10,8 +10,8 @@ public abstract class EnemyView extends LivingEntityView {
     private final int id;
     public EnemyView(float x, float y, float width, float height, int curHealth, int maxHealth,
                      int id, Direction direction, LivingEntityState livingEntityState,
-                     EnemyType enemyType, String atlasPath, SpriteBatch batch) {
-        super(x, y, width, height, curHealth, maxHealth, direction, livingEntityState, atlasPath, batch);
+                     EnemyType enemyType, String atlasPath, SpriteBatch batch, float speedFrameDuration, float attackFrameDuration) {
+        super(x, y, width, height, curHealth, maxHealth, direction, livingEntityState, atlasPath, batch, speedFrameDuration, attackFrameDuration);
         this.id = id;
     }
 
