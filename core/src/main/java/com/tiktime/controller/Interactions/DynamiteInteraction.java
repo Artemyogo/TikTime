@@ -9,7 +9,7 @@ import com.tiktime.model.entities.Category;
 import com.tiktime.model.entities.DynamiteModel;
 import com.tiktime.model.entities.weapons.BulletModel;
 
-public class DynamiteInteraction extends Interaction{
+public class DynamiteInteraction extends Interaction {
     IExplosive explosion;
     public DynamiteInteraction(IExplosive explosion) {
         super(Category.combine(Category.PLAYER, Category.ENEMY, Category.BULLET), Category.DYNAMITE.getBits());

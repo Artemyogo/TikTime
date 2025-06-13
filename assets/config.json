@@ -113,6 +113,13 @@
     "width": 0.5,
     "height": 1
   },
+  "healthPotion": {
+    "density": 0,
+    "restitution": 0,
+    "friction": 0.5,
+    "width": 1,
+    "height": 1
+  },
   "bullet": {
     "density": 0.1,
     "restitution": 0,

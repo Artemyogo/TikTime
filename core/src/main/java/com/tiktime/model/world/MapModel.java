@@ -107,10 +107,16 @@ public class MapModel implements Disposable {
 //        BodyFactory.createBodiesOnLayer(world, dynamiteLayer, Category.DYNAMITE, BodyDef.BodyType.StaticBody);
     }
 
+    public void createHealthPotions(World world, BodyManager bodyManager) {
+        TiledMapTileLayer healthPotionLayer = (TiledMapTileLayer) map.getLayers().get(MagicConstants.HEALTH_POTIONS_LAYER_NAME);
+        EntityFactory.createHealthPotionModels(world, bodyManager, healthPotionLayer);
+    }
+
     public void createAll(World world, BodyManager bodyManager) {
         createWalls(world);
         createDoors(world);
         createDynamites(world, bodyManager);
+        createHealthPotions(world, bodyManager);
     }
 
     @Override

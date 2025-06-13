@@ -137,7 +137,8 @@ public class WorldController implements Pausable, Disposable {
             addInteraction(new EntityInteraction()).
             addInteraction(new MeleeAttackInteraction()).
             addInteraction(new BulletInteraction()).
-            addInteraction(new EnemyWallInteraction()));
+            addInteraction(new EnemyWallInteraction()).
+            addInteraction(new HealthPotionInteraction()));
     }
 
     public void changePausedStatus() {

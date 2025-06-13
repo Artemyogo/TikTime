@@ -9,6 +9,7 @@ import com.badlogic.gdx.utils.Array;
 import com.tiktime.common.configs.GameConfig;
 import com.tiktime.common.MagicConstants;
 import com.tiktime.common.configs.configdata.*;
+import com.tiktime.model.entities.HealthPotion;
 import com.tiktime.model.world.BodyManager;
 import com.tiktime.model.entities.Category;
 import com.tiktime.model.entities.DynamiteModel;
@@ -229,6 +230,13 @@ public class EntityFactory {
         ArrayList<Body> dynamiteBodies = BodyFactory.createBodiesOnLayer(world, dynamiteLayer, Category.DYNAMITE, BodyDef.BodyType.StaticBody);
         Array<DynamiteModel> res = new Array<>();
         dynamiteBodies.forEach(body -> res.add(new DynamiteModel(body, bodyManager, (TiledMapTileLayer.Cell) body.getUserData())));
+        return res;
+    }
+
+    public static Array<HealthPotion> createHealthPotionModels(World world, BodyManager bodyManager, TiledMapTileLayer healthPotionLayer) {
+        ArrayList<Body> healthPotionBodies = BodyFactory.createBodiesOnLayer(world, healthPotionLayer, Category.HEALTH_POTION, BodyDef.BodyType.StaticBody);
+        Array<HealthPotion> res = new Array<>();
+        healthPotionBodies.forEach(body -> res.add(new HealthPotion(body, bodyManager, (TiledMapTileLayer.Cell) body.getUserData())));
         return res;
     }
 }

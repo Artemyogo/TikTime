@@ -101,6 +101,10 @@ public class BodyFactory {
                         FixtureFactory.setWallFixture(body);
                         break;
                     }
+                    case HEALTH_POTION: {
+                        FixtureFactory.setHealthPotionFixture(body);
+                        break;
+                    }
                     default: {
                         throw new IllegalArgumentException("Invalid category");
                     }

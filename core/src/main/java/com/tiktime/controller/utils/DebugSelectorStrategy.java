@@ -8,7 +8,7 @@ import java.util.Random;
 public class DebugSelectorStrategy implements MapSelectorStrategy {
     @Override
     public String selectMapPath(List<String> maps) {
-//        Gdx.app.log("DebugSelectorStrategy", "selectMapPath: " + maps);
-        return maps.get(3);
+        Gdx.app.log("DebugSelectorStrategy", "selectMapPath: " + maps);
+        return maps.get(6);
     }
 }

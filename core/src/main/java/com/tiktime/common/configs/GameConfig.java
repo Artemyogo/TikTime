@@ -14,7 +14,7 @@ public final class GameConfig {
     public static WeaponData getWeaponConfig(WeaponType weapon) {
         switch (weapon) {
             case AK47:
-                return data.getAk47(); // currently weapon == ak47
+                return data.getAk47();
             case FISTS:
                 return data.getFists();
             case GLOCK:
@@ -52,7 +52,7 @@ public final class GameConfig {
     }
 
     public static WeaponData getAk47WeaponConfig() {
-        return data.getWeapon(); // currently weapon == ak47
+        return data.getAk47();
     }
 
     public static WallData getWallConfig() {
@@ -65,6 +65,10 @@ public final class GameConfig {
 
     public static DynamiteData getDynamiteConfig() {
         return data.getDynamite();
+    }
+
+    public static HealthPotionData getHealthPotionConfig() {
+        return data.getHealthPotion();
     }
 
     /**

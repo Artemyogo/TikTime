@@ -15,6 +15,7 @@ public class ConfigData {
     private FistsWeaponData fists;
     private AnimanEnemyData animan;
     private BossEnemyData boss;
+    private HealthPotionData healthPotion;
 
 
     public AnimanEnemyData getAniman() {
@@ -62,5 +63,9 @@ public class ConfigData {
 
     public BulletData getBullet() {
         return bullet;
+    }
+
+    public HealthPotionData getHealthPotion() {
+        return healthPotion;
     }
 }

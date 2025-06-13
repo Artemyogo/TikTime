@@ -62,6 +62,11 @@ public class FixtureFactory {
             Category.combine(Category.PLAYER, Category.ENEMY, Category.BULLET), false, body);
     }
 
+    public static void setHealthPotionFixture(Body body) {
+        setSensorFixture(GameConfig.getHealthPotionConfig().getWidth(), GameConfig.getHealthPotionConfig().getHeight(),
+                        Category.HEALTH_POTION.getBits(), Category.combine(Category.PLAYER), body);
+    }
+
     public static void setEnemyFixture(Body body, Category enemy) {
         setFixture(GameConfig.getEnemyConfig(enemy),
             enemy.getBits(),
@@ -94,7 +99,7 @@ public class FixtureFactory {
 
     public static void setPlayerFixtureDef(Body body) {
         setFixture(GameConfig.getPlayerConfig(), Category.PLAYER.getBits(),
-            Category.combine(Category.BULLET, Category.DOOR, Category.DYNAMITE, Category.ENEMY, Category.WALL, Category.ENEMY_ATTACK),
+            Category.combine(Category.HEALTH_POTION, Category.BULLET, Category.DOOR, Category.DYNAMITE, Category.ENEMY, Category.WALL, Category.ENEMY_ATTACK),
             false, body);
     }
 

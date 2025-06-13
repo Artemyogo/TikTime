@@ -53,6 +53,7 @@ public final class MagicConstants {
     public static final String WALLS_LAYER_NAME = "walls";
     public static final String DOORS_LAYER_NAME = "doors";
     public static final String DYNAMITES_LAYER_NAME = "dynamite";
+    public static final String HEALTH_POTIONS_LAYER_NAME = "healthPotions";
 
     public static final String PLAYER_SPAWN_NAME = "playerSpawn";
 
