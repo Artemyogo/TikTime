@@ -1,7 +1,5 @@
 package com.tiktime.common;
 
-import com.tiktime.view.world.WorldView;
-
 public final class MagicConstants {
     private MagicConstants() {}
     public static final boolean DEBUG = false;

@@ -11,7 +11,10 @@ public class DynamiteModel extends EntityModel {
         this.cell = cell;
     }
 
-    public TiledMapTileLayer.Cell getCell() {
-        return cell;
+    @Override
+    public void deleteBody() {
+        super.deleteBody();
+        cell.setTile(null);
     }
+
 }

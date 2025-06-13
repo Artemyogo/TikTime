@@ -73,7 +73,7 @@ public class BulletController implements Pausable, EventListener, Disposable {
     @Override
     public void dispose() {
         unsubscribeOnEvents();
-        allBulletsView.clear();
+//        allBulletsView.clear();
     }
 
     @Override

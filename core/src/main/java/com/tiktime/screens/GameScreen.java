@@ -17,7 +17,7 @@ public class GameScreen extends ScreenAdapter {
 
     @Override
     public void show() {
-        Gdx.app.log("GameScreen", "Showing");
+//        Gdx.app.log("GameScreen", "Showing");
         worldController.activateInputProcessor();
     }
 

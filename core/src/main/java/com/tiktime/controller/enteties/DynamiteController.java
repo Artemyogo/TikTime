@@ -1,8 +1,6 @@
 package com.tiktime.controller.enteties;
 
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.physics.box2d.Body;
-import com.tiktime.model.entities.DynamiteModel;
 import com.tiktime.model.world.WorldModel;
 
 public class DynamiteController implements IExplosive {
@@ -14,9 +12,6 @@ public class DynamiteController implements IExplosive {
 
     @Override
     public void explosion(Body body, float radius, float force) {
-        DynamiteModel dynamiteModel = (DynamiteModel) body.getUserData();
-        TiledMapTileLayer.Cell cell = dynamiteModel.getCell();
-        cell.setTile(null);
         worldModel.explosion(body.getPosition().x, body.getPosition().y, radius, force);
     }
 }
