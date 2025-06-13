@@ -5,7 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
 import com.tiktime.common.MagicConstants;
-import com.tiktime.model.BodyManager;
+import com.tiktime.model.world.BodyManager;
 import com.tiktime.model.entities.Categoriable;
 import com.tiktime.model.entities.Category;
 import com.tiktime.model.entities.components.HealthComponent;

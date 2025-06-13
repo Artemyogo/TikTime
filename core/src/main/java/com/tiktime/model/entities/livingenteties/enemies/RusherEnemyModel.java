@@ -2,7 +2,7 @@ package com.tiktime.model.entities.livingenteties.enemies;
 
 import com.badlogic.gdx.physics.box2d.Body;
 import com.tiktime.common.configs.GameConfig;
-import com.tiktime.model.BodyManager;
+import com.tiktime.model.world.BodyManager;
 import com.tiktime.model.entities.Category;
 import com.tiktime.model.entities.components.HealthComponent;
 import com.tiktime.model.entities.components.MovementComponent;

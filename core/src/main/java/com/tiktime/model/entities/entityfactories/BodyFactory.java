@@ -81,25 +81,29 @@ public class BodyFactory {
         return body;
     }
 
-    public static List<Body> createBodiesOnLayer(World world, TiledMapTileLayer layer, Category category, BodyDef.BodyType bodyType) {
-        if(layer == null) return null;
-        List<Body> res = new ArrayList<>();
+    public static ArrayList<Body> createBodiesOnLayer(World world, TiledMapTileLayer layer, Category category, BodyDef.BodyType bodyType) {
+        ArrayList<Body> res = new ArrayList<>();
+        if(layer == null) return res;
         for (int x = 0; x < layer.getWidth(); x++) {
             for (int y = 0; y < layer.getHeight(); y++) {
                 if (layer.getCell(x, y) == null) continue;
                 Body body = createBody(world, BodyDefFactory.getBodyDef(x, y, bodyType, MagicConstants.BODY_WIDTH, MagicConstants.BODY_HEIGHT));
                 switch (category) {
-                    case DOOR:
+                    case DOOR: {
                         FixtureFactory.setDoorFixture(body);
                         break;
-                    case DYNAMITE:
+                    }
+                    case DYNAMITE: {
                         FixtureFactory.setDynamiteFixture(body);
                         break;
-                    case WALL:
+                    }
+                    case WALL: {
                         FixtureFactory.setWallFixture(body);
                         break;
-                    default:
-                            throw new IllegalArgumentException("Invalid category");
+                    }
+                    default: {
+                        throw new IllegalArgumentException("Invalid category");
+                    }
                 }
                 body.setUserData(layer.getCell(x, y));
                 res.add(body);

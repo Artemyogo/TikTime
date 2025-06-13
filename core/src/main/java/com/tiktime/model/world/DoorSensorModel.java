@@ -1,4 +1,4 @@
-package com.tiktime.model;
+package com.tiktime.model.world;
 
 public class DoorSensorModel {
     private int counter = 0;

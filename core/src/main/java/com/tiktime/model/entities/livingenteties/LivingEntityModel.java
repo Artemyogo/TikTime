@@ -1,15 +1,11 @@
 package com.tiktime.model.entities.livingenteties;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
-import com.tiktime.model.BodyManager;
+import com.tiktime.model.world.BodyManager;
 import com.tiktime.model.entities.EntityModel;
 import com.tiktime.model.entities.components.HealthComponent;
 import com.tiktime.model.entities.components.MovementComponent;
-import com.tiktime.model.events.EventManager;
-import com.tiktime.model.events.GameEvent;
-import com.tiktime.model.events.GameEventType;
 
 import static com.badlogic.gdx.math.MathUtils.ceil;
 

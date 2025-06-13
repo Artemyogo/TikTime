@@ -2,8 +2,7 @@ package com.tiktime.model.entities.livingenteties;
 
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
-import com.tiktime.common.Direction;
-import com.tiktime.model.BodyManager;
+import com.tiktime.model.world.BodyManager;
 import com.tiktime.model.entities.components.HealthComponent;
 import com.tiktime.model.entities.components.MovementComponent;
 import com.tiktime.model.entities.weapons.WeaponModel;

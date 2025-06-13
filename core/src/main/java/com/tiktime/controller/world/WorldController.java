@@ -4,11 +4,11 @@ import com.badlogic.gdx.*;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.utils.Disposable;
 import com.tiktime.common.MagicConstants;
 import com.tiktime.controller.Interactions.*;
+import com.tiktime.controller.enteties.DynamiteController;
 import com.tiktime.controller.inputprocessors.WorldInputProcessor;
 import com.tiktime.controller.utils.DebugSelectorStrategy;
 import com.tiktime.controller.utils.MapSelector;
@@ -16,20 +16,18 @@ import com.tiktime.controller.utils.RandomSelectorStrategy;
 import com.tiktime.controller.enteties.BulletController;
 import com.tiktime.controller.enteties.EnemyController;
 import com.tiktime.controller.enteties.PlayerController;
-import com.tiktime.model.DoorSensorModel;
-import com.tiktime.model.MapModel;
-import com.tiktime.model.WorldModel;
-import com.tiktime.common.configs.GameConfig;
-import com.tiktime.common.configs.configdata.WeaponData;
+import com.tiktime.model.world.DoorSensorModel;
+import com.tiktime.model.world.MapModel;
+import com.tiktime.model.world.WorldModel;
+import com.tiktime.model.entities.DynamiteModel;
 import com.tiktime.model.entities.livingenteties.PlayerModel;
-import com.tiktime.common.WeaponType;
 import com.tiktime.screens.Screen;
 import com.tiktime.screens.ScreenHandler;
 import com.tiktime.view.world.GameView;
 import com.tiktime.common.Pausable;
 import com.tiktime.view.world.WorldView;
 
-public class WorldController implements Pausable, Disposable, IExplosive {
+public class WorldController implements Pausable, Disposable {
     private final ScreenHandler screenHandler;
     private final GameView gameView;
 
@@ -43,6 +41,7 @@ public class WorldController implements Pausable, Disposable, IExplosive {
     private PlayerController playerController;
     private EnemyController enemyController;
     private BulletController bulletController;
+    private DynamiteController dynamiteController;
 
     private final boolean debug = MagicConstants.DEBUG_WORLD_CONTROLLER;
     private boolean paused = false;
@@ -128,23 +127,17 @@ public class WorldController implements Pausable, Disposable, IExplosive {
         playerController = new PlayerController(playerModel, worldView, screenHandler);
         enemyController = new EnemyController(worldView.getAllEnemyView(), worldModel.getEnemies());
         bulletController = new BulletController(worldView.getAllBulletsView());
+        dynamiteController = new DynamiteController(worldModel);
     }
 
     private void setCollisionController(WorldModel worldModel) {
         worldModel.setCollisionController(new CollisionController(this).
-            addInteraction(new DynamiteInteraction(this, worldModel.getBodyManager())). // TODO: this is bad, BM only in model sh be
+            addInteraction(new DynamiteInteraction(dynamiteController)).
                 addInteraction(new DoorInteraction(doorSensorModel)).
             addInteraction(new EntityInteraction()).
             addInteraction(new MeleeAttackInteraction()).
             addInteraction(new BulletInteraction()).
             addInteraction(new EnemyWallInteraction()));
-    }
-
-    @Override
-    public void explosion(Body body, float radius, float force) {
-        TiledMapTileLayer.Cell cell = (TiledMapTileLayer.Cell) body.getUserData();
-        cell.setTile(null);
-        worldModel.explosion(body.getPosition().x, body.getPosition().y, radius, force);
     }
 
     public void changePausedStatus() {

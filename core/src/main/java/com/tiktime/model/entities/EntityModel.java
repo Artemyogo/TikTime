@@ -2,7 +2,7 @@ package com.tiktime.model.entities;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import com.tiktime.model.BodyManager;
+import com.tiktime.model.world.BodyManager;
 
 public abstract class EntityModel implements Entitiable {
     public static int idNext = 0;

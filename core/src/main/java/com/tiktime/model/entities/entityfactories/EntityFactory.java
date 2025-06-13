@@ -1,12 +1,17 @@
 package com.tiktime.model.entities.entityfactories;
 
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Array;
 import com.tiktime.common.configs.GameConfig;
 import com.tiktime.common.MagicConstants;
 import com.tiktime.common.configs.configdata.*;
-import com.tiktime.model.BodyManager;
+import com.tiktime.model.world.BodyManager;
 import com.tiktime.model.entities.Category;
+import com.tiktime.model.entities.DynamiteModel;
 import com.tiktime.model.entities.components.*;
 import com.tiktime.model.entities.livingenteties.*;
 import com.tiktime.model.entities.livingenteties.enemies.AnimanEnemyModel;
@@ -15,6 +20,8 @@ import com.tiktime.model.entities.livingenteties.enemies.EnemyModel;
 import com.tiktime.model.entities.livingenteties.enemies.RusherEnemyModel;
 import com.tiktime.model.entities.weapons.*;
 import com.tiktime.common.WeaponType;
+
+import java.util.ArrayList;
 
 import static com.badlogic.gdx.math.MathUtils.ceil;
 
@@ -49,7 +56,7 @@ public class EntityFactory {
         HealthComponent healthComponent = playerModel.getHealthComponent();
         healthComponent.regenerateHealth(PlayerModel.CurrentStats.getRegenHealth());
 
-        return new PlayerModel(
+        PlayerModel newPlayerModel = new PlayerModel(
             Category.PLAYER,
             weaponModel,
             movementComponent,
@@ -57,6 +64,8 @@ public class EntityFactory {
             BodyFactory.createPlayerBody(world, x, y),
             bodyManager
         );
+
+        return newPlayerModel;
     }
 
     public static EnemyModel createEnemyModel(World world, BodyManager bodyManager, float x, float y, int level, Category enemy) {
@@ -215,5 +224,11 @@ public class EntityFactory {
     public static BulletModel createBulletModel(World world, BodyManager bodyManager, Attackable attackable,
                                                 float x, float y, float rotationDeg, Vector2 direction) {
         return new BulletModel(BodyFactory.createBulletBody(world, x, y, direction), bodyManager, attackable, rotationDeg);
+    }
+    public static Array<DynamiteModel> createDynamiteModels(World world, BodyManager bodyManager, TiledMapTileLayer dynamiteLayer) {
+        ArrayList<Body> dynamiteBodies = BodyFactory.createBodiesOnLayer(world, dynamiteLayer, Category.DYNAMITE, BodyDef.BodyType.StaticBody);
+        Array<DynamiteModel> res = new Array<>();
+        dynamiteBodies.forEach(body -> res.add(new DynamiteModel(body, bodyManager, (TiledMapTileLayer.Cell) body.getUserData())));
+        return res;
     }
 }

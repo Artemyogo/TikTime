@@ -156,6 +156,7 @@ public class EnemyController implements Pausable, EventListener, Disposable {
     @Override
     public void dispose() {
         unsubscribeOnEvents();
+        allEnemyView.clear();
     }
 
     @Override

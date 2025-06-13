@@ -1,20 +1,16 @@
 package com.tiktime.model.entities.livingenteties;
 
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
-import com.tiktime.common.Direction;
 import com.tiktime.common.WeaponType;
 import com.tiktime.common.configs.GameConfig;
 import com.tiktime.common.configs.configdata.PlayerData;
 import com.tiktime.common.configs.configdata.WeaponData;
-import com.tiktime.model.BodyManager;
+import com.tiktime.model.world.BodyManager;
 import com.tiktime.model.entities.Categoriable;
 import com.tiktime.model.entities.Category;
-import com.tiktime.model.entities.components.GunshotAttackComponent;
 import com.tiktime.model.entities.components.HealthComponent;
 import com.tiktime.model.entities.components.MovementComponent;
 import com.tiktime.model.entities.weapons.GunshotAttackable;
-import com.tiktime.model.entities.weapons.MeleeAttackable;
 import com.tiktime.model.entities.weapons.WeaponModel;
 import com.tiktime.model.events.EventManager;
 import com.tiktime.model.events.GameEvent;

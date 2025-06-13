@@ -1,12 +1,8 @@
 package com.tiktime.model.entities.components;
 
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
-import com.tiktime.model.BodyManager;
+import com.tiktime.model.world.BodyManager;
 import com.tiktime.model.entities.weapons.Attackable;
-
-import java.awt.*;
 
 public abstract class AttackComponent implements Attackable {
     protected final float attackCooldown;

@@ -13,8 +13,7 @@ import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.tiktime.controller.DeathController;
-import com.tiktime.controller.MenuController;
-import com.tiktime.model.MapModel;
+import com.tiktime.model.world.MapModel;
 import com.tiktime.view.world.Renderable;
 
 public class DeathView implements Disposable, Renderable {

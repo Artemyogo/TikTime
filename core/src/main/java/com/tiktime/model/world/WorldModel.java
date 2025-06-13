@@ -1,4 +1,4 @@
-package com.tiktime.model;
+package com.tiktime.model.world;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
@@ -34,12 +34,10 @@ public class WorldModel implements EventListener, Disposable {
     public void update(float delta){
         // ORDER IS IMPORTANT
         enemies.forEach(e -> {
-//            Gdx.app.log("WorldModel", e.getWeaponModel().toString());
             e.update(delta, player, world);
         });
         world.step(delta, velocityIterations, positionIterations);
         bodyManager.flush();
-//        Gdx.app.log("Physics", "Bodies count: " + world.getBodyCount());
     }
 
     public WorldModel(MapModel mapModel) {
@@ -82,7 +80,7 @@ public class WorldModel implements EventListener, Disposable {
             enemies.add(bossEnemyModel);
         }
 
-        mapModel.createAll(world);
+        mapModel.createAll(world, bodyManager);
         subscribeOnEvents();
     }
 
@@ -110,10 +108,6 @@ public class WorldModel implements EventListener, Disposable {
         return player;
     }
 
-    public Vector2 getPlayerPosition(){
-        return player.getPosition();
-    }
-
     public Set<EnemyModel> getEnemies(){
         return new HashSet<>(enemies);
     }
@@ -134,10 +128,6 @@ public class WorldModel implements EventListener, Disposable {
                 entity.applyForce(x, y, radius, force);
             }
         });
-    }
-
-    public float distance(Vector2 start, Vector2 end){
-        return (float) Math.hypot(start.x - end.x, start.y - end.y);
     }
 
     @Override

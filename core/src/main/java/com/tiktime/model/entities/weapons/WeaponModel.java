@@ -1,10 +1,7 @@
 package com.tiktime.model.entities.weapons;
 
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
-import com.tiktime.common.Direction;
 import com.tiktime.common.WeaponType;
-import com.tiktime.model.BodyManager;
 import com.tiktime.model.entities.components.AttackComponent;
 
 public abstract class WeaponModel implements Attackable {

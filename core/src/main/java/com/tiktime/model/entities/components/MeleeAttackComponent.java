@@ -1,10 +1,8 @@
 package com.tiktime.model.entities.components;
 
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
 import com.tiktime.common.Direction;
-import com.tiktime.model.BodyManager;
+import com.tiktime.model.world.BodyManager;
 import com.tiktime.model.entities.entityfactories.BodyFactory;
 import com.tiktime.model.entities.weapons.MeleeAttackable;
 

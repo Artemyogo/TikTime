@@ -1,7 +1,7 @@
 package com.tiktime.controller.Interactions;
 
 import com.badlogic.gdx.physics.box2d.Contact;
-import com.tiktime.model.DoorSensorModel;
+import com.tiktime.model.world.DoorSensorModel;
 import com.tiktime.model.entities.Category;
 
 public class DoorInteraction extends Interaction {

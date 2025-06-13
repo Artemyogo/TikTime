@@ -1,4 +1,4 @@
-package com.tiktime.model;
+package com.tiktime.model.world;
 
 public class TimerModel {
     private float time;

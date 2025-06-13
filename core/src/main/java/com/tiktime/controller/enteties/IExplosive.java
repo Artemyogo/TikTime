@@ -1,4 +1,4 @@
-package com.tiktime.controller.world;
+package com.tiktime.controller.enteties;
 
 import com.badlogic.gdx.physics.box2d.Body;
 
