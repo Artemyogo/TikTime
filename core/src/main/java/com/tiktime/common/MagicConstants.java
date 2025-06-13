@@ -6,9 +6,11 @@ public final class MagicConstants {
     public static final boolean DEBUG_WORLD_CONTROLLER = DEBUG || false;
     public static final boolean DEBUG_WORLD_VIEW = DEBUG || false;
 
-
     public static final String UPGRADES_PREFERENCES_NAME = "com.tiktime.upgrades";
     public static final String SETTINGS_PREFERENCES_NAME = "com.tiktime.settings";
+
+    public static final long HEALTH_POTION_TOUCH_SOUND_COOLDOWN = 500;
+    public static final int HEALTH_POTION_ADD = 10;
 
     public static final float BODY_WIDTH = 1f;
     public static final float BODY_HEIGHT = 1f;
@@ -33,6 +35,8 @@ public final class MagicConstants {
     public static final float TIME_STEP = 1 / 60f;
     public static final int VELOCITY_ITERATIONS = 6;
     public static final int POSITION_ITERATIONS = 2;
+
+    public static final String HEALTH_POTION_SOUND_PATH = "health_potion_sound.wav";
 
     public static final String AK47_ATLAS_PATH = "animations/ak47weapon.atlas";
     public static final String RUSHER_ATLAS_PATH = "animations/rusher.atlas";

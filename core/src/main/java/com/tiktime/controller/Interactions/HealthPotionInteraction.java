@@ -22,6 +22,7 @@ public class HealthPotionInteraction extends Interaction {
         PlayerModel playerModel = (PlayerModel) playerFixture.getBody().getUserData();
 
         healthPotion.onTouch(playerModel);
+        healthPotion.playSound();
         healthPotion.deleteBody();
     }
 
