@@ -9,7 +9,7 @@ public final class MagicConstants {
     public static final String UPGRADES_PREFERENCES_NAME = "com.tiktime.upgrades";
     public static final String SETTINGS_PREFERENCES_NAME = "com.tiktime.settings";
 
-    public static final long HEALTH_POTION_TOUCH_SOUND_COOLDOWN = 500;
+    public static final long HEALTH_POTION_TOUCH_SOUND_COOLDOWN = 300;
     public static final int HEALTH_POTION_ADD = 10;
 
     public static final float BODY_WIDTH = 1f;
