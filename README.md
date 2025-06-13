@@ -1,5 +1,6 @@
 # TikTime
 Programowanie Obiektowe 2025
 
-# How to run
-```gradlew dist``` creates dist directory in lwjgl3 directory with .jar
+![](photo_2025-06-13_23-50-54.jpg)
+![](photo_2025-06-13_23-50-49.jpg)
+![](photo_2025-06-13_23-49-35.jpg)
