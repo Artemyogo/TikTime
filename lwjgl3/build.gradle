@@ -1,31 +1,21 @@
-
-buildscript {
-  repositories {
-    gradlePluginPortal()
-  }
-  dependencies {
-    classpath "io.github.fourlastor:construo:1.7.1"
-    if(enableGraalNative == 'true') {
-      classpath "org.graalvm.buildtools.native:org.graalvm.buildtools.native.gradle.plugin:0.9.28"
-    }
-  }
-}
 plugins {
-  id "application"
+  id 'com.github.johnrengelman.shadow' version '8.1.1'
 }
-apply plugin: 'io.github.fourlastor.construo'
 
+def appName = 'TikTime'
+def gdxVersion = '1.11.0'
+def projectVersion = '1.0.0'
 
-import io.github.fourlastor.construo.Target
+sourceSets.main.resources.srcDirs += [rootProject.file('assets').path]
 
-sourceSets.main.resources.srcDirs += [ rootProject.file('assets').path ]
 mainClassName = 'com.tiktime.lwjgl3.Lwjgl3Launcher'
-application.setMainClass(mainClassName)
-eclipse.project.name = appName + '-lwjgl3'
-java.sourceCompatibility = 8
-java.targetCompatibility = 8
-if (JavaVersion.current().isJava9Compatible()) {
-        compileJava.options.release.set(8)
+application {
+  mainClass.set(mainClassName)
+}
+
+java {
+  sourceCompatibility = JavaVersion.VERSION_1_8
+  targetCompatibility = JavaVersion.VERSION_1_8
 }
 
 dependencies {
@@ -34,166 +24,34 @@ dependencies {
   implementation "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
   implementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
   implementation project(':core')
-  implementation("com.badlogicgames.gdx:gdx-tools:$gdxVersion"){exclude group: 'com.badlogicgames.gdx', module: 'gdx-backend-lwjgl'}
-
-  if(enableGraalNative == 'true') {
-    implementation "io.github.berstanio:gdx-svmhelper-backend-lwjgl3:$graalHelperVersion"
-      implementation "io.github.berstanio:gdx-svmhelper-extension-box2d:$graalHelperVersion"
-      implementation "io.github.berstanio:gdx-svmhelper-extension-freetype:$graalHelperVersion"
-
-    }
+  implementation("com.badlogicgames.gdx:gdx-tools:$gdxVersion") {
+    exclude group: 'com.badlogicgames.gdx', module: 'gdx-backend-lwjgl'
+  }
 }
 
-def os = System.properties['os.name'].toLowerCase()
+shadowJar {
+  group = 'build'
+  description = 'Assemble fat jar including all dependencies'
+
+  from(rootProject.file('assets')) {
+    into 'assets'
+  }
+
+  archiveClassifier.set('')
+
+  manifest {
+    attributes(
+      'Main-Class': 'com.tiktime.lwjgl3.Lwjgl3Launcher',
+      'Class-Path': 'assets/'
+    )
+  }
+}
+
+jar.enabled = false
 
 run {
   workingDir = rootProject.file('assets').path
-// You can uncomment the next line if your IDE claims a build failure even when the app closed properly.
-  //setIgnoreExitValue(true)
-
-  if (os.contains('mac')) jvmArgs += "-XstartOnFirstThread"
-}
-
-jar {
-// sets the name of the .jar file this produces to the name of the game or app, with the version after.
-  archiveFileName.set("${appName}-${projectVersion}.jar")
-// the duplicatesStrategy matters starting in Gradle 7.0; this setting works.
-  duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
-  dependsOn configurations.runtimeClasspath
-  from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
-// these "exclude" lines remove some unnecessary duplicate files in the output JAR.
-  exclude('META-INF/INDEX.LIST', 'META-INF/*.SF', 'META-INF/*.DSA', 'META-INF/*.RSA')
-  dependencies {
-    exclude('META-INF/INDEX.LIST', 'META-INF/maven/**')
+  if (System.properties['os.name'].toLowerCase().contains('mac')) {
+    jvmArgs += "-XstartOnFirstThread"
   }
-// setting the manifest makes the JAR runnable.
-  manifest {
-    attributes 'Main-Class': project.mainClassName
-  }
-
-// this last step may help on some OSes that need extra instruction to make runnable JARs.
-  doLast {
-    file(archiveFile).setExecutable(true, false)
-  }
-}
-
-// Builds a JAR that only includes the files needed to run on macOS, not Windows or Linux.
-// The file size for a Mac-only JAR is about 7MB smaller than a cross-platform JAR.
-tasks.register("jarMac") {
-  dependsOn("jar")
-  group("build")
-  jar.archiveFileName.set("${appName}-${projectVersion}-mac.jar")
-  jar.exclude("windows/x86/**", "windows/x64/**", "linux/arm32/**", "linux/arm64/**", "linux/x64/**", "**/*.dll", "**/*.so",
-    'META-INF/INDEX.LIST', 'META-INF/*.SF', 'META-INF/*.DSA', 'META-INF/*.RSA')
-  dependencies {
-    jar.exclude("windows/x86/**", "windows/x64/**", "linux/arm32/**", "linux/arm64/**", "linux/x64/**",
-      'META-INF/INDEX.LIST', 'META-INF/maven/**')
-  }
-}
-
-// Builds a JAR that only includes the files needed to run on Linux, not Windows or macOS.
-// The file size for a Linux-only JAR is about 5MB smaller than a cross-platform JAR.
-tasks.register("jarLinux") {
-  dependsOn("jar")
-  group("build")
-  jar.archiveFileName.set("${appName}-${projectVersion}-linux.jar")
-  jar.exclude("windows/x86/**", "windows/x64/**", "macos/arm64/**", "macos/x64/**", "**/*.dll", "**/*.dylib",
-    'META-INF/INDEX.LIST', 'META-INF/*.SF', 'META-INF/*.DSA', 'META-INF/*.RSA')
-  dependencies {
-    jar.exclude("windows/x86/**", "windows/x64/**", "macos/arm64/**", "macos/x64/**",
-      'META-INF/INDEX.LIST', 'META-INF/maven/**')
-  }
-}
-
-// Builds a JAR that only includes the files needed to run on Windows, not Linux or macOS.
-// The file size for a Windows-only JAR is about 6MB smaller than a cross-platform JAR.
-tasks.register("jarWin") {
-  dependsOn("jar")
-  group("build")
-  jar.archiveFileName.set("${appName}-${projectVersion}-win.jar")
-  jar.exclude("macos/arm64/**", "macos/x64/**", "linux/arm32/**", "linux/arm64/**", "linux/x64/**", "**/*.dylib", "**/*.so",
-    'META-INF/INDEX.LIST', 'META-INF/*.SF', 'META-INF/*.DSA', 'META-INF/*.RSA')
-  dependencies {
-    jar.exclude("macos/arm64/**", "macos/x64/**", "linux/arm32/**", "linux/arm64/**", "linux/x64/**",
-      'META-INF/INDEX.LIST', 'META-INF/maven/**')
-  }
-}
-
-construo {
-    // name of the executable
-    name.set(appName)
-    // human-readable name, used for example in the `.app` name for macOS
-    humanName.set(appName)
-    // Optional, defaults to project version property
-    version.set("$projectVersion")
-
-    targets.configure {
-      create("linuxX64", Target.Linux) {
-        architecture.set(Target.Architecture.X86_64)
-        jdkUrl.set("https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.12%2B7/OpenJDK17U-jdk_x64_linux_hotspot_17.0.12_7.tar.gz")
-      }
-      create("macM1", Target.MacOs) {
-        architecture.set(Target.Architecture.AARCH64)
-        jdkUrl.set("https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.12%2B7/OpenJDK17U-jdk_aarch64_mac_hotspot_17.0.12_7.tar.gz")
-        // macOS needs an identifier
-        identifier.set("com.tiktime." + appName)
-        // Optional: icon for macOS
-        macIcon.set(project.file("icons/logo.icns"))
-      }
-      create("macX64", Target.MacOs) {
-        architecture.set(Target.Architecture.X86_64)
-        jdkUrl.set("https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.12%2B7/OpenJDK17U-jdk_x64_mac_hotspot_17.0.12_7.tar.gz")
-        // macOS needs an identifier
-        identifier.set("com.tiktime." + appName)
-        // Optional: icon for macOS
-        macIcon.set(project.file("icons/logo.icns"))
-      }
-      create("winX64", Target.Windows) {
-        architecture.set(Target.Architecture.X86_64)
-        jdkUrl.set("https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.12%2B7/OpenJDK17U-jdk_x64_windows_hotspot_17.0.12_7.zip")
-        // Uncomment the next line to show a console when the game runs, to print messages.
-        //useConsole.set(true)
-      }
-    }
-}
-
-// Equivalent to the jar task; here for compatibility with gdx-setup.
-tasks.register('dist') {
-  dependsOn 'jar'
-  doLast {
-    def assetsDir = rootProject.file("assets")
-
-    copy {
-      from(assetsDir) {
-        include "**"
-      }
-      into("dist")
-    }
-
-    copy {
-      from(tasks.named('jar').get().archiveFile)
-      into("dist")
-    }
-  }
-}
-
-distributions {
-  main {
-    contents {
-      into('libs') {
-        project.configurations.runtimeClasspath.files.findAll { file ->
-          file.getName() != project.tasks.jar.outputs.files.singleFile.name
-        }.each { file ->
-          exclude file.name
-        }
-      }
-    }
-  }
-}
-
-startScripts.dependsOn(':lwjgl3:jar')
-startScripts.classpath = project.tasks.jar.outputs.files
-
-if(enableGraalNative == 'true') {
-  apply from: file("nativeimage.gradle")
 }
